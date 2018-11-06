@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SteakBot.Core;
 
 namespace SteakBot
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static readonly Bot Bot = new Bot();
+
+		private static void Main(string[] args)
 		{
+			Bot.RunAsync().Wait();
 		}
 	}
 }

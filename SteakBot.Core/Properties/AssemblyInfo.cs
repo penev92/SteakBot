@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SteakBot")]
+[assembly: AssemblyTitle("SteakBot.Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SteakBot")]
+[assembly: AssemblyProduct("SteakBot.Core")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a5e57ce3-8fcf-4cc6-80d0-bc6ae4d61111")]
+[assembly: Guid("09b1229f-19aa-4fcb-972e-bf6fa2b4ed91")]
 
 // Version information for an assembly consists of the following four values:
 //
