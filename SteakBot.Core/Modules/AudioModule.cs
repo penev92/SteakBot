@@ -55,6 +55,7 @@ namespace SteakBot.Core.Modules
 	{
 		private readonly ConcurrentDictionary<ulong, IAudioClient> _connectedChannels = new ConcurrentDictionary<ulong, IAudioClient>();
 		private AudioOutStream _audioOutStream;
+		private bool _isPlaying;
 
 		public async Task JoinAudio(IGuild guild, IVoiceChannel target)
 		{
@@ -80,6 +81,8 @@ namespace SteakBot.Core.Modules
 
 		public async Task LeaveAudio(IGuild guild)
 		{
+			_isPlaying = false;
+
 			IAudioClient client;
 			if (_connectedChannels.TryRemove(guild.Id, out client))
 			{
@@ -90,6 +93,11 @@ namespace SteakBot.Core.Modules
 
 		public async Task SendAudioAsync(IGuild guild, IMessageChannel channel, string filePath)
 		{
+			if (_isPlaying)
+			{
+				return;
+			}
+			
 			// Your task: Get a full path to the file if the value of 'path' is only a filename.
 			if (!File.Exists(filePath))
 			{
@@ -109,12 +117,14 @@ namespace SteakBot.Core.Modules
 					//try { await ffmpeg.StandardOutput.BaseStream.CopyToAsync(audioStream); }
 					try
 					{
+						_isPlaying = true;
 						await pcmStream.CopyToAsync(_audioOutStream);
 					}
 					finally
 					{
 						await _audioOutStream.FlushAsync();
 						await pcmStream.FlushAsync();
+						_isPlaying = false;
 					}
 				}
 				//using (var ffmpeg = CreateProcess(path))
