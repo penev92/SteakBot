@@ -32,4 +32,14 @@
 {"ResultType":"Image","Name":"tumbleweed","Value":"http://static.skaip.org/img/emoticons/180x180/f6fcff/tumbleweed.gif","Description":"Skype tumbleweed emoticon"},
 {"ResultType":"Image","Name":"suspicious","Value":"http://static.skaip.org/img/emoticons/180x180/f6fcff/wonder.gif","Description":"Skype suspicious/wondering emoticon"},
 {"ResultType":"Image","Name":"bow","Value":"http://static.skaip.org/img/emoticons/180x180/f6fcff/bow.gif","Description":"Skype bow emoticon"},
-{"ResultType":"Image","Name":"angry","Value":"http://static.skaip.org/img/emoticons/180x180/f6fcff/angry.gif","Description":"Skype angry emoticon"}]
+{"ResultType":"Image","Name":"angry","Value":"http://static.skaip.org/img/emoticons/180x180/f6fcff/angry.gif","Description":"Skype angry emoticon"},
+{"ResultType":"Image","Name":"ttm","Value":"http://static.skaip.org/img/emoticons/180x180/f6fcff/ttm.gif","Description":"Skype talk-too-much emoticon"},
+{"ResultType":"Image","Name":"wait","Value":"http://static.skaip.org/img/emoticons/180x180/f6fcff/wait.gif","Description":"Skype wait emoticon"},
+{"ResultType":"Image","Name":"monkey","Value":"http://static.skaip.org/img/emoticons/180x180/f6fcff/monkey.gif","Description":"Skype monkey emoticon"},
+{"ResultType":"Image","Name":"waat","Value":"https://www.youtube.com/watch?v=BnNpM5zez9E","Description":"Skype waat minion"},
+{"ResultType":"Image","Name":"wheeze","Value":"https://i.imgur.com/ZHmHih5.png","Description":"Wheezing meme"},
+{"ResultType":"Image","Name":"yeahSure","Value":"https://memegenerator.net/img/instances/39161249/yeah-sure.jpg","Description":"Yeah, sure meme"},
+{"ResultType":"Image","Name":"deadHorse","Value":"https://media.giphy.com/media/oaZk0WNSO7fXi/giphy.gif","Description":"Beating the dead horse"},
+{"ResultType":"Image","Name":"deadHorseSouthPark","Value":"https://media.giphy.com/media/RL0xU1daTlMoE/giphy.gif","Description":"Beating the dead horse, South Park style"},
+{"ResultType":"Image","Name":"confused","Value":"http://clipart-library.com/images/6TrooeX8c.png","Description":""},
+{"ResultType":"Image","Name":"kowalski","Value":"https://i.kym-cdn.com/entries/icons/mobile/000/027/456/kowalski.jpg","Description":"\"Kowalski, analysis!\" meme"}]
