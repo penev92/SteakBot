@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
@@ -64,9 +65,35 @@ namespace SteakBot.Core
 		{
 			// Hook the MessageReceived Event into our Command Handler
 			_client.MessageReceived += HandleCommandAsync;
+			_client.UserVoiceStateUpdated += HandleUserVoiceStateUpdated;
 
 			// Discover all of the commands in this assembly and load them.
 			await _commands.AddModulesAsync(Assembly.GetExecutingAssembly());
+		}
+
+		private async Task HandleUserVoiceStateUpdated(SocketUser user, SocketVoiceState leaveState, SocketVoiceState joinState)
+		{
+			if (joinState.VoiceChannel != null)
+			{
+				// TODO: Perhaps not hardcode this so?
+				var channel = joinState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
+				var messageChannel = channel as ISocketMessageChannel;
+				if (messageChannel != null)
+				{
+					await messageChannel.SendMessageAsync($"{user.Mention} has joined {joinState.VoiceChannel.Name}");
+				}
+			}
+			else
+			if (leaveState.VoiceChannel != null)
+			{
+				// TODO: Perhaps not hardcode this so?
+				var channel = leaveState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
+				var messageChannel = channel as ISocketMessageChannel;
+				if (messageChannel != null)
+				{
+					await messageChannel.SendMessageAsync($"{user.Mention} has ragequit");
+				}
+			}
 		}
 
 		private async Task HandleCommandAsync(SocketMessage messageParam)
