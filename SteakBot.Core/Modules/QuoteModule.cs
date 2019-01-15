@@ -17,6 +17,10 @@ namespace SteakBot.Core.Modules
 			await Context.Channel.DeleteMessagesAsync(new[] { Context.Message }, RequestOptions.Default);
 
 			var users = GetUsers().ToList();
+			var userByUsername = users.ToDictionary(x => x.Username, y => y);
+			var userByNickname = users.Cast<SocketGuildUser>().Where(x => !string.IsNullOrWhiteSpace(x.Nickname)).ToDictionary(x => x.Nickname, y => y as IUser);
+			var userByName = userByNickname.Union(userByUsername).ToDictionary(x => x.Key, y => y.Value);
+
 			var lines = message.Split('\n').ToList();
 			SocketTextChannel referredChannel = null;
 
@@ -30,8 +34,6 @@ namespace SteakBot.Core.Modules
 				}
 			}
 
-			var embeds = new List<EmbedBuilder>();
-
 			var embedDescription = new StringBuilder();
 			var embedAuthor = new EmbedAuthorBuilder();
 
@@ -40,19 +42,19 @@ namespace SteakBot.Core.Modules
 			foreach (var line in lines)
 			{
 				var isAuthorLine = false;
-				foreach (var user in users)
+				foreach (var user in userByName)
 				{
-					if (line.StartsWith(user.Username))
+					if (line.StartsWith(user.Key))
 					{
 						embedAuthor = new EmbedAuthorBuilder
 						{
-							Name = user.Username,
-							IconUrl = user.GetAvatarUrl()
+							Name = user.Key,
+							IconUrl = user.Value.GetAvatarUrl()
 						};
 
 						isAuthorLine = true;
 
-						var trim = line.Substring(user.Username.Length);
+						var trim = line.Substring(user.Key.Length);
 						timestamp = trim.Trim();
 
 						break;
