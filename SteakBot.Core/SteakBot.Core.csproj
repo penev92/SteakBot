@@ -205,6 +205,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
+    <Compile Include="EventHandlers\LogHandler.cs" />
+    <Compile Include="EventHandlers\MessageReceivedHandler.cs" />
+    <Compile Include="EventHandlers\ReactionEventHandler.cs" />
+    <Compile Include="EventHandlers\VoiceStateEventHandler.cs" />
     <Compile Include="ManualCommandHandler.cs" />
     <Compile Include="Modules\HelpModule.cs" />
     <Compile Include="Modules\MemeModule.cs" />

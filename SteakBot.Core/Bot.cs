@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using SteakBot.Core.EventHandlers;
 using SteakBot.Core.Modules;
 
 namespace SteakBot.Core
@@ -17,6 +17,7 @@ namespace SteakBot.Core
 		private readonly DiscordSocketClient _client;
 		private readonly CommandService _commands;
 		private readonly IServiceProvider _serviceProvider;
+		private readonly MessageReceivedHandler _messageReceivedHandler;
 
 		public Bot()
 		{
@@ -27,6 +28,8 @@ namespace SteakBot.Core
 				.AddSingleton(_commands)
 				.AddSingleton<AudioService>()
 				.BuildServiceProvider();
+
+			_messageReceivedHandler = new MessageReceivedHandler(_client, _commands, _serviceProvider);
 
 			AttachEventHandlers();
 			RegisterCommandModules();
@@ -46,80 +49,6 @@ namespace SteakBot.Core
 			Console.ReadLine();
 		}
 
-		private async Task HandleReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
-		{
-			var channel = arg3.Channel;
-			var message = await channel.GetMessageAsync(arg3.MessageId);
-
-			await channel.SendMessageAsync($"{arg3.User.Value.Mention} reacted with {arg3.Emote} to a message by {message.Author.Username}"
-				+ $" from {message.CreatedAt.LocalDateTime.ToString("HH:mm:ss")} of {message.CreatedAt.LocalDateTime.ToString("dd.MM.yyyy")}.");
-		}
-
-		private Task Log(LogMessage msg)
-		{
-			Console.WriteLine(msg.ToString());
-			return Task.CompletedTask;
-		}
-
-		private async Task HandleUserVoiceStateUpdated(SocketUser user, SocketVoiceState leaveState, SocketVoiceState joinState)
-		{
-			if (joinState.VoiceChannel != null)
-			{
-				// TODO: Perhaps not hardcode this so?
-				var channel = joinState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
-				var messageChannel = channel as ISocketMessageChannel;
-				if (messageChannel != null)
-				{
-					await messageChannel.SendMessageAsync($"{user.Mention} has joined {joinState.VoiceChannel.Name}");
-				}
-			}
-			else
-			if (leaveState.VoiceChannel != null)
-			{
-				// TODO: Perhaps not hardcode this so?
-				var channel = leaveState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
-				var messageChannel = channel as ISocketMessageChannel;
-				if (messageChannel != null)
-				{
-					await messageChannel.SendMessageAsync($"{user.Mention} has ragequit");
-				}
-			}
-		}
-
-		private async Task HandleCommandAsync(SocketMessage messageParam)
-		{
-			// Don't process the command if it was a System Message
-			var message = messageParam as SocketUserMessage;
-			if (message == null)
-				return;
-
-			if (message.Source == MessageSource.Bot)
-				return;
-
-			// Create a number to track where the prefix ends and the command begins
-			var argPos = 0;
-
-			// Create a Command Context
-			var context = new SocketCommandContext(_client, message);
-
-			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
-			if (message.HasCharPrefix('!', ref argPos))// || message.HasMentionPrefix(_client.CurrentUser, ref argPos))
-			{
-				if (await ManualCommandHandler.HandleCommandAsync(message))
-				{
-					return;
-				}
-
-				// Execute the command. (result does not indicate a return value, 
-				// rather an object stating if the command executed successfully)
-				var result = await _commands.ExecuteAsync(context, argPos, _serviceProvider);
-				if (!result.IsSuccess)
-				{
-					await context.Channel.SendMessageAsync(result.ErrorReason);
-				}
-			}
-		}
-
 		public void Dispose()
 		{
 			((IDisposable) _commands)?.Dispose();
@@ -130,10 +59,10 @@ namespace SteakBot.Core
 
 		private void AttachEventHandlers()
 		{
-			_client.Log += Log;
-			_client.ReactionAdded += HandleReactionAdded;
-			_client.MessageReceived += HandleCommandAsync;
-			_client.UserVoiceStateUpdated += HandleUserVoiceStateUpdated;
+			_client.Log += LogHandler.Log;
+			_client.ReactionAdded += ReactionEventHandler.HandleReactionAdded;
+			_client.MessageReceived += _messageReceivedHandler.HandleMessageReceivedAsync;
+			_client.UserVoiceStateUpdated += VoiceStateEventHandler.HandleUserVoiceStateUpdated;
 		}
 
 		private void RegisterCommandModules()
