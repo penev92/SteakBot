@@ -4,11 +4,12 @@ namespace SteakBot
 {
 	internal class Program
 	{
-		private static readonly Bot Bot = new Bot();
-
-		private static void Main(string[] args)
+		private static void Main()
 		{
-			Bot.RunAsync().Wait();
+			using (var bot = new Bot())
+			{
+				bot.RunAsync().Wait();
+			}
 		}
 	}
 }

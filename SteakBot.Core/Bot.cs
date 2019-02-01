@@ -11,7 +11,7 @@ using SteakBot.Core.Modules;
 
 namespace SteakBot.Core
 {
-	public class Bot
+	public class Bot : IDisposable
 	{
 		private static readonly string discordBotToken = "";
 
@@ -141,6 +141,11 @@ namespace SteakBot.Core
 					await context.Channel.SendMessageAsync(result.ErrorReason);
 				}
 			}
+		}
+
+		public void Dispose()
+		{
+			_client?.Dispose();
 		}
 	}
 }
