@@ -57,7 +57,7 @@ namespace SteakBot.Core
 			if (messageString.EndsWith("!"))
 			{
 				commandText = commandText.Substring(0, commandText.Length - 1);
-				await channel.DeleteMessagesAsync(new[] { message }, RequestOptions.Default);
+				await channel.DeleteMessageAsync(message, RequestOptions.Default);
 			}
 
 			var command = Commands.FirstOrDefault(x => x.Name == commandText);
@@ -81,7 +81,7 @@ namespace SteakBot.Core
 						ImageUrl = command.Value
 					};
 
-					await channel.SendMessageAsync("", embed: embed);
+					await channel.SendMessageAsync("", embed: embed.Build());
 					return true;
 				}
 

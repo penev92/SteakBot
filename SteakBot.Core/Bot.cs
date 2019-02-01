@@ -80,7 +80,7 @@ namespace SteakBot.Core
 			_client.UserVoiceStateUpdated += HandleUserVoiceStateUpdated;
 
 			// Discover all of the commands in this assembly and load them.
-			await _commands.AddModulesAsync(Assembly.GetExecutingAssembly());
+			await _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _services);
 		}
 
 		private async Task HandleUserVoiceStateUpdated(SocketUser user, SocketVoiceState leaveState, SocketVoiceState joinState)
