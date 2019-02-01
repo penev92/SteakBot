@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using SteakBot.Core.EventHandlers.Abstraction;
 
 namespace SteakBot.Core.EventHandlers
 {
-	internal class ReactionEventHandler
+	internal class ReactionEventHandler : IReactionEventHandler
 	{
-		internal static async Task HandleReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
+		public async Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
 		{
 			var channel = arg3.Channel;
 			var message = await channel.GetMessageAsync(arg3.MessageId);

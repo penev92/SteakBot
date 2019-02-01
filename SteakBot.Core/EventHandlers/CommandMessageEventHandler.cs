@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using SteakBot.Core.EventHandlers.Abstraction;
 
 namespace SteakBot.Core.EventHandlers
 {
-	internal class CommandMessageEventHandler
+	internal class CommandMessageEventHandler : IMessageEventHandler
 	{
 		private const char CommandChar = '!';
 
@@ -21,7 +22,7 @@ namespace SteakBot.Core.EventHandlers
 			_serviceProvider = serviceProvider;
 		}
 
-		internal async Task HandleMessageReceivedAsync(SocketMessage messageParam)
+		public async Task HandleMessageReceivedAsync(SocketMessage messageParam)
 		{
 			// Don't process the command if it was a System Message, the sender is a bot or this is not a command.
 			if (!(messageParam is SocketUserMessage message) || message.Source == MessageSource.Bot || !IsCommand(message, out var argPos))

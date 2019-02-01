@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord;
+using SteakBot.Core.EventHandlers.Abstraction;
 
 namespace SteakBot.Core.EventHandlers
 {
-	internal static class LogHandler
+	internal class LogEventHandler : ILogEventHandler
 	{
-		internal static Task Log(LogMessage msg)
+		public Task Log(LogMessage msg)
 		{
 			Console.WriteLine(msg.ToString());
 			return Task.CompletedTask;

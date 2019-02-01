@@ -205,7 +205,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
-    <Compile Include="EventHandlers\LogHandler.cs" />
+    <Compile Include="EventHandlers\Abstraction\ILogEventHandler.cs" />
+    <Compile Include="EventHandlers\Abstraction\IMessageEventHandler.cs" />
+    <Compile Include="EventHandlers\Abstraction\IReactionEventHandler.cs" />
+    <Compile Include="EventHandlers\Abstraction\IVoiceStateEventHandler.cs" />
+    <Compile Include="EventHandlers\LogEventHandler.cs" />
     <Compile Include="EventHandlers\CommandMessageEventHandler.cs" />
     <Compile Include="EventHandlers\ReactionEventHandler.cs" />
     <Compile Include="EventHandlers\VoiceStateEventHandler.cs" />

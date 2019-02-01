@@ -1,12 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord.WebSocket;
+using SteakBot.Core.EventHandlers.Abstraction;
 
 namespace SteakBot.Core.EventHandlers
 {
-	internal class VoiceStateEventHandler
+	internal class VoiceStateEventHandler : IVoiceStateEventHandler
 	{
-		internal static async Task HandleUserVoiceStateUpdated(SocketUser user, SocketVoiceState leaveState, SocketVoiceState joinState)
+		public async Task HandleUserVoiceStateUpdatedAsync(SocketUser user, SocketVoiceState leaveState, SocketVoiceState joinState)
 		{
 			if (joinState.VoiceChannel != null)
 			{
