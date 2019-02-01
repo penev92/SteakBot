@@ -40,7 +40,7 @@ namespace SteakBot.Core
 		private static readonly string MemeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
 		private static Lazy<IList<MemeCommand>> _commands = new Lazy<IList<MemeCommand>>(() => LoadCommands());
 		
-		internal static IList<MemeCommand> Commands { get => _commands.Value; }
+		internal static IList<MemeCommand> Commands { get { return _commands.Value; } }
 
 		public static async Task<bool> HandleCommandAsync(SocketUserMessage message)
 		{

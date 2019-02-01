@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
@@ -23,6 +24,8 @@ namespace SteakBot.Core
 		{
 			_client = new DiscordSocketClient();
 			_client.Log += Log;
+
+			_client.ReactionAdded += HandleReactionAdded;
 
 			_commands = new CommandService();
 			_audioService = new AudioService();
@@ -54,6 +57,17 @@ namespace SteakBot.Core
 			//webhookClient.
 		}
 
+		private async Task HandleReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
+		{
+			var channel = arg3.Channel;
+			var message = await channel.GetMessageAsync(arg3.MessageId, CacheMode.AllowDownload);
+
+			await channel.SendMessageAsync($"{arg3.User.Value.Mention} reacted with {arg3.Emote} to a message by {message.Author.Username}"
+				+ $" from {message.CreatedAt.LocalDateTime.ToString("HH:mm:ss")} of {message.CreatedAt.LocalDateTime.ToString("dd.MM.yyyy")}.");
+
+			return;
+		}
+
 		private Task Log(LogMessage msg)
 		{
 			Console.WriteLine(msg.ToString());
@@ -64,9 +78,35 @@ namespace SteakBot.Core
 		{
 			// Hook the MessageReceived Event into our Command Handler
 			_client.MessageReceived += HandleCommandAsync;
+			_client.UserVoiceStateUpdated += HandleUserVoiceStateUpdated;
 
 			// Discover all of the commands in this assembly and load them.
 			await _commands.AddModulesAsync(Assembly.GetExecutingAssembly());
+		}
+
+		private async Task HandleUserVoiceStateUpdated(SocketUser user, SocketVoiceState leaveState, SocketVoiceState joinState)
+		{
+			if (joinState.VoiceChannel != null)
+			{
+				// TODO: Perhaps not hardcode this so?
+				var channel = joinState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
+				var messageChannel = channel as ISocketMessageChannel;
+				if (messageChannel != null)
+				{
+					await messageChannel.SendMessageAsync($"{user.Mention} has joined {joinState.VoiceChannel.Name}");
+				}
+			}
+			else
+			if (leaveState.VoiceChannel != null)
+			{
+				// TODO: Perhaps not hardcode this so?
+				var channel = leaveState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
+				var messageChannel = channel as ISocketMessageChannel;
+				if (messageChannel != null)
+				{
+					await messageChannel.SendMessageAsync($"{user.Mention} has ragequit");
+				}
+			}
 		}
 
 		private async Task HandleCommandAsync(SocketMessage messageParam)
