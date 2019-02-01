@@ -218,6 +218,8 @@
     <Compile Include="Modules\MemeModule.cs" />
     <Compile Include="Modules\QuoteModule.cs" />
     <Compile Include="Modules\AudioModule.cs" />
+    <Compile Include="Objects\Enums\MemeResultType.cs" />
+    <Compile Include="Objects\MemeCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

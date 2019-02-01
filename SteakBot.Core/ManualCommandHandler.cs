@@ -7,34 +7,11 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SteakBot.Core.Objects;
+using SteakBot.Core.Objects.Enums;
 
 namespace SteakBot.Core
 {
-	internal enum ResultType
-	{
-		Text = 1,
-		Image = 2
-	}
-
-	internal class MemeCommand
-	{
-		public ResultType ResultType { get; set; }
-
-		public string Name { get; set; }
-
-		public string Value { get; set; }
-
-		public string Description { get; set; }
-
-		public MemeCommand(ResultType resultType, string name, string value, string description)
-		{
-			ResultType = resultType;
-			Name = name;
-			Value = value;
-			Description = description;
-		}
-	}
-
 	internal static class ManualCommandHandler
 	{
 		private static readonly string MemeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
@@ -66,15 +43,15 @@ namespace SteakBot.Core
 				return false;
 			}
 
-			switch (command.ResultType)
+			switch (command.MemeResultType)
 			{
-				case ResultType.Text:
+				case MemeResultType.Text:
 				{
 					await channel.SendMessageAsync(command.Value);
 					return true;
 				}
 
-				case ResultType.Image:
+				case MemeResultType.Image:
 				{
 					var embed = new EmbedBuilder
 					{
