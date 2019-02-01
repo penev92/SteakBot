@@ -4,6 +4,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using SteakBot.Core.EventHandlers.Abstraction;
+using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
 
 namespace SteakBot.Core.EventHandlers
 {
@@ -14,12 +15,14 @@ namespace SteakBot.Core.EventHandlers
 		private readonly DiscordSocketClient _client;
 		private readonly CommandService _commands;
 		private readonly IServiceProvider _serviceProvider;
+		private readonly ManualCommandHandler _manualCommandHandler;
 
 		internal CommandMessageEventHandler(DiscordSocketClient client, CommandService commands, IServiceProvider serviceProvider)
 		{
 			_client = client;
 			_commands = commands;
 			_serviceProvider = serviceProvider;
+			_manualCommandHandler = new ManualCommandHandler();
 		}
 
 		public async Task HandleMessageReceivedAsync(SocketMessage messageParam)
@@ -30,8 +33,9 @@ namespace SteakBot.Core.EventHandlers
 				return;
 			}
 
-			if (await ManualCommandHandler.HandleCommandAsync(message))
+			if (_manualCommandHandler.CanHandle(message))
 			{
+				_manualCommandHandler.Invoke(message);
 				return;
 			}
 
