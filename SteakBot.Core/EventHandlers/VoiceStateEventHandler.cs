@@ -12,8 +12,7 @@ namespace SteakBot.Core.EventHandlers
 			{
 				// TODO: Perhaps not hardcode this so?
 				var channel = joinState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
-				var messageChannel = channel as ISocketMessageChannel;
-				if (messageChannel != null)
+				if (channel is ISocketMessageChannel messageChannel)
 				{
 					await messageChannel.SendMessageAsync($"{user.Mention} has joined {joinState.VoiceChannel.Name}");
 				}
@@ -23,8 +22,7 @@ namespace SteakBot.Core.EventHandlers
 			{
 				// TODO: Perhaps not hardcode this so?
 				var channel = leaveState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
-				var messageChannel = channel as ISocketMessageChannel;
-				if (messageChannel != null)
+				if (channel is ISocketMessageChannel messageChannel)
 				{
 					await messageChannel.SendMessageAsync($"{user.Mention} has ragequit");
 				}

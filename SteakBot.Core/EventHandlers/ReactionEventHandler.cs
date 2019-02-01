@@ -12,7 +12,7 @@ namespace SteakBot.Core.EventHandlers
 			var message = await channel.GetMessageAsync(arg3.MessageId);
 
 			await channel.SendMessageAsync($"{arg3.User.Value.Mention} reacted with {arg3.Emote} to a message by {message.Author.Username}"
-			                               + $" from {message.CreatedAt.LocalDateTime.ToString("HH:mm:ss")} of {message.CreatedAt.LocalDateTime.ToString("dd.MM.yyyy")}.");
+			                               + $" from {message.CreatedAt.LocalDateTime:HH:mm:ss} of {message.CreatedAt.LocalDateTime:dd.MM.yyyy}.");
 		}
 	}
 }

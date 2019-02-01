@@ -17,7 +17,7 @@ namespace SteakBot.Core
 		private readonly DiscordSocketClient _client;
 		private readonly CommandService _commands;
 		private readonly IServiceProvider _serviceProvider;
-		private readonly MessageReceivedHandler _messageReceivedHandler;
+		private readonly CommandMessageEventHandler _messageEventHandler;
 
 		public Bot()
 		{
@@ -29,7 +29,7 @@ namespace SteakBot.Core
 				.AddSingleton<AudioService>()
 				.BuildServiceProvider();
 
-			_messageReceivedHandler = new MessageReceivedHandler(_client, _commands, _serviceProvider);
+			_messageEventHandler = new CommandMessageEventHandler(_client, _commands, _serviceProvider);
 
 			AttachEventHandlers();
 			RegisterCommandModules();
@@ -61,7 +61,7 @@ namespace SteakBot.Core
 		{
 			_client.Log += LogHandler.Log;
 			_client.ReactionAdded += ReactionEventHandler.HandleReactionAdded;
-			_client.MessageReceived += _messageReceivedHandler.HandleMessageReceivedAsync;
+			_client.MessageReceived += _messageEventHandler.HandleMessageReceivedAsync;
 			_client.UserVoiceStateUpdated += VoiceStateEventHandler.HandleUserVoiceStateUpdated;
 		}
 
