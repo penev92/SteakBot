@@ -205,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
+    <Compile Include="DependencyInjection\ServiceProviderExtensions.cs" />
     <Compile Include="EventHandlers\Abstraction\ILogEventHandler.cs" />
     <Compile Include="EventHandlers\Abstraction\IMessageEventHandler.cs" />
     <Compile Include="EventHandlers\Abstraction\IReactionEventHandler.cs" />
