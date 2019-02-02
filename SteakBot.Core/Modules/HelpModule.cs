@@ -8,7 +8,7 @@ namespace SteakBot.Core.Modules
 	public class HelpModule : ModuleBase<SocketCommandContext>
 	{
 		[Command("list")]
-		public async Task Shrug()
+		public async Task List()
 		{
 			await ReplyAsync(string.Join("\r\n", CustomCommandMessageHandler.Commands.Select(x => $"`{x.Name}` - {x.Description}")));
 		}
