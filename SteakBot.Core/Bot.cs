@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -10,11 +11,12 @@ namespace SteakBot.Core
 {
 	public class Bot : IDisposable
 	{
-		private static readonly string discordBotToken = "";
+		private static readonly string DiscordBotToken = ConfigurationManager.AppSettings["BotToken"];
+
+		private readonly IServiceProvider _serviceProvider;
 
 		private readonly DiscordSocketClient _client;
 		private readonly CommandService _commands;
-		private readonly IServiceProvider _serviceProvider;
 
 		private readonly ILogEventHandler _logEventHandler;
 		private readonly IMessageEventHandler _messageEventHandler;
@@ -38,7 +40,7 @@ namespace SteakBot.Core
 
 		public async Task RunAsync()
 		{
-			await _client.LoginAsync(TokenType.Bot, discordBotToken);
+			await _client.LoginAsync(TokenType.Bot, DiscordBotToken);
 			await _client.StartAsync();
 
 			Console.ReadLine();
