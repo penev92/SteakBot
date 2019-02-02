@@ -16,7 +16,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 
 		internal static IList<MemeCommand> Commands { get; } = LoadCommands();
 
-		internal CustomCommandMessageHandler()
+		public CustomCommandMessageHandler()
 		{
 			CommandNames = Commands.Select(x => x.Name);
 		}

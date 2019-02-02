@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 using SteakBot.Core.EventHandlers.Abstraction;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 
@@ -11,13 +11,11 @@ namespace SteakBot.Core.EventHandlers
 {
 	internal class MessageEventHandler : IMessageEventHandler
 	{
-		private readonly IServiceProvider _serviceProvider;
 		private readonly IEnumerable<ICustomMessageHandler> _customMessageHandlers;
 
 		public MessageEventHandler(IServiceProvider serviceProvider)
 		{
-			_serviceProvider = serviceProvider;
-			_customMessageHandlers = LoadMessageHandlers();
+			_customMessageHandlers = serviceProvider.GetServices<ICustomMessageHandler>();
 		}
 
 		public async Task HandleMessageReceivedAsync(SocketMessage messageParam)
@@ -36,17 +34,5 @@ namespace SteakBot.Core.EventHandlers
 				}
 			});
 		}
-
-		#region Private methods
-
-		private IEnumerable<ICustomMessageHandler> LoadMessageHandlers()
-		{
-			return AppDomain.CurrentDomain
-				.GetAssemblies()
-				.SelectMany(x => x.GetTypes().Where(y => !y.IsAbstract && y.GetInterfaces().Contains(typeof(ICustomMessageHandler))))
-				.Select(x => (ICustomMessageHandler)Activator.CreateInstance(x, _serviceProvider));
-		}
-
-		#endregion
 	}
 }

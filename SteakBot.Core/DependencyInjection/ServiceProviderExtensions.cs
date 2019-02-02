@@ -3,6 +3,8 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using SteakBot.Core.EventHandlers;
 using SteakBot.Core.EventHandlers.Abstraction;
+using SteakBot.Core.EventHandlers.CustomMessageHandlers;
+using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
 using SteakBot.Core.Modules;
 
 namespace SteakBot.Core.DependencyInjection
@@ -33,6 +35,13 @@ namespace SteakBot.Core.DependencyInjection
 				.AddSingleton<ModuleBase<SocketCommandContext>, MemeModule>()
 				.AddSingleton<ModuleBase<SocketCommandContext>, QuoteModule>()
 				.AddSingleton<AudioService>();
+		}
+
+		public static IServiceCollection AddDefaultCustomMessageHandlers(this IServiceCollection serviceCollection)
+		{
+			return serviceCollection
+				.AddSingleton<ICustomMessageHandler, CustomCommandMessageHandler>()
+				.AddSingleton<ICustomMessageHandler, StandardCommandMessageHandler>();
 		}
 	}
 }

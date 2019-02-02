@@ -13,7 +13,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 
 		private readonly char _commandChar;
 
-		internal StandardCommandMessageHandler(DiscordSocketClient client, CommandService commands, IServiceProvider serviceProvider)
+		public StandardCommandMessageHandler(DiscordSocketClient client, CommandService commands, IServiceProvider serviceProvider)
 		{
 			_client = client;
 			_commands = commands;
