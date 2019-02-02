@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Newtonsoft.Json;
@@ -12,40 +10,28 @@ using SteakBot.Core.Objects.Enums;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers
 {
-	internal class ManualCommandHandler : ICustomMessageHandler
+	internal class CustomCommandMessageHandler : BaseCommandMessageHandler
 	{
-		private const string CommandChar = "!";
-		private const string DeleteMessageChar = "!";
-
 		private static readonly string MemeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
-		private static readonly Lazy<IList<MemeCommand>> CommandsLazy = new Lazy<IList<MemeCommand>>(LoadCommands);
-		
-		internal static IList<MemeCommand> Commands => CommandsLazy.Value;
 
-		public bool CanHandle(SocketUserMessage message)
+		internal static IList<MemeCommand> Commands { get; } = LoadCommands();
+
+		internal CustomCommandMessageHandler()
 		{
-			var messageString = message.Content;
-			var commandText = messageString.Replace(CommandChar, "").Replace(DeleteMessageChar, "");
-			return messageString.StartsWith(CommandChar) && Commands.Any(x => x.Name == commandText);
+			CommandNames = Commands.Select(x => x.Name);
 		}
 
-		public async void Invoke(SocketUserMessage message)
+		protected override bool InvokeInner(SocketUserMessage message)
 		{
 			var channel = message.Channel;
-
-			if (ShouldDeleteMessage(message))
-			{
-				await channel.DeleteMessageAsync(message, RequestOptions.Default);
-			}
-
 			var commandText = message.Content.Replace(CommandChar, "").Replace(DeleteMessageChar, "");
 			var command = Commands.Single(x => x.Name == commandText);
 			switch (command.MemeResultType)
 			{
 				case MemeResultType.Text:
 				{
-					await channel.SendMessageAsync(command.Value);
-					return;
+					channel.SendMessageAsync(command.Value).Wait();
+					return true;
 				}
 
 				case MemeResultType.Image:
@@ -55,23 +41,18 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 						ImageUrl = command.Value
 					};
 
-					await channel.SendMessageAsync("", embed: embed.Build());
-					return;
+					channel.SendMessageAsync("", embed: embed.Build()).Wait();
+					return true;
 				}
 
 				default:
 				{
-					return;
+					return false;
 				}
 			}
 		}
 
 		#region Private methods
-
-		private static bool ShouldDeleteMessage(SocketUserMessage message)
-		{
-			return message.Content.EndsWith(DeleteMessageChar);
-		}
 
 		private static IList<MemeCommand> LoadCommands()
 		{

@@ -10,7 +10,7 @@ namespace SteakBot.Core.Modules
 		[Command("list")]
 		public async Task Shrug()
 		{
-			await ReplyAsync(string.Join("\r\n", ManualCommandHandler.Commands.Select(x => $"`{x.Name}` - {x.Description}")));
+			await ReplyAsync(string.Join("\r\n", CustomCommandMessageHandler.Commands.Select(x => $"`{x.Name}` - {x.Description}")));
 		}
 
 		[Command("help")]

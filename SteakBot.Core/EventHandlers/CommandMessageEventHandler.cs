@@ -15,14 +15,14 @@ namespace SteakBot.Core.EventHandlers
 		private readonly DiscordSocketClient _client;
 		private readonly CommandService _commands;
 		private readonly IServiceProvider _serviceProvider;
-		private readonly ManualCommandHandler _manualCommandHandler;
+		private readonly CustomCommandMessageHandler _manualCommandHandler;
 
 		internal CommandMessageEventHandler(DiscordSocketClient client, CommandService commands, IServiceProvider serviceProvider)
 		{
 			_client = client;
 			_commands = commands;
 			_serviceProvider = serviceProvider;
-			_manualCommandHandler = new ManualCommandHandler();
+			_manualCommandHandler = new CustomCommandMessageHandler();
 		}
 
 		public async Task HandleMessageReceivedAsync(SocketMessage messageParam)
