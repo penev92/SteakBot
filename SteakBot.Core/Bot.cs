@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using SteakBot.Core.EventHandlers;
 using SteakBot.Core.EventHandlers.Abstraction;
-using SteakBot.Core.Modules;
 
 namespace SteakBot.Core
 {
@@ -24,20 +21,16 @@ namespace SteakBot.Core
 		private readonly IReactionEventHandler _reactionEventHandler;
 		private readonly IVoiceStateEventHandler _voiceStateEventHandler;
 
-		public Bot()
+		public Bot(IServiceProvider serviceProvider)
 		{
-			_client = new DiscordSocketClient();
-			_commands = new CommandService();
-			_serviceProvider = new ServiceCollection()
-				.AddSingleton(_client)
-				.AddSingleton(_commands)
-				.AddSingleton<AudioService>()
-				.BuildServiceProvider();
+			_serviceProvider = serviceProvider;
 
-			_logEventHandler = new LogEventHandler();
-			_messageEventHandler = new MessageEventHandler(_serviceProvider);
-			_reactionEventHandler = new ReactionEventHandler();
-			_voiceStateEventHandler = new VoiceStateEventHandler();
+			_client = _serviceProvider.GetService<DiscordSocketClient>();
+			_commands = _serviceProvider.GetService<CommandService>();
+			_logEventHandler = _serviceProvider.GetService<ILogEventHandler>();
+			_messageEventHandler = _serviceProvider.GetService<IMessageEventHandler>();
+			_reactionEventHandler = _serviceProvider.GetService<IReactionEventHandler>();
+			_voiceStateEventHandler = _serviceProvider.GetService<IVoiceStateEventHandler>();
 
 			AttachEventHandlers();
 			RegisterCommandModules();
@@ -75,7 +68,11 @@ namespace SteakBot.Core
 
 		private void RegisterCommandModules()
 		{
-			_commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider).Wait();
+			var modules = _serviceProvider.GetServices(typeof(ModuleBase<SocketCommandContext>));
+			foreach (var module in modules)
+			{
+				_commands.AddModuleAsync(module.GetType(), _serviceProvider).Wait();
+			}
 		}
 
 		#endregion

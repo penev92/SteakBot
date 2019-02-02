@@ -1,4 +1,6 @@
-﻿using SteakBot.Core;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SteakBot.Core;
+using SteakBot.Core.DependencyInjection;
 
 namespace SteakBot
 {
@@ -6,7 +8,14 @@ namespace SteakBot
 	{
 		private static void Main()
 		{
-			using (var bot = new Bot())
+			var serviceProvider = new ServiceCollection()
+				.AddBasicDiscordServices()
+				.AddDefaultEventHandlerServices()
+				.AddDefaultModules()
+				.AddDefaultCustomMessageHandlers()
+				.BuildServiceProvider();
+
+			using (var bot = new Bot(serviceProvider))
 			{
 				bot.RunAsync().Wait();
 			}
