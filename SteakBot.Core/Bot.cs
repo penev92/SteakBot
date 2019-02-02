@@ -35,7 +35,7 @@ namespace SteakBot.Core
 				.BuildServiceProvider();
 
 			_logEventHandler = new LogEventHandler();
-			_messageEventHandler = new CommandMessageEventHandler(_client, _commands, _serviceProvider);
+			_messageEventHandler = new MessageEventHandler(_serviceProvider);
 			_reactionEventHandler = new ReactionEventHandler();
 			_voiceStateEventHandler = new VoiceStateEventHandler();
 

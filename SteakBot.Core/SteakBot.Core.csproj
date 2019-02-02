@@ -209,7 +209,7 @@
     <Compile Include="EventHandlers\Abstraction\IMessageEventHandler.cs" />
     <Compile Include="EventHandlers\Abstraction\IReactionEventHandler.cs" />
     <Compile Include="EventHandlers\Abstraction\IVoiceStateEventHandler.cs" />
-    <Compile Include="EventHandlers\CommandMessageEventHandler.cs" />
+    <Compile Include="EventHandlers\MessageEventHandler.cs" />
     <Compile Include="EventHandlers\CustomMessageHandlers\CommandMessageHandlers\BaseCommandMessageHandler.cs" />
     <Compile Include="EventHandlers\CustomMessageHandlers\CommandMessageHandlers\StandardCommandMessageHandler.cs" />
     <Compile Include="EventHandlers\CustomMessageHandlers\CommandMessageHandlers\CustomCommandMessageHandler.cs" />
