@@ -4,7 +4,7 @@ namespace SteakBot.Core.Objects
 {
 	internal class MemeCommand
 	{
-		public MemeResultType MemeResultType { get; set; }
+		public MemeResultType ResultType { get; set; }
 
 		public string Name { get; set; }
 
@@ -12,9 +12,9 @@ namespace SteakBot.Core.Objects
 
 		public string Description { get; set; }
 
-		public MemeCommand(MemeResultType memeResultType, string name, string value, string description)
+		public MemeCommand(MemeResultType resultType, string name, string value, string description)
 		{
-			MemeResultType = memeResultType;
+			ResultType = resultType;
 			Name = name;
 			Value = value;
 			Description = description;

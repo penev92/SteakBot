@@ -26,7 +26,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 			var channel = message.Channel;
 			var commandText = message.Content.Replace(CommandChar, "").Replace(DeleteMessageChar, "");
 			var command = Commands.Single(x => x.Name == commandText);
-			switch (command.MemeResultType)
+			switch (command.ResultType)
 			{
 				case MemeResultType.Text:
 				{
