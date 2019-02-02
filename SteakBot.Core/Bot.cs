@@ -26,18 +26,22 @@ namespace SteakBot.Core
 
 		public Bot()
 		{
-			_client = new DiscordSocketClient();
-			_commands = new CommandService();
 			_serviceProvider = new ServiceCollection()
-				.AddSingleton(_client)
-				.AddSingleton(_commands)
+				.AddSingleton<DiscordSocketClient>()
+				.AddSingleton<CommandService>()
+				.AddSingleton<ILogEventHandler, LogEventHandler>()
+				.AddSingleton<IMessageEventHandler, MessageEventHandler>()
+				.AddSingleton<IReactionEventHandler, ReactionEventHandler>()
+				.AddSingleton<IVoiceStateEventHandler, VoiceStateEventHandler>()
 				.AddSingleton<AudioService>()
 				.BuildServiceProvider();
 
-			_logEventHandler = new LogEventHandler();
-			_messageEventHandler = new MessageEventHandler(_serviceProvider);
-			_reactionEventHandler = new ReactionEventHandler();
-			_voiceStateEventHandler = new VoiceStateEventHandler();
+			_client = _serviceProvider.GetService<DiscordSocketClient>();
+			_commands = _serviceProvider.GetService<CommandService>();
+			_logEventHandler = _serviceProvider.GetService<ILogEventHandler>();
+			_messageEventHandler = _serviceProvider.GetService<IMessageEventHandler>();
+			_reactionEventHandler = _serviceProvider.GetService<IReactionEventHandler>();
+			_voiceStateEventHandler = _serviceProvider.GetService<IVoiceStateEventHandler>();
 
 			AttachEventHandlers();
 			RegisterCommandModules();
