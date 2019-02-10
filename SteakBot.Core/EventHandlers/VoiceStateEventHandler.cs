@@ -25,7 +25,7 @@ namespace SteakBot.Core.EventHandlers
 				var channel = leaveState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
 				if (channel is ISocketMessageChannel messageChannel)
 				{
-					await messageChannel.SendMessageAsync($"{user.Mention} has ragequit");
+					await messageChannel.SendMessageAsync($"{user.Mention} has ragequit {leaveState.VoiceChannel.Name}");
 				}
 			}
 		}
