@@ -1,15 +1,16 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
+using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
 
 namespace SteakBot.Core.Modules
 {
 	public class HelpModule : ModuleBase<SocketCommandContext>
 	{
 		[Command("list")]
-		public async Task Shrug()
+		public async Task List()
 		{
-			await ReplyAsync(string.Join("\r\n", ManualCommandHandler.Commands.Select(x => $"`{x.Name}` - {x.Description}")));
+			await ReplyAsync(string.Join("\r\n", CustomCommandMessageHandler.Commands.Select(x => $"`{x.Name}` - {x.Description}")));
 		}
 
 		[Command("help")]

@@ -1,146 +1,82 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
+using System.Configuration;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.Rest;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using SteakBot.Core.Modules;
+using SteakBot.Core.EventHandlers.Abstraction;
 
 namespace SteakBot.Core
 {
-	public class Bot
+	public class Bot : IDisposable
 	{
-		private static readonly string discordBotToken = "";
+		private static readonly string DiscordBotToken = ConfigurationManager.AppSettings["BotToken"];
 
-		private CommandService _commands;
-		private AudioService _audioService;
-		private DiscordSocketClient _client;
-		private IServiceProvider _services;
+		private readonly IServiceProvider _serviceProvider;
+
+		private readonly DiscordSocketClient _client;
+		private readonly CommandService _commands;
+
+		private readonly ILogEventHandler _logEventHandler;
+		private readonly IMessageEventHandler _messageEventHandler;
+		private readonly IReactionEventHandler _reactionEventHandler;
+		private readonly IVoiceStateEventHandler _voiceStateEventHandler;
+
+		public Bot(IServiceProvider serviceProvider)
+		{
+			_serviceProvider = serviceProvider;
+
+			_client = _serviceProvider.GetService<DiscordSocketClient>();
+			_commands = _serviceProvider.GetService<CommandService>();
+			_logEventHandler = _serviceProvider.GetService<ILogEventHandler>();
+			_messageEventHandler = _serviceProvider.GetService<IMessageEventHandler>();
+			_reactionEventHandler = _serviceProvider.GetService<IReactionEventHandler>();
+			_voiceStateEventHandler = _serviceProvider.GetService<IVoiceStateEventHandler>();
+
+			AttachEventHandlers();
+			RegisterCommandModules();
+		}
 
 		public async Task RunAsync()
 		{
-			_client = new DiscordSocketClient();
-			_client.Log += Log;
-
-			_client.ReactionAdded += HandleReactionAdded;
-
-			_commands = new CommandService();
-			_audioService = new AudioService();
-
-			await _client.LoginAsync(TokenType.Bot, discordBotToken);
+			await _client.LoginAsync(TokenType.Bot, DiscordBotToken);
 			await _client.StartAsync();
-
-			_services = new ServiceCollection()
-				.AddSingleton(_client)
-				.AddSingleton(_commands)
-				.AddSingleton(_audioService)
-				.BuildServiceProvider();
-
-			await InstallCommandsAsync();
 
 			Console.ReadLine();
 
 			await _client.LogoutAsync();
 			await _client.StopAsync();
 
-			Console.ReadLine();
-
 			Console.WriteLine("Done");
-
-			// Block this task until the program is closed.
-			await Task.Delay(-1);
-
-			//var webhookClient = new Discord.Webhook.DiscordWebhookClient(123, "", new DiscordRestConfig());
-			//webhookClient.
+			Console.ReadLine();
 		}
 
-		private async Task HandleReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
+		public void Dispose()
 		{
-			var channel = arg3.Channel;
-			var message = await channel.GetMessageAsync(arg3.MessageId, CacheMode.AllowDownload);
-
-			await channel.SendMessageAsync($"{arg3.User.Value.Mention} reacted with {arg3.Emote} to a message by {message.Author.Username}"
-				+ $" from {message.CreatedAt.LocalDateTime.ToString("HH:mm:ss")} of {message.CreatedAt.LocalDateTime.ToString("dd.MM.yyyy")}.");
-
-			return;
+			((IDisposable) _commands)?.Dispose();
+			_client?.Dispose();
 		}
 
-		private Task Log(LogMessage msg)
+		#region Private methods
+
+		private void AttachEventHandlers()
 		{
-			Console.WriteLine(msg.ToString());
-			return Task.CompletedTask;
+			_client.Log += _logEventHandler.Log;
+			_client.ReactionAdded += _reactionEventHandler.HandleReactionAddedAsync;
+			_client.MessageReceived += _messageEventHandler.HandleMessageReceivedAsync;
+			_client.UserVoiceStateUpdated += _voiceStateEventHandler.HandleUserVoiceStateUpdatedAsync;
 		}
 
-		public async Task InstallCommandsAsync()
+		private void RegisterCommandModules()
 		{
-			// Hook the MessageReceived Event into our Command Handler
-			_client.MessageReceived += HandleCommandAsync;
-			_client.UserVoiceStateUpdated += HandleUserVoiceStateUpdated;
-
-			// Discover all of the commands in this assembly and load them.
-			await _commands.AddModulesAsync(Assembly.GetExecutingAssembly());
-		}
-
-		private async Task HandleUserVoiceStateUpdated(SocketUser user, SocketVoiceState leaveState, SocketVoiceState joinState)
-		{
-			if (joinState.VoiceChannel != null)
+			var modules = _serviceProvider.GetServices(typeof(ModuleBase<SocketCommandContext>));
+			foreach (var module in modules)
 			{
-				// TODO: Perhaps not hardcode this so?
-				var channel = joinState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
-				var messageChannel = channel as ISocketMessageChannel;
-				if (messageChannel != null)
-				{
-					await messageChannel.SendMessageAsync($"{user.Mention} has joined {joinState.VoiceChannel.Name}");
-				}
-			}
-			else
-			if (leaveState.VoiceChannel != null)
-			{
-				// TODO: Perhaps not hardcode this so?
-				var channel = leaveState.VoiceChannel.Guild.Channels.FirstOrDefault(x => x.Name == "bendoverwatch");
-				var messageChannel = channel as ISocketMessageChannel;
-				if (messageChannel != null)
-				{
-					await messageChannel.SendMessageAsync($"{user.Mention} has ragequit");
-				}
+				_commands.AddModuleAsync(module.GetType(), _serviceProvider).Wait();
 			}
 		}
 
-		private async Task HandleCommandAsync(SocketMessage messageParam)
-		{
-			// Don't process the command if it was a System Message
-			var message = messageParam as SocketUserMessage;
-			if (message == null)
-				return;
-
-			if (message.Source == MessageSource.Bot)
-				return;
-
-			// Create a number to track where the prefix ends and the command begins
-			var argPos = 0;
-
-			// Create a Command Context
-			var context = new SocketCommandContext(_client, message);
-
-			// Determine if the message is a command, based on if it starts with '!' or a mention prefix
-			if (message.HasCharPrefix('!', ref argPos))// || message.HasMentionPrefix(_client.CurrentUser, ref argPos))
-			{
-				if (await ManualCommandHandler.HandleCommandAsync(message))
-				{
-					return;
-				}
-
-				// Execute the command. (result does not indicate a return value, 
-				// rather an object stating if the command executed successfully)
-				var result = await _commands.ExecuteAsync(context, argPos, _services);
-				if (!result.IsSuccess)
-				{
-					await context.Channel.SendMessageAsync(result.ErrorReason);
-				}
-			}
-		}
+		#endregion
 	}
 }

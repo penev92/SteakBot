@@ -1,14 +1,24 @@
-﻿using SteakBot.Core;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SteakBot.Core;
+using SteakBot.Core.DependencyInjection;
 
 namespace SteakBot
 {
 	internal class Program
 	{
-		private static readonly Bot Bot = new Bot();
-
-		private static void Main(string[] args)
+		private static void Main()
 		{
-			Bot.RunAsync().Wait();
+			var serviceProvider = new ServiceCollection()
+				.AddBasicDiscordServices()
+				.AddDefaultEventHandlerServices()
+				.AddDefaultModules()
+				.AddDefaultCustomMessageHandlers()
+				.BuildServiceProvider();
+
+			using (var bot = new Bot(serviceProvider))
+			{
+				bot.RunAsync().Wait();
+			}
 		}
 	}
 }

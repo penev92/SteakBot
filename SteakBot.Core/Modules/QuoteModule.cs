@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Audio;
 using Discord.Commands;
 using Discord.WebSocket;
 
@@ -14,7 +13,7 @@ namespace SteakBot.Core.Modules
 		[Command("quote")]
 		public async Task Quote([Remainder]string message)
 		{
-			await Context.Channel.DeleteMessagesAsync(new[] { Context.Message }, RequestOptions.Default);
+			await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
 
 			var users = GetUsers().ToList();
 			var userByUsername = users.ToDictionary(x => x.Username, y => y);
@@ -91,7 +90,7 @@ namespace SteakBot.Core.Modules
 				Footer = new EmbedFooterBuilder { Text = footerText },
 			};
 
-			await ReplyAsync("", false, embed);
+			await ReplyAsync("", false, embed.Build());
 		}
 
 		private IEnumerable<IUser> GetUsers()
