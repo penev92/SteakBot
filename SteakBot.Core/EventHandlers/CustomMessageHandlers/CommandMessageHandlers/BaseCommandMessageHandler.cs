@@ -16,7 +16,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 		public bool CanHandle(SocketUserMessage message)
 		{
 			var messageString = message.Content;
-			var commandText = messageString.Replace(CommandChar, "").Replace(DeleteMessageChar, "").Split(' ')[0];
+			var commandText = messageString.Replace(CommandChar, "").Replace(DeleteMessageChar, "").Split(' ', '\n')[0];
 			return messageString.StartsWith(CommandChar) && CommandNames.Any(x => x == commandText);
 		}
 
