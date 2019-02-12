@@ -218,6 +218,7 @@
     <Compile Include="EventHandlers\LogEventHandler.cs" />
     <Compile Include="EventHandlers\ReactionEventHandler.cs" />
     <Compile Include="EventHandlers\VoiceStateEventHandler.cs" />
+    <Compile Include="Modules\AudioService.cs" />
     <Compile Include="Modules\HelpModule.cs" />
     <Compile Include="Modules\MemeModule.cs" />
     <Compile Include="Modules\QuoteModule.cs" />

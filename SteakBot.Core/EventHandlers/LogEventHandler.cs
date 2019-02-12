@@ -5,12 +5,12 @@ using SteakBot.Core.EventHandlers.Abstraction;
 
 namespace SteakBot.Core.EventHandlers
 {
-	internal class LogEventHandler : ILogEventHandler
-	{
-		public Task Log(LogMessage msg)
-		{
-			Console.WriteLine(msg.ToString());
-			return Task.CompletedTask;
-		}
-	}
+    internal class LogEventHandler : ILogEventHandler
+    {
+        public Task Log(LogMessage msg)
+        {
+            Console.WriteLine(msg.ToString());
+            return Task.CompletedTask;
+        }
+    }
 }
