@@ -9,14 +9,14 @@ using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 
 namespace SteakBot.Core.EventHandlers
 {
-	internal class MessageEventHandler : IMessageEventHandler
-	{
-		private readonly IEnumerable<ICustomMessageHandler> _customMessageHandlers;
+    internal class MessageEventHandler : IMessageEventHandler
+    {
+        private readonly IEnumerable<ICustomMessageHandler> _customMessageHandlers;
 
-		public MessageEventHandler(IServiceProvider serviceProvider)
-		{
-			_customMessageHandlers = serviceProvider.GetServices<ICustomMessageHandler>();
-		}
+        public MessageEventHandler(IServiceProvider serviceProvider)
+        {
+            _customMessageHandlers = serviceProvider.GetServices<ICustomMessageHandler>();
+        }
 
         public async Task HandleMessageReceivedAsync(SocketMessage messageParam)
         {

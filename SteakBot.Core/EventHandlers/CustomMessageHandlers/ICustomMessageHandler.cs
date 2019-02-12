@@ -2,10 +2,10 @@
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers
 {
-	internal interface ICustomMessageHandler
-	{
-		bool CanHandle(SocketUserMessage message);
+    internal interface ICustomMessageHandler
+    {
+        bool CanHandle(SocketUserMessage message);
 
-		void Invoke(SocketUserMessage message);
-	}
+        void Invoke(SocketUserMessage message);
+    }
 }

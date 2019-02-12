@@ -3,8 +3,8 @@ using Discord;
 
 namespace SteakBot.Core.EventHandlers.Abstraction
 {
-	public interface ILogEventHandler
-	{
-		Task Log(LogMessage msg);
-	}
+    public interface ILogEventHandler
+    {
+        Task Log(LogMessage msg);
+    }
 }
