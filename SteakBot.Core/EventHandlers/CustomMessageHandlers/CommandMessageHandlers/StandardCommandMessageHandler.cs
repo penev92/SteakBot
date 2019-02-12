@@ -18,9 +18,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 			_client = client;
 			_commands = commands;
 			_serviceProvider = serviceProvider;
-
 			_commandChar = CommandChar[0];
-
 			CommandNames = _commands.Commands.Select(x => x.Name);
 		}
 
