@@ -1,0 +1,7 @@
+; Top-most http://editorconfig.org/ file
+root = true
+
+; 4-space indentation
+[*.cs]
+indent_style = space
+indent_size = 4
