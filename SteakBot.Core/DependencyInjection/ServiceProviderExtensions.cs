@@ -11,11 +11,17 @@ namespace SteakBot.Core.DependencyInjection
 {
     public static class ServiceProviderExtensions
     {
-        public static IServiceCollection AddBasicDiscordServices(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddBasicExternalDiscordServices(this IServiceCollection serviceCollection)
         {
             return serviceCollection
                 .AddSingleton<DiscordSocketClient>()
                 .AddSingleton<CommandService>();
+        }
+
+        public static IServiceCollection AddBasicDiscordServices(this IServiceCollection serviceCollection)
+        {
+            return serviceCollection
+                .AddSingleton<Bot>();
         }
 
         public static IServiceCollection AddDefaultEventHandlerServices(this IServiceCollection serviceCollection)
