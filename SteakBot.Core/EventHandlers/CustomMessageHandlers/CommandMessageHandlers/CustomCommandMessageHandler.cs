@@ -13,20 +13,59 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
     internal class CustomCommandMessageHandler : BaseCommandMessageHandler
     {
         private static readonly string MemeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
+        private static readonly string MemeCommandsOriginRelativeFilePath = ConfigurationManager.AppSettings["memeCommandsOriginRelativeFilePath"];
 
-        internal static IList<MemeCommand> Commands { get; } = LoadCommands();
+        internal static IList<MemeCommand> Commands { get; set; } = LoadCommands();
+
+        private static IEnumerable<string> commandNames;
+
+        protected override IEnumerable<string> CommandNames { get => commandNames; set => commandNames = value; }
 
         public CustomCommandMessageHandler()
         {
-            CommandNames = Commands.Select(x => x.Name);
+            commandNames = Commands.Select(x => x.Name);
+        }
+
+        public static bool SaveCommand(MemeCommand newCmd)
+        {
+            if (ValidateNewCommand(newCmd))
+            {
+                Commands.Add(newCmd);
+                using (var fileWriter = new StreamWriter(MemeCommandsFileName))
+                {
+                    using (var jsonTextWriter = new JsonTextWriter(fileWriter))
+                    {
+                        var jsonSerializer = new JsonSerializer();
+                        jsonSerializer.Serialize(jsonTextWriter, Commands);
+                    }
+                }
+
+#if DEBUG
+                // replace original file
+                using (var fileWriter = new StreamWriter(MemeCommandsOriginRelativeFilePath))
+                {
+                    using (var jsonTextWriter = new JsonTextWriter(fileWriter))
+                    {
+                        var jsonSerializer = new JsonSerializer();
+                        jsonSerializer.Serialize(jsonTextWriter, Commands);
+                    }
+                }
+#endif
+
+                ReloadCommands();
+
+                return true;
+            }
+
+            return false;
         }
 
         protected override bool InvokeInner(SocketUserMessage message)
         {
             var channel = message.Channel;
             var commandText = message.Content.Replace(CommandChar, "").Replace(DeleteMessageChar, "");
-            var command = Commands.Single(x => x.Name == commandText);
-            switch (command.ResultType)
+            var command = Commands.SingleOrDefault(x => x.Name == commandText);
+            switch (command?.ResultType)
             {
                 case MemeResultType.Text:
                     {
@@ -64,6 +103,22 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
                     return jsonSerializer.Deserialize<IList<MemeCommand>>(jsonTextReader);
                 }
             }
+        }
+
+        private static void ReloadCommands()
+        {
+            Commands = LoadCommands();
+            commandNames = Commands.Select(x => x.Name);
+        }
+
+        private static bool ValidateNewCommand(MemeCommand newCmd)
+        {
+            if (Commands.Contains(newCmd))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion

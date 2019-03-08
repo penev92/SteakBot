@@ -20,6 +20,7 @@ namespace SteakBot.Core.Modules
             await ReplyAsync("`say <something>` - Bot says something");
             await ReplyAsync("`list` - Lists all available \"memes\"");
             await ReplyAsync("`quote` - Duuh, quotes...");
+            await ReplyAsync("`add <name>,<value>,<description>` - Add a dank meme of your choosing");
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
         protected const string CommandChar = "!";
         protected const string DeleteMessageChar = "!";
 
-        protected IEnumerable<string> CommandNames;
+        protected virtual IEnumerable<string> CommandNames { get; set; }
 
         public bool CanHandle(SocketUserMessage message)
         {
