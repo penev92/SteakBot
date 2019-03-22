@@ -16,17 +16,17 @@ namespace SteakBot.Core.Modules
             await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
 
             var users = GetUsers().ToList();
-            var userByUsername = users.ToDictionary(x => x.Username, y => y);
-            var userByNickname = users.Cast<SocketGuildUser>().Where(x => !string.IsNullOrWhiteSpace(x.Nickname)).ToDictionary(x => x.Nickname, y => y as IUser);
-            var userByName = userByNickname.Union(userByUsername).ToDictionary(x => x.Key, y => y.Value);
+            var usersByUsername = users.GroupBy(x => x.Username);
+            var usersByNickname = users.Cast<SocketGuildUser>().Where(x => !string.IsNullOrWhiteSpace(x.Nickname)).GroupBy(x => x.Nickname);
+            var usersByNameTmp = usersByNickname.Union(usersByUsername).GroupBy(x => x.Key);
+            var usersByName = usersByNameTmp.ToDictionary(x => x.Key, y => y.SelectMany(z => z).ToList());
 
             var lines = message.Split('\n').ToList();
             SocketTextChannel referredChannel = null;
 
             foreach (var socketGuildChannel in Context.Guild.Channels)
             {
-                var channel = socketGuildChannel as SocketTextChannel;
-                if (channel != null && channel.Mention == lines[0].Trim())
+                if (socketGuildChannel is SocketTextChannel channel && channel.Mention == lines[0].Trim())
                 {
                     referredChannel = channel;
                     lines.RemoveAt(0);
@@ -41,19 +41,19 @@ namespace SteakBot.Core.Modules
             foreach (var line in lines)
             {
                 var isAuthorLine = false;
-                foreach (var user in userByName)
+                foreach (var userList in usersByName)
                 {
-                    if (line.StartsWith(user.Key))
+                    if (line.StartsWith(userList.Key))
                     {
                         embedAuthor = new EmbedAuthorBuilder
                         {
-                            Name = user.Key,
-                            IconUrl = user.Value.GetAvatarUrl()
+                            Name = userList.Key,
+                            IconUrl = userList.Value.Count == 1 ? userList.Value.First().GetAvatarUrl() : null
                         };
 
                         isAuthorLine = true;
 
-                        var trim = line.Substring(user.Key.Length);
+                        var trim = line.Substring(userList.Key.Length);
                         timestamp = trim.Trim();
 
                         break;
@@ -67,27 +67,23 @@ namespace SteakBot.Core.Modules
             }
 
             var footerText = string.Empty;
-            var titleText = string.Empty;
 
             if (!string.IsNullOrEmpty(timestamp))
             {
                 footerText = $"  -  {timestamp}";
-                titleText = timestamp;
             }
 
             if (referredChannel != null)
             {
                 footerText += $", in #{referredChannel.Name}";
-                titleText += $", in #{referredChannel.Name}";
             }
 
             var embed = new EmbedBuilder
             {
                 Color = Color.Blue,
-                //Title = titleText,
                 Author = embedAuthor,
                 Description = embedDescription.ToString(),
-                Footer = new EmbedFooterBuilder { Text = footerText },
+                Footer = new EmbedFooterBuilder { Text = footerText }
             };
 
             await ReplyAsync("", false, embed.Build());
