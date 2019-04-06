@@ -48,6 +48,9 @@ namespace SteakBot.Core.Services
                     }
                 }
 #endif
+
+                ReloadCommandsEvent.Invoke();
+
                 return true;
             }
 
