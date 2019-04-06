@@ -3,7 +3,7 @@ using System;
 
 namespace SteakBot.Core.Objects
 {
-    internal class MemeCommand : IEquatable<MemeCommand>
+    public class MemeCommand : IEquatable<MemeCommand>
     {
         public MemeResultType ResultType { get; set; }
 
@@ -26,13 +26,7 @@ namespace SteakBot.Core.Objects
         public override bool Equals(object other)
         {
             var item = other as MemeCommand;
-
-            if (item == null)
-            {
-                return false;
-            }
-
-            return Equals(item);
+            return item != null && Equals(item);
         }
 
         public bool Equals(MemeCommand other)

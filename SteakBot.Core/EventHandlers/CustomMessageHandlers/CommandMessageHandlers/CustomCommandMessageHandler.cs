@@ -10,23 +10,19 @@ using SteakBot.Core.Objects.Enums;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers
 {
-    internal class CustomCommandMessageHandler : BaseCommandMessageHandler
+    public  class CustomCommandMessageHandler : BaseCommandMessageHandler
     {
         private static readonly string MemeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
         private static readonly string MemeCommandsOriginRelativeFilePath = ConfigurationManager.AppSettings["memeCommandsOriginRelativeFilePath"];
 
         internal static IList<MemeCommand> Commands { get; set; } = LoadCommands();
 
-        private static IEnumerable<string> commandNames;
-
-        protected override IEnumerable<string> CommandNames { get => commandNames; set => commandNames = value; }
-
         public CustomCommandMessageHandler()
         {
-            commandNames = Commands.Select(x => x.Name);
+            CommandNames = Commands.Select(x => x.Name);
         }
 
-        public static bool SaveCommand(MemeCommand newCmd)
+        public bool SaveCommand(MemeCommand newCmd)
         {
             if (ValidateNewCommand(newCmd))
             {
@@ -41,7 +37,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
                 }
 
 #if DEBUG
-                // replace original file
+                // Replace original file.
                 using (var fileWriter = new StreamWriter(MemeCommandsOriginRelativeFilePath))
                 {
                     using (var jsonTextWriter = new JsonTextWriter(fileWriter))
@@ -105,10 +101,10 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
             }
         }
 
-        private static void ReloadCommands()
+        private void ReloadCommands()
         {
             Commands = LoadCommands();
-            commandNames = Commands.Select(x => x.Name);
+            CommandNames = Commands.Select(x => x.Name);
         }
 
         private static bool ValidateNewCommand(MemeCommand newCmd)

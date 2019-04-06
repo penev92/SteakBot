@@ -6,12 +6,12 @@ using Discord.WebSocket;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers
 {
-    internal abstract class BaseCommandMessageHandler : ICustomMessageHandler
+    public abstract class BaseCommandMessageHandler : ICustomMessageHandler
     {
         protected const string CommandChar = "!";
         protected const string DeleteMessageChar = "!";
 
-        protected virtual IEnumerable<string> CommandNames { get; set; }
+        protected IEnumerable<string> CommandNames;
 
         public bool CanHandle(SocketUserMessage message)
         {
