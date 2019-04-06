@@ -6,7 +6,7 @@ using Discord;
 using Discord.Audio;
 using NAudio.Wave;
 
-namespace SteakBot.Core.Modules
+namespace SteakBot.Core.Services
 {
     public class AudioService
     {

@@ -1,33 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Discord;
 using Discord.WebSocket;
-using SteakBot.Core.Modules;
-using SteakBot.Core.Objects;
+using SteakBot.Core.Services;
 using SteakBot.Core.Objects.Enums;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers
 {
-    public  class CustomCommandMessageHandler : BaseCommandMessageHandler
+    internal class CustomCommandMessageHandler : BaseCommandMessageHandler
     {
         private readonly MemeService _memeService;
-
-        internal static IList<MemeCommand> Commands { get; set; }
 
         public CustomCommandMessageHandler(MemeService memeService)
         {
             _memeService = memeService;
-            _memeService.ReloadCommandsEvent += ReloadCommands;
-
-            Commands = _memeService.LoadCommands();
-            CommandNames = Commands.Select(x => x.Name);
+            _memeService.ReloadCommandsEvent += ReloadCommandNames;
+            ReloadCommandNames();
         }
 
         protected override bool InvokeInner(SocketUserMessage message)
         {
             var channel = message.Channel;
             var commandText = message.Content.Replace(CommandChar, "").Replace(DeleteMessageChar, "");
-            var command = Commands.SingleOrDefault(x => x.Name == commandText);
+            var command = _memeService.MemeCommands.SingleOrDefault(x => x.Name == commandText);
             switch (command?.ResultType)
             {
                 case MemeResultType.Text:
@@ -56,10 +50,9 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 
         #region Private methods
 
-        private void ReloadCommands()
+        public void ReloadCommandNames()
         {
-            Commands = _memeService.LoadCommands();
-            CommandNames = Commands.Select(x => x.Name);
+            CommandNames = _memeService.MemeCommands.Select(x => x.Name);
         }
 
         #endregion

@@ -6,7 +6,7 @@ using Discord.WebSocket;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers
 {
-    public abstract class BaseCommandMessageHandler : ICustomMessageHandler
+    internal abstract class BaseCommandMessageHandler : ICustomMessageHandler
     {
         protected const string CommandChar = "!";
         protected const string DeleteMessageChar = "!";

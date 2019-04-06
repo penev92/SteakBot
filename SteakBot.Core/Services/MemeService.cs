@@ -2,20 +2,24 @@
 using SteakBot.Core.Objects;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Configuration;
 
-namespace SteakBot.Core.Modules
+namespace SteakBot.Core.Services
 {
     public class MemeService
     {
         private static readonly string MemeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
         private static readonly string MemeCommandsOriginRelativeFilePath = ConfigurationManager.AppSettings["memeCommandsOriginRelativeFilePath"];
 
-        private IList<MemeCommand> Commands { get; set; }
-
         public delegate void ReloadCommands();
         public event ReloadCommands ReloadCommandsEvent;
+
+        public IList<MemeCommand> MemeCommands { get; set; }
+
+        public MemeService()
+        {
+            LoadCommands();
+        }
 
         #region Public methods
 
@@ -23,13 +27,13 @@ namespace SteakBot.Core.Modules
         {
             if (ValidateNewCommand(newCmd))
             {
-                Commands.Add(newCmd);
+                MemeCommands.Add(newCmd);
                 using (var fileWriter = new StreamWriter(MemeCommandsFileName))
                 {
                     using (var jsonTextWriter = new JsonTextWriter(fileWriter))
                     {
                         var jsonSerializer = new JsonSerializer();
-                        jsonSerializer.Serialize(jsonTextWriter, Commands);
+                        jsonSerializer.Serialize(jsonTextWriter, MemeCommands);
                     }
                 }
 
@@ -40,12 +44,10 @@ namespace SteakBot.Core.Modules
                     using (var jsonTextWriter = new JsonTextWriter(fileWriter))
                     {
                         var jsonSerializer = new JsonSerializer();
-                        jsonSerializer.Serialize(jsonTextWriter, Commands);
+                        jsonSerializer.Serialize(jsonTextWriter, MemeCommands);
                     }
                 }
 #endif
-                ReloadCommandsEvent.Invoke();
-
                 return true;
             }
 
@@ -59,9 +61,9 @@ namespace SteakBot.Core.Modules
                 using (var jsonTextReader = new JsonTextReader(fileReader))
                 {
                     var jsonSerializer = new JsonSerializer();
-                    Commands = jsonSerializer.Deserialize<IList<MemeCommand>>(jsonTextReader);
+                    MemeCommands = jsonSerializer.Deserialize<IList<MemeCommand>>(jsonTextReader);
 
-                    return Commands;
+                    return MemeCommands;
                 }
             }
         }
@@ -72,7 +74,7 @@ namespace SteakBot.Core.Modules
 
         private bool ValidateNewCommand(MemeCommand newCmd)
         {
-            if (Commands.Contains(newCmd))
+            if (MemeCommands.Contains(newCmd))
             {
                 return false;
             }

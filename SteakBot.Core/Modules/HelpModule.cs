@@ -1,16 +1,23 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord.Commands;
-using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
+using SteakBot.Core.Services;
 
 namespace SteakBot.Core.Modules
 {
     public class HelpModule : ModuleBase<SocketCommandContext>
     {
+        private readonly MemeService _memeService;
+
+        public HelpModule(MemeService memeService)
+        {
+            _memeService = memeService;
+        }
+
         [Command("list")]
         public async Task List()
         {
-            await ReplyAsync(string.Join("\r\n", CustomCommandMessageHandler.Commands.Select(x => $"`{x.Name}` - {x.Description}")));
+            await ReplyAsync(string.Join("\r\n", _memeService.MemeCommands.Select(x => $"`{x.Name}` - {x.Description}")));
         }
 
         [Command("help")]

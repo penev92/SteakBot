@@ -62,10 +62,10 @@
     <Compile Include="EventHandlers\ReactionEventHandler.cs" />
     <Compile Include="EventHandlers\VoiceStateEventHandler.cs" />
     <Compile Include="Modules\AddMemeModule.cs" />
-    <Compile Include="Modules\AudioService.cs" />
+    <Compile Include="Services\AudioService.cs" />
     <Compile Include="Modules\HelpModule.cs" />
     <Compile Include="Modules\MemeModule.cs" />
-    <Compile Include="Modules\MemeService.cs" />
+    <Compile Include="Services\MemeService.cs" />
     <Compile Include="Modules\QuoteModule.cs" />
     <Compile Include="Modules\AudioModule.cs" />
     <Compile Include="Objects\Enums\MemeResultType.cs" />
