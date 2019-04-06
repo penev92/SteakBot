@@ -65,6 +65,7 @@
     <Compile Include="Modules\AudioService.cs" />
     <Compile Include="Modules\HelpModule.cs" />
     <Compile Include="Modules\MemeModule.cs" />
+    <Compile Include="Modules\MemeService.cs" />
     <Compile Include="Modules\QuoteModule.cs" />
     <Compile Include="Modules\AudioModule.cs" />
     <Compile Include="Objects\Enums\MemeResultType.cs" />

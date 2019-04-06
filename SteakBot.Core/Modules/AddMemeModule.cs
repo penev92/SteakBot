@@ -12,11 +12,11 @@ namespace SteakBot.Core.Modules
 {
     public class AddMemeModule : ModuleBase<SocketCommandContext>
     {
-        private readonly CustomCommandMessageHandler _customCommandMessageHandler;
+        private readonly MemeService _memeService;
 
-        public AddMemeModule(IEnumerable<ICustomMessageHandler> customCommandMessageHandler)
+        public AddMemeModule(MemeService memeService)
         {
-            _customCommandMessageHandler = (CustomCommandMessageHandler)customCommandMessageHandler.First(x => x is CustomCommandMessageHandler);
+            _memeService = memeService;
         }
 
         [Command("addMeme")]
@@ -28,7 +28,7 @@ namespace SteakBot.Core.Modules
 
             MemeResultType type = value.ToLower().Contains("http") ? MemeResultType.Image : MemeResultType.Text;
 
-            var result = _customCommandMessageHandler.SaveCommand(new MemeCommand(type, name, value, description));
+            var result = _memeService.SaveCommand(new MemeCommand(type, name, value, description));
 
             isMessage = type == MemeResultType.Text;
 
