@@ -21,8 +21,8 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
         {
             var channel = message.Channel;
             var commandText = message.Content.Replace(CommandChar, "").Replace(DeleteMessageChar, "");
-            var command = _memeService.MemeCommands.SingleOrDefault(x => x.Name == commandText);
-            switch (command?.ResultType)
+            var command = _memeService.MemeCommands.Single(x => x.Name == commandText);
+            switch (command.ResultType)
             {
                 case MemeResultType.Text:
                     {
@@ -50,7 +50,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 
         #region Private methods
 
-        public void ReloadCommandNames()
+        private void ReloadCommandNames()
         {
             CommandNames = _memeService.MemeCommands.Select(x => x.Name);
         }

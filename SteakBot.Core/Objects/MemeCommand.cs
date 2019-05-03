@@ -1,5 +1,5 @@
-﻿using SteakBot.Core.Objects.Enums;
-using System;
+﻿using System;
+using SteakBot.Core.Objects.Enums;
 
 namespace SteakBot.Core.Objects
 {
@@ -36,27 +36,32 @@ namespace SteakBot.Core.Objects
                 return false;
             }
 
-            return (object.ReferenceEquals(this.ResultType, other.ResultType)
-                    || this.ResultType.Equals(other.ResultType))
-                && (object.ReferenceEquals(this.Name, other.Name)
-                    || this.Name != null
-                    && this.Name.Equals(other.Name))
-                && (object.ReferenceEquals(this.Value, other.Value)
-                    || this.Value != null
-                    && this.Value.Equals(other.Value))
-                && (object.ReferenceEquals(this.Description, other.Description)
-                    || this.Description != null
-                    && this.Description.Equals(other.Description));
+            if(ReferenceEquals(other, this))
+            {
+                return true;
+            }
+
+            return this.ResultType.Equals(other.ResultType)
+                && this.Name == other.Name
+                && this.Value == other.Value
+                && this.Description == other.Description;
         }
 
+        // https://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-an-overridden-system-object-gethashcode
         public override int GetHashCode()
         {
-            return this.ResultType.GetHashCode()
-                 ^ (this.Name != null ? this.Name.GetHashCode() : 0)
-                 ^ (this.Value != null ? this.Value.GetHashCode() : 0)
-                 ^ (this.Description != null ? this.Description.GetHashCode() : 0);
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = 151;
+                hash = hash * 443 + this.ResultType.GetHashCode();
+                hash = hash * 443 + this.Name.GetHashCode();
+                hash = hash * 443 + this.Value.GetHashCode();
+                hash = hash * 443 + this.Description.GetHashCode();
+                
+                return hash;
+            }
         }
-
+        
         #endregion
 
         #region Operators

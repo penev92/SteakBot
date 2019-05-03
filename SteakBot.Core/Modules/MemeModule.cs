@@ -26,8 +26,6 @@ namespace SteakBot.Core.Modules
 
             var result = _memeService.SaveCommand(new MemeCommand(type, name, value, description));
 
-            var isMessage = type == MemeResultType.Text;
-
             if (result)
             {
                 if (type == MemeResultType.Image)
@@ -41,15 +39,13 @@ namespace SteakBot.Core.Modules
                 {
                     replyMessage = value;
                 }
-
-                await (isMessage
-                      ? ReplyAsync(replyMessage)
-                      : ReplyAsync(replyMessage, embed: embed.Build()));
             }
             else
             {
                 replyMessage = "Saving failed! ;(";
             }
+
+            await ReplyAsync(replyMessage, embed: embed?.Build());
         }
     }
 }
