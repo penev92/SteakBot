@@ -1,20 +1,51 @@
 ﻿using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
+using SteakBot.Core.Objects;
+using SteakBot.Core.Objects.Enums;
+using SteakBot.Core.Services;
 
 namespace SteakBot.Core.Modules
 {
     public class MemeModule : ModuleBase<SocketCommandContext>
     {
-        [Command("hi")]
-        public async Task Hi()
+        private readonly MemeService _memeService;
+
+        public MemeModule(MemeService memeService)
         {
-            await ReplyAsync($"Hi, {Context.User.Mention} !");
+            _memeService = memeService;
         }
 
-        [Command("say")]
-        public async Task Say([Remainder]string message)
+        [Command("addMeme")]
+        public async Task AddMeme(string name, string value, string description)
         {
-            await ReplyAsync(message);
+            var replyMessage = string.Empty;
+            EmbedBuilder embed = null;
+
+            var type = value.ToLower().Contains("http") ? MemeResultType.Image : MemeResultType.Text;
+
+            var result = _memeService.SaveCommand(new MemeCommand(type, name, value, description));
+
+            if (result)
+            {
+                if (type == MemeResultType.Image)
+                {
+                    embed = new EmbedBuilder
+                    {
+                        ImageUrl = value
+                    };
+                }
+                else
+                {
+                    replyMessage = value;
+                }
+            }
+            else
+            {
+                replyMessage = "Saving failed! ;(";
+            }
+
+            await ReplyAsync(replyMessage, embed: embed?.Build());
         }
     }
 }

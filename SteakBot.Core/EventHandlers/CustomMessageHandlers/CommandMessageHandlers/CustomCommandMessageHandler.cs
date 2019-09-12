@@ -1,31 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using Discord;
 using Discord.WebSocket;
-using Newtonsoft.Json;
-using SteakBot.Core.Objects;
+using SteakBot.Core.Services;
 using SteakBot.Core.Objects.Enums;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers
 {
     internal class CustomCommandMessageHandler : BaseCommandMessageHandler
     {
-        private static readonly string MemeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
+        private readonly MemeService _memeService;
 
-        internal static IList<MemeCommand> Commands { get; } = LoadCommands();
-
-        public CustomCommandMessageHandler()
+        public CustomCommandMessageHandler(MemeService memeService)
         {
-            CommandNames = Commands.Select(x => x.Name);
+            _memeService = memeService;
+            _memeService.ReloadCommandsEvent += ReloadCommandNames;
+            ReloadCommandNames();
         }
 
         protected override bool InvokeInner(SocketUserMessage message)
         {
             var channel = message.Channel;
             var commandText = message.Content.Replace(CommandChar, "").Replace(DeleteMessageChar, "");
-            var command = Commands.Single(x => x.Name == commandText);
+            var command = _memeService.MemeCommands.Single(x => x.Name == commandText);
             switch (command.ResultType)
             {
                 case MemeResultType.Text:
@@ -54,16 +50,9 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 
         #region Private methods
 
-        private static IList<MemeCommand> LoadCommands()
+        private void ReloadCommandNames()
         {
-            using (var fileReader = new StreamReader(MemeCommandsFileName))
-            {
-                using (var jsonTextReader = new JsonTextReader(fileReader))
-                {
-                    var jsonSerializer = new JsonSerializer();
-                    return jsonSerializer.Deserialize<IList<MemeCommand>>(jsonTextReader);
-                }
-            }
+            CommandNames = _memeService.MemeCommands.Select(x => x.Name);
         }
 
         #endregion

@@ -6,6 +6,7 @@ using SteakBot.Core.EventHandlers.Abstraction;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
 using SteakBot.Core.Modules;
+using SteakBot.Core.Services;
 
 namespace SteakBot.Core.DependencyInjection
 {
@@ -32,9 +33,11 @@ namespace SteakBot.Core.DependencyInjection
             return serviceCollection
                 .AddSingleton<ModuleBase<SocketCommandContext>, AudioModule>()
                 .AddSingleton<ModuleBase<SocketCommandContext>, HelpModule>()
-                .AddSingleton<ModuleBase<SocketCommandContext>, MemeModule>()
+                .AddSingleton<ModuleBase<SocketCommandContext>, ChatModule>()
                 .AddSingleton<ModuleBase<SocketCommandContext>, QuoteModule>()
-                .AddSingleton<AudioService>();
+                .AddSingleton<ModuleBase<SocketCommandContext>, MemeModule>()
+                .AddSingleton<AudioService>()
+                .AddSingleton<MemeService>();
         }
 
         public static IServiceCollection AddDefaultCustomMessageHandlers(this IServiceCollection serviceCollection)
