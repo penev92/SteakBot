@@ -32,6 +32,7 @@ namespace SteakBot.Core.DependencyInjection
         {
             return serviceCollection
                 .AddSingleton<ModuleBase<SocketCommandContext>, AudioModule>()
+                .AddSingleton<ModuleBase<SocketCommandContext>, DotaModule>()
                 .AddSingleton<ModuleBase<SocketCommandContext>, HelpModule>()
                 .AddSingleton<ModuleBase<SocketCommandContext>, ChatModule>()
                 .AddSingleton<ModuleBase<SocketCommandContext>, QuoteModule>()
