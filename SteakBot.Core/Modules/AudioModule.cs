@@ -42,7 +42,7 @@ namespace SteakBot.Core.Modules
         [Command("gg", RunMode = RunMode.Async)]
         public async Task Gg()
         {
-            await _service.PlayAudio(Context.Guild, Context.Channel, @"C:\Users\Pavel\Desktop\gg.mp3");
+            await _service.PlayAudio(Context.Guild, Context.Channel, "ggVoiceFile");
         }
     }
 }

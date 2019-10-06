@@ -12,6 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Assets\gg.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Assets\memeCommands.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

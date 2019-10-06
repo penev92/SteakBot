@@ -1,5 +1,5 @@
 ﻿using System.Collections.Concurrent;
-using System.Diagnostics;
+using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
@@ -11,8 +11,9 @@ namespace SteakBot.Core.Services
     public class AudioService
     {
         private readonly ConcurrentDictionary<ulong, IAudioClient> _connectedChannels = new ConcurrentDictionary<ulong, IAudioClient>();
-        private AudioOutStream _audioOutStream;
+
         private bool _isPlaying;
+        private AudioOutStream _audioOutStream;
 
         public async Task JoinAudioChannel(IGuild guild, IVoiceChannel target)
         {
@@ -46,36 +47,39 @@ namespace SteakBot.Core.Services
             }
         }
 
-        public async Task PlayAudio(IGuild guild, IMessageChannel channel, string audioFile)
+        public async Task PlayAudio(IGuild guild, IMessageChannel sourceTextChannel, string audioFileIdentifier)
         {
-            await SendAudioAsync(guild, channel, audioFile);
+            var filePath = ConfigurationManager.AppSettings[audioFileIdentifier];
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                await sourceTextChannel.SendMessageAsync("Unknown file identifier.");
+                return;
+            }
+
+            if (!File.Exists(filePath))
+            {
+                await sourceTextChannel.SendMessageAsync("File does not exist.");
+                return;
+            }
+
+            await SendAudioAsync(guild, filePath);
         }
 
         #region Private methods
 
-        private async Task SendAudioAsync(IGuild guild, IMessageChannel channel, string filePath)
+        private async Task SendAudioAsync(IGuild guild, string filePath)
         {
             if (_isPlaying)
             {
                 return;
             }
 
-            // Your task: Get a full path to the file if the value of 'path' is only a filename.
-            if (!File.Exists(filePath))
-            {
-                await channel.SendMessageAsync("File does not exist.");
-                return;
-            }
-
             if (_connectedChannels.TryGetValue(guild.Id, out IAudioClient audioClient))
             {
-                //using (var audioStream = audioClient.CreatePCMStream(AudioApplication.Voice))
                 _audioOutStream = _audioOutStream ?? audioClient.CreatePCMStream(AudioApplication.Voice);
                 using (var mp3 = new Mp3FileReader(filePath))
                 using (var pcmStream = WaveFormatConversionStream.CreatePcmStream(mp3))
                 {
-                    //WaveFileWriter.CreateWaveFile(_outPath_, pcm);
-                    //try { await ffmpeg.StandardOutput.BaseStream.CopyToAsync(audioStream); }
                     try
                     {
                         _isPlaying = true;
@@ -88,24 +92,7 @@ namespace SteakBot.Core.Services
                         _isPlaying = false;
                     }
                 }
-                //using (var ffmpeg = CreateProcess(path))
-                //using (var stream = audioClient.CreatePCMStream(AudioApplication.Music))
-                //{
-                //	try { await ffmpeg.StandardOutput.BaseStream.CopyToAsync(stream); }
-                //	finally { await stream.FlushAsync(); }
-                //}
             }
-        }
-
-        private Process CreateProcess(string filePath)
-        {
-            return Process.Start(new ProcessStartInfo
-            {
-                FileName = "ffmpeg.exe",
-                Arguments = $"-hide_banner -loglevel panic -i \"{filePath}\" -ac 2 -f s16le -ar 48000 pipe:1",
-                UseShellExecute = false,
-                RedirectStandardOutput = true
-            });
         }
 
         #endregion
