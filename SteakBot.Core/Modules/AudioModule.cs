@@ -21,9 +21,20 @@ namespace SteakBot.Core.Modules
         // You *MUST* mark these commands with 'RunMode.Async'
         // otherwise the bot will not respond until the Task times out.
         [Command("join", RunMode = RunMode.Async)]
-        public async Task Join()
+        public async Task Join(string channelName)
         {
-            await _service.JoinAudio(Context.Guild, Context.Guild.VoiceChannels.First());
+            if (string.IsNullOrWhiteSpace(channelName))
+            {
+                await ReplyAsync($"Channel name needed!");
+            }
+
+            var channel = Context.Guild.VoiceChannels.FirstOrDefault(x => x.Name == channelName);
+            if (channel == null)
+            {
+                await ReplyAsync($"No such voice channel!");
+            }
+
+            await _service.JoinAudio(Context.Guild, channel);
         }
 
         // Remember to add preconditions to your commands,
