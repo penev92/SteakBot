@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <None Update="Assets\memeCommands.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

@@ -24,7 +24,7 @@ namespace SteakBot.Core.Modules
 
             var type = value.ToLower().Contains("http") ? MemeResultType.Image : MemeResultType.Text;
 
-            var result = _memeService.SaveCommand(new MemeCommand(type, name, value, description));
+            var result = _memeService.AddCommand(new MemeCommand(type, name, value, description));
 
             if (result)
             {

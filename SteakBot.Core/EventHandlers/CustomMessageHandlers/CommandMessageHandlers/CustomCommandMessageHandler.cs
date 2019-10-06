@@ -13,8 +13,8 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
         public CustomCommandMessageHandler(MemeService memeService)
         {
             _memeService = memeService;
-            _memeService.ReloadCommandsEvent += ReloadCommandNames;
-            ReloadCommandNames();
+            _memeService.OnReloadCommands += OnReloadCommandNames;
+            OnReloadCommandNames();
         }
 
         protected override bool InvokeInner(SocketUserMessage message)
@@ -50,7 +50,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 
         #region Private methods
 
-        private void ReloadCommandNames()
+        private void OnReloadCommandNames()
         {
             CommandNames = _memeService.MemeCommands.Select(x => x.Name);
         }
