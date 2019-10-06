@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteakBot", "SteakBot\SteakBot.csproj", "{A5E57CE3-8FCF-4CC6-80D0-BC6AE4D61111}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteakBot.Core", "SteakBot.Core\SteakBot.Core.csproj", "{09B1229F-19AA-4FCB-972E-BF6FA2B4ED91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteakBot.Core", "SteakBot.Core\SteakBot.Core.csproj", "{A8EBA8CF-0B46-4507-AFDE-A58BBE9FBA00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +17,15 @@ Global
 		{A5E57CE3-8FCF-4CC6-80D0-BC6AE4D61111}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5E57CE3-8FCF-4CC6-80D0-BC6AE4D61111}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5E57CE3-8FCF-4CC6-80D0-BC6AE4D61111}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09B1229F-19AA-4FCB-972E-BF6FA2B4ED91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09B1229F-19AA-4FCB-972E-BF6FA2B4ED91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09B1229F-19AA-4FCB-972E-BF6FA2B4ED91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09B1229F-19AA-4FCB-972E-BF6FA2B4ED91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8EBA8CF-0B46-4507-AFDE-A58BBE9FBA00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8EBA8CF-0B46-4507-AFDE-A58BBE9FBA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8EBA8CF-0B46-4507-AFDE-A58BBE9FBA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8EBA8CF-0B46-4507-AFDE-A58BBE9FBA00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98D22F84-8030-4F3B-8BA4-22325F61AE5B}
 	EndGlobalSection
 EndGlobal

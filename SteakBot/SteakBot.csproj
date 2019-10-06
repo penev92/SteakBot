@@ -50,15 +50,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SteakBot.Core\SteakBot.Core.csproj">
-      <Project>{09B1229F-19AA-4FCB-972E-BF6FA2B4ED91}</Project>
-      <Name>SteakBot.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection">
       <Version>2.2.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SteakBot.Core\SteakBot.Core.csproj">
+      <Project>{a8eba8cf-0b46-4507-afde-a58bbe9fba00}</Project>
+      <Name>SteakBot.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
