@@ -7,12 +7,8 @@ namespace SteakBot.Core.Modules
 {
     public class AudioModule : ModuleBase<SocketCommandContext>
     {
-        // Scroll down further for the AudioService.
-        // Like, way down
         private readonly AudioService _service;
 
-        // Remember to add an instance of the AudioService
-        // to your IServiceCollection when you initialize your bot
         public AudioModule(AudioService service)
         {
             _service = service;
@@ -37,9 +33,6 @@ namespace SteakBot.Core.Modules
             await _service.JoinAudio(Context.Guild, channel);
         }
 
-        // Remember to add preconditions to your commands,
-        // this is merely the minimal amount necessary.
-        // Adding more commands of your own is also encouraged.
         [Command("leave", RunMode = RunMode.Async)]
         public async Task LeaveCmd()
         {
