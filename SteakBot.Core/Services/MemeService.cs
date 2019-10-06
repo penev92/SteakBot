@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using SteakBot.Core.Objects;
 using Newtonsoft.Json;
+using SteakBot.Core.Objects;
 
 namespace SteakBot.Core.Services
 {
     public class MemeService
     {
-        private static readonly string MemeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
+        public IList<MemeCommand> MemeCommands { get; private set; }
 
         public delegate void ReloadCommands();
-        public event ReloadCommands ReloadCommandsEvent;
+        public event ReloadCommands OnReloadCommands;
 
-        public IList<MemeCommand> MemeCommands { get; private set; }
+        private readonly string _memeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
 
         public MemeService()
         {
@@ -22,23 +22,16 @@ namespace SteakBot.Core.Services
 
         #region Public methods
 
-        public bool SaveCommand(MemeCommand newCmd)
+        public bool AddCommand(MemeCommand newCommand)
         {
-            if (!ValidateNewCommand(newCmd))
+            if (!ValidateNewCommand(newCommand))
             {
                 return false;
             }
 
-            MemeCommands.Add(newCmd);
-            using (var fileWriter = new StreamWriter(MemeCommandsFileName))
-            using (var jsonTextWriter = new JsonTextWriter(fileWriter))
-            {
-                var jsonSerializer = new JsonSerializer();
-                jsonSerializer.Serialize(jsonTextWriter, MemeCommands);
-            }
-
-            ReloadCommandsEvent?.Invoke();
-
+            MemeCommands.Add(newCommand);
+            SaveCommands();
+            OnReloadCommands?.Invoke();
             return true;
         }
 
@@ -46,19 +39,25 @@ namespace SteakBot.Core.Services
 
         #region Private methods
 
-        private void LoadCommands()
-        {
-            using (var fileReader = new StreamReader(MemeCommandsFileName))
-            using (var jsonTextReader = new JsonTextReader(fileReader))
-            {
-                var jsonSerializer = new JsonSerializer();
-                MemeCommands = jsonSerializer.Deserialize<IList<MemeCommand>>(jsonTextReader);
-            }
-        }
-
         private bool ValidateNewCommand(MemeCommand newCmd)
         {
             return !MemeCommands.Contains(newCmd);
+        }
+
+        private void LoadCommands()
+        {
+            var text = File.ReadAllText(_memeCommandsFileName);
+            MemeCommands = JsonConvert.DeserializeObject<List<MemeCommand>>(text);
+        }
+
+        private void SaveCommands()
+        {
+            using (var fileWriter = new StreamWriter(_memeCommandsFileName))
+            using (var jsonTextWriter = new JsonTextWriter(fileWriter) { Formatting = Formatting.Indented, Indentation = 4 })
+            {
+                var jsonSerializer = new JsonSerializer();
+                jsonSerializer.Serialize(jsonTextWriter, MemeCommands);
+            }
         }
 
         #endregion
