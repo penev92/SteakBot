@@ -44,5 +44,11 @@ namespace SteakBot.Core.Modules
         {
             await _service.PlayAudio(Context.Guild, Context.Channel, "ggVoiceFile");
         }
+
+        [Command("surprise", RunMode = RunMode.Async)]
+        public async Task Surprise()
+        {
+            await _service.PlayAudio(Context.Guild, Context.Channel, "surpriseMf");
+        }
     }
 }
