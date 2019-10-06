@@ -46,4 +46,7 @@
 {"ResultType":"Image","Name":"goodShit","Value":"https://www.youtube.com/watch?v=OYjv8ogsEGE","Description":"\"That's some good shit\" youtube video"},
 {"ResultType":"Image","Name":"tobey","Value":"https://i.imgflip.com/19r9yy.jpg","Description":"Tobey Maguire meme"},
 {"ResultType":"Image","Name":"ok","Value":"https://images-na.ssl-images-amazon.com/images/I/614VmsFwoNL._SX355_.jpg","Description":"OPM ok"},
-{"ResultType":"Text","Name":"kolega","Value":"https://www.youtube.com/watch?v=y4nSn-OjPGw","Description":"Upsurt - Kolega"}]
+{"ResultType":"Text","Name":"kolega","Value":"https://www.youtube.com/watch?v=y4nSn-OjPGw","Description":"Upsurt - Kolega"},
+{"ResultType":"Image","Name":"waitNevermind","Value":"https://i.pinimg.com/600x315/b5/f1/27/b5f12790717a79db3dcb09cb2e1bb5d0.jpg","Description":"Wait! ... Nevermind..."},
+{"ResultType":"Image","Name":"pikachu","Value":"https://i.kym-cdn.com/photos/images/original/001/431/201/40f.png","Description":"Surprised Pikachu"},
+{"ResultType":"Image","Name":"hackerman","Value":"https://i.kym-cdn.com/photos/images/newsfeed/001/176/251/4d7.png","Description":"Hackerman meme"}]
