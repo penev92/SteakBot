@@ -12,9 +12,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Assets\gg.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Assets\memeCommands.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y &quot;$(SolutionDir)lib\libsodium.dll&quot; &quot;$(TargetDir)libsodium.dll&quot;&#xD;&#xA;copy /Y &quot;$(SolutionDir)lib\opus.dll&quot; &quot;$(TargetDir)opus.dll&quot;" />
+  </Target>
 
 </Project>
