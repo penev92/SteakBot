@@ -14,7 +14,7 @@ namespace SteakBot.Core.Services
         private AudioOutStream _audioOutStream;
         private bool _isPlaying;
 
-        public async Task JoinAudio(IGuild guild, IVoiceChannel target)
+        public async Task JoinAudioChannel(IGuild guild, IVoiceChannel target)
         {
             if (_connectedChannels.TryGetValue(guild.Id, out IAudioClient client))
             {
@@ -35,7 +35,7 @@ namespace SteakBot.Core.Services
             }
         }
 
-        public async Task LeaveAudio(IGuild guild)
+        public async Task LeaveAudioChannel(IGuild guild)
         {
             _isPlaying = false;
 
@@ -46,7 +46,14 @@ namespace SteakBot.Core.Services
             }
         }
 
-        public async Task SendAudioAsync(IGuild guild, IMessageChannel channel, string filePath)
+        public async Task PlayAudio(IGuild guild, IMessageChannel channel, string audioFile)
+        {
+            await SendAudioAsync(guild, channel, audioFile);
+        }
+
+        #region Private methods
+
+        private async Task SendAudioAsync(IGuild guild, IMessageChannel channel, string filePath)
         {
             if (_isPlaying)
             {
@@ -100,5 +107,7 @@ namespace SteakBot.Core.Services
                 RedirectStandardOutput = true
             });
         }
+
+        #endregion
     }
 }

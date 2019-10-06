@@ -30,19 +30,19 @@ namespace SteakBot.Core.Modules
                 await ReplyAsync($"No such voice channel!");
             }
 
-            await _service.JoinAudio(Context.Guild, channel);
+            await _service.JoinAudioChannel(Context.Guild, channel);
         }
 
         [Command("leave", RunMode = RunMode.Async)]
         public async Task LeaveCmd()
         {
-            await _service.LeaveAudio(Context.Guild);
+            await _service.LeaveAudioChannel(Context.Guild);
         }
 
         [Command("gg", RunMode = RunMode.Async)]
         public async Task Gg()
         {
-            await _service.SendAudioAsync(Context.Guild, Context.Channel, @"C:\Users\Pavel\Desktop\gg.mp3");
+            await _service.PlayAudio(Context.Guild, Context.Channel, @"C:\Users\Pavel\Desktop\gg.mp3");
         }
     }
 }
