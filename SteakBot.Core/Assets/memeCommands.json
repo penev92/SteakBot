@@ -1,314 +1,320 @@
 [
     {
-        "ResultType": "Text",
+        "ResultType": 1,
         "Name": "shrug",
         "Value": "¯\\_(ツ)_/¯",
         "Description": "ASCII shrug"
     },
     {
-        "ResultType": "Text",
+        "ResultType": 1,
         "Name": "tableFlip",
         "Value": "(╯°□°）╯︵ ┻━┻",
         "Description": "ASCII table flip"
     },
     {
-        "ResultType": "Text",
+        "ResultType": 1,
         "Name": "tableBack",
         "Value": "┬──┬◡ﾉ(° -°ﾉ)",
         "Description": "ASCII put the table back"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "balance",
         "Value": "https://i.imgflip.com/23qudi.jpg",
         "Description": "Spongebob admires the balance"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "magic",
         "Value": "https://afinde-production.s3.amazonaws.com/uploads/Imagination.png",
         "Description": "Spongebob admires the magic"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "aliens",
         "Value": "https://imgflip.com/s/meme/Ancient-Aliens.jpg",
         "Description": "Aliens guy with no caption"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "generousGod",
         "Value": "https://img.memecdn.com/when-i-level-up-someone-amp-039-s-account_o_2942005.jpg",
         "Description": "\"I am a generous God\""
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "soGood",
         "Value": "https://i.kym-cdn.com/entries/icons/original/000/006/077/so_good.png",
         "Description": ""
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "justRight",
         "Value": "https://i.kym-cdn.com/entries/icons/original/000/019/698/d96.jpg",
         "Description": ""
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "rabbids",
         "Value": "https://i.imgur.com/gbkf6qc.mp4",
         "Description": "Raving Rabbids cow chase"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "ifYouKnow",
         "Value": "https://i.kym-cdn.com/entries/icons/mobile/000/008/549/ifuknowwhatimean.jpg",
         "Description": "\"If you know what I mean\""
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "dense",
         "Value": "https://i.kym-cdn.com/photos/images/newsfeed/000/540/811/e45.png",
         "Description": "\"You dense mother*\""
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "strangle",
         "Value": "http://www.memes.at/faces/must_resist.jpg",
         "Description": ""
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "facepalm",
         "Value": "https://i.kym-cdn.com/entries/icons/mobile/000/000/554/picard-facepalm.jpg",
         "Description": "Captain Picard facepalm"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "doubleFacepalm",
         "Value": "https://i.kym-cdn.com/photos/images/newsfeed/000/339/529/280.jpg",
         "Description": "Captain Picard + Lieutenant Riker double facepalm"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "notBad",
         "Value": "https://i.kym-cdn.com/photos/images/newsfeed/000/138/246/tumblr_lltzgnHi5F1qzib3wo1_400.jpg",
         "Description": "Not bad Obama"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "butWhy",
         "Value": "http://www.reactiongifs.com/r/but-why.gif",
         "Description": "But why, the gif version"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "daamn",
         "Value": "https://i.imgur.com/G58yDnO.jpg",
         "Description": "DAAAAAMN"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "smart",
         "Value": "https://www.meme-arsenal.com/memes/ac490d2a8ff94ccdc1f84dc2fb3ba701.jpg",
         "Description": "Smart guy"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "itsRetarded",
         "Value": "https://i.kym-cdn.com/photos/images/facebook/001/151/981/927.png",
         "Description": "Oh no, it's retarded"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "doubt",
         "Value": "https://i.imgur.com/uNn17PO.jpg",
         "Description": "Press X for Doubt"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "trap",
         "Value": "https://i.kym-cdn.com/entries/icons/original/000/000/157/itsatrap.jpg",
         "Description": "Admiral Ackbar \"It's a trap!\""
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "like",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/like.gif",
         "Description": "Skype Like emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "tmi",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/tmi.gif",
         "Description": "Skype TMI emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "fuckNo",
         "Value": "https://media.giphy.com/media/12XMGIWtrHBl5e/giphy.gif",
         "Description": "The Office \"NO\" gif"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "blackNo",
         "Value": "https://media.giphy.com/media/FEikw3bXVHdMk/giphy.gif",
         "Description": "Black \"No way\" gif"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "shrugGif",
         "Value": "https://www.tenor.co/vxuu.gif",
         "Description": "Muppet shrug gif"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "cwl",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/cwl.gif",
         "Description": "Skype CWL emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "howAboutNo",
         "Value": "https://imgflip.com/s/meme/How-About-No-Bear.jpg",
         "Description": "How about no bear"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "nod",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/nod.gif",
         "Description": "Skype nod emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "grumpyNo",
         "Value": "https://1u0b5867gsn1ez16a1p2vcj1-wpengine.netdna-ssl.com/wp-content/uploads/2014/09/grumpy-cat-no-1-300x234.jpg",
         "Description": "Grumpy cat \"No\""
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "tumbleweed",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/tumbleweed.gif",
         "Description": "Skype tumbleweed emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "suspicious",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/wonder.gif",
         "Description": "Skype suspicious/wondering emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "bow",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/bow.gif",
         "Description": "Skype bow emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "angry",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/angry.gif",
         "Description": "Skype angry emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "ttm",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/ttm.gif",
         "Description": "Skype talk-too-much emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "wait",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/wait.gif",
         "Description": "Skype wait emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "monkey",
         "Value": "http://static.skaip.org/img/emoticons/180x180/f6fcff/monkey.gif",
         "Description": "Skype monkey emoticon"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "waat",
         "Value": "https://www.youtube.com/watch?v=BnNpM5zez9E",
         "Description": "Skype waat minion"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "wheeze",
         "Value": "https://i.imgur.com/ZHmHih5.png",
         "Description": "Wheezing meme"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "yeahSure",
         "Value": "https://memegenerator.net/img/instances/39161249/yeah-sure.jpg",
         "Description": "Yeah, sure meme"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "deadHorse",
         "Value": "https://media.giphy.com/media/oaZk0WNSO7fXi/giphy.gif",
         "Description": "Beating the dead horse"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "deadHorseSouthPark",
         "Value": "https://media.giphy.com/media/RL0xU1daTlMoE/giphy.gif",
         "Description": "Beating the dead horse, South Park style"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "confused",
         "Value": "http://clipart-library.com/images/6TrooeX8c.png",
         "Description": ""
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "kowalski",
         "Value": "https://i.kym-cdn.com/entries/icons/mobile/000/027/456/kowalski.jpg",
         "Description": "\"Kowalski, analysis!\" meme"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "goodShit",
         "Value": "https://www.youtube.com/watch?v=OYjv8ogsEGE",
         "Description": "\"That's some good shit\" youtube video"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "tobey",
         "Value": "https://i.imgflip.com/19r9yy.jpg",
         "Description": "Tobey Maguire meme"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "ok",
         "Value": "https://images-na.ssl-images-amazon.com/images/I/614VmsFwoNL._SX355_.jpg",
         "Description": "OPM ok"
     },
     {
-        "ResultType": "Text",
+        "ResultType": 1,
         "Name": "kolega",
         "Value": "https://www.youtube.com/watch?v=y4nSn-OjPGw",
         "Description": "Upsurt - Kolega"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "waitNevermind",
         "Value": "https://i.pinimg.com/600x315/b5/f1/27/b5f12790717a79db3dcb09cb2e1bb5d0.jpg",
         "Description": "Wait! ... Nevermind..."
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "pikachu",
         "Value": "https://i.kym-cdn.com/photos/images/original/001/431/201/40f.png",
         "Description": "Surprised Pikachu"
     },
     {
-        "ResultType": "Image",
+        "ResultType": 2,
         "Name": "hackerman",
         "Value": "https://i.kym-cdn.com/photos/images/newsfeed/001/176/251/4d7.png",
         "Description": "Hackerman meme"
+    },
+    {
+        "ResultType": 2,
+        "Name": "confusedScreaming",
+        "Value": "https://i.kym-cdn.com/photos/images/newsfeed/001/172/010/6e4.jpg",
+        "Description": "Confused screaming guy"
     }
 ]
