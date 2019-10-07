@@ -21,13 +21,13 @@ namespace SteakBot.Core.Modules
         {
             if (string.IsNullOrWhiteSpace(channelName))
             {
-                await ReplyAsync($"Channel name needed!");
+                await ReplyAsync("Channel name needed!");
             }
 
             var channel = Context.Guild.VoiceChannels.FirstOrDefault(x => x.Name == channelName);
             if (channel == null)
             {
-                await ReplyAsync($"No such voice channel!");
+                await ReplyAsync("No such voice channel!");
             }
 
             await _service.JoinAudioChannel(Context.Guild, channel);
