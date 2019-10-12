@@ -68,12 +68,12 @@ namespace SteakBot.Core.Objects
 
         public static bool operator ==(MemeCommand lhs, MemeCommand rhs)
         {
-            return lhs.Equals(rhs);
+            return (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null)) || lhs.Equals(rhs);
         }
 
         public static bool operator !=(MemeCommand lhs, MemeCommand rhs)
         {
-            return !lhs.Equals(rhs);
+            return (ReferenceEquals(lhs, null) && !ReferenceEquals(rhs, null)) || !lhs.Equals(rhs);
         }
 
         #endregion
