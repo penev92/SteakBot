@@ -19,21 +19,45 @@ namespace SteakBot.Core.Modules
         [Command("addMeme")]
         public async Task AddMeme(string name, string value, string description)
         {
-            var replyMessage = string.Empty;
-            EmbedBuilder embed = null;
-
-            var type = value.ToLower().Contains("http") ? MemeResultType.Image : MemeResultType.Text;
+            var type = _memeService.GetMemeType(value);
 
             var result = _memeService.AddCommand(new MemeCommand(type, name, value, description));
 
-            if (result)
+            await SendResponse(result, type, value, "Add failed! ;(");
+        }
+
+        [Command("editMeme")]
+        public async Task EditMeme(string oldName, string newName, string newValue, string newDescription)
+        {
+            var type = _memeService.GetMemeType(newValue);
+
+            var result = _memeService.EditCommand(oldName, new MemeCommand(type, newName, newValue, newDescription));
+
+            await SendResponse(result, type, newValue, "Edit failed! ;(");
+        }
+
+        [Command("removeMeme")]
+        public async Task RemoveMeme(string name)
+        {
+            var result = _memeService.RemoveCommand(name);
+
+            var replyMessage = result ? "Removed" : "Remove failed! ;(";
+
+            await ReplyAsync(replyMessage);
+        }
+
+        #region Private methods
+
+        private Task SendResponse(bool commandResult, MemeResultType memeType, string value, string failureMessage)
+        {
+            var replyMessage = string.Empty;
+            var embed = new EmbedBuilder();
+
+            if (commandResult)
             {
-                if (type == MemeResultType.Image)
+                if (memeType == MemeResultType.Image)
                 {
-                    embed = new EmbedBuilder
-                    {
-                        ImageUrl = value
-                    };
+                    embed.ImageUrl = value;
                 }
                 else
                 {
@@ -42,10 +66,11 @@ namespace SteakBot.Core.Modules
             }
             else
             {
-                replyMessage = "Saving failed! ;(";
+                replyMessage = failureMessage;
             }
-
-            await ReplyAsync(replyMessage, embed: embed?.Build());
+            return ReplyAsync(replyMessage, embed: embed?.Build());
         }
+
+        #endregion
     }
 }

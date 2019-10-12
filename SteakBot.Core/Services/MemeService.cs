@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using SteakBot.Core.Objects;
+using SteakBot.Core.Objects.Enums;
 
 namespace SteakBot.Core.Services
 {
@@ -32,7 +34,40 @@ namespace SteakBot.Core.Services
             MemeCommands.Add(newCommand);
             SaveCommands();
             OnReloadCommands?.Invoke();
+
             return true;
+        }
+
+        public bool EditCommand(string oldCommandName, MemeCommand newCommand)
+        {
+            if (!ValidateNewCommand(newCommand) || !DeleteCommand(oldCommandName))
+            {
+                return false;
+            }
+
+            MemeCommands.Add(newCommand);
+            SaveCommands();
+            OnReloadCommands?.Invoke();
+
+            return true;
+        }
+
+        public bool RemoveCommand(string commandName)
+        {
+            if (!DeleteCommand(commandName))
+            {
+                return false;
+            }
+
+            SaveCommands();
+            OnReloadCommands?.Invoke();
+
+            return true;
+        }
+
+        public MemeResultType GetMemeType(string value)
+        {
+            return value.ToLower().Contains("http") ? MemeResultType.Image : MemeResultType.Text;
         }
 
         #endregion
@@ -42,6 +77,19 @@ namespace SteakBot.Core.Services
         private bool ValidateNewCommand(MemeCommand newCmd)
         {
             return !MemeCommands.Contains(newCmd);
+        }
+
+        private bool DeleteCommand(string commandName)
+        {
+            var command = MemeCommands.FirstOrDefault(x => x.Name == commandName);
+            if (command == null)
+            {
+                return false;
+            }
+
+            MemeCommands.Remove(command);
+
+            return true;
         }
 
         private void LoadCommands()
