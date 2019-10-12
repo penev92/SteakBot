@@ -8,6 +8,7 @@ namespace SteakBot.Core.Modules
     class DotaModule : ModuleBase<SocketCommandContext>
     {
         [Command("prizepool")]
+        [Summary("Special snowflake command that is only relevant during July and August")]
         public async Task List()
         {
             var uri = "http://www.dota2.com/international/battlepass/";
