@@ -11,6 +11,7 @@ namespace SteakBot.Core.Modules
     public class QuoteModule : ModuleBase<SocketCommandContext>
     {
         [Command("quote")]
+        [Summary("Duuh, quotes...")]
         public async Task Quote([Remainder]string message)
         {
             await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);

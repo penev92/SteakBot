@@ -17,6 +17,7 @@ namespace SteakBot.Core.Modules
         // You *MUST* mark these commands with 'RunMode.Async'
         // otherwise the bot will not respond until the Task times out.
         [Command("join", RunMode = RunMode.Async)]
+        [Summary("`join <channel name>` - Bot join chosen voice channel")]
         public async Task Join(string channelName)
         {
             if (string.IsNullOrWhiteSpace(channelName))
@@ -34,12 +35,14 @@ namespace SteakBot.Core.Modules
         }
 
         [Command("leave", RunMode = RunMode.Async)]
+        [Summary("SteakBot leaves voice channel")]
         public async Task LeaveCmd()
         {
             await _service.LeaveAudioChannel(Context.Guild);
         }
 
         [Command("gg", RunMode = RunMode.Async)]
+        [Summary("SteakBot says GG")]
         public async Task Gg()
         {
             await _service.PlayAudio(Context.Guild, Context.Channel, "ggVoiceFile");

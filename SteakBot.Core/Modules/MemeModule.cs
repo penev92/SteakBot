@@ -17,6 +17,7 @@ namespace SteakBot.Core.Modules
         }
 
         [Command("addMeme")]
+        [Summary("`addMeme <commandName> <value(text/link)> <description(use \"\" when you have spaces)>` - Add a dank meme of your choosing")]
         public async Task AddMeme(string name, string value, string description)
         {
             var type = _memeService.GetMemeType(value);
@@ -27,6 +28,7 @@ namespace SteakBot.Core.Modules
         }
 
         [Command("editMeme")]
+        [Summary("`editMem <commandName> <newCommandName> <newValue(text/link)> <newDescription(use \"\" when you have spaces)>` - Evolve a meme of your choosing")]
         public async Task EditMeme(string oldName, string newName, string newValue, string newDescription)
         {
             var type = _memeService.GetMemeType(newValue);
@@ -37,6 +39,7 @@ namespace SteakBot.Core.Modules
         }
 
         [Command("removeMeme")]
+        [Summary("`removeMeme <commandName>` - Remove an ancient meme")]
         public async Task RemoveMeme(string name)
         {
             var result = _memeService.RemoveCommand(name);
