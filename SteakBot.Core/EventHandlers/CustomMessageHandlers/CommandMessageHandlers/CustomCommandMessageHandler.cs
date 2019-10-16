@@ -25,26 +25,20 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
             switch (command.ResultType)
             {
                 case MemeResultType.Text:
-                    {
-                        channel.SendMessageAsync(command.Value).Wait();
-                        return true;
-                    }
+                case MemeResultType.Video:
+                    channel.SendMessageAsync(command.Value).Wait();
+                    return true;
 
                 case MemeResultType.Image:
+                    var embed = new EmbedBuilder()
                     {
-                        var embed = new EmbedBuilder
-                        {
-                            ImageUrl = command.Value
-                        };
-
-                        channel.SendMessageAsync("", embed: embed.Build()).Wait();
-                        return true;
-                    }
+                        ImageUrl = command.Value
+                    };
+                    channel.SendMessageAsync("", embed: embed.Build()).Wait();
+                    return true;
 
                 default:
-                    {
-                        return false;
-                    }
+                    return false;
             }
         }
 

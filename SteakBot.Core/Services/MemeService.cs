@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using SteakBot.Core.Objects;
 using SteakBot.Core.Objects.Enums;
@@ -16,6 +17,19 @@ namespace SteakBot.Core.Services
         public event ReloadCommands OnReloadCommands;
 
         private readonly string _memeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
+
+        private readonly string[] _imageFormats =
+        {
+            ".jpg",
+            ".png",
+            ".gif"
+        };
+
+        private readonly string[] _videoFormats =
+        {
+            ".mp4",
+            ".webm"
+        };
 
         public MemeService()
         {
@@ -67,7 +81,37 @@ namespace SteakBot.Core.Services
 
         public MemeResultType GetMemeType(string value)
         {
-            return value.ToLower().Contains("http") ? MemeResultType.Image : MemeResultType.Text;
+            var valueToProcess = value.ToLower();
+
+            // Totally original regex (https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url)
+            Regex urlRegex = new Regex(@"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)");
+            if (urlRegex.IsMatch(valueToProcess))
+            {
+                var isImage = _imageFormats.Any(imageFormat => valueToProcess.EndsWith(imageFormat));
+                var isVideo = _videoFormats.Any(videoFormat => valueToProcess.EndsWith(videoFormat));
+
+                if (isImage && isVideo)
+                {
+                    return MemeResultType.Unknown;
+                }
+
+                if (isImage)
+                {
+                    return MemeResultType.Image;
+                }
+                else if (isVideo)
+                {
+                    return MemeResultType.Video;
+                }
+                else
+                {
+                    return MemeResultType.Text;
+                }
+            }
+            else
+            {
+                return MemeResultType.Text;
+            }
         }
 
         #endregion
