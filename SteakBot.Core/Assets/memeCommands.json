@@ -54,7 +54,7 @@
         "Description": ""
     },
     {
-        "ResultType": 2,
+        "ResultType": 3,
         "Name": "rabbids",
         "Value": "https://i.imgur.com/gbkf6qc.mp4",
         "Description": "Raving Rabbids cow chase"
@@ -228,7 +228,7 @@
         "Description": "Skype monkey emoticon"
     },
     {
-        "ResultType": 2,
+        "ResultType": 3,
         "Name": "waat",
         "Value": "https://www.youtube.com/watch?v=BnNpM5zez9E",
         "Description": "Skype waat minion"
@@ -270,7 +270,7 @@
         "Description": "\"Kowalski, analysis!\" meme"
     },
     {
-        "ResultType": 2,
+        "ResultType": 3,
         "Name": "goodShit",
         "Value": "https://www.youtube.com/watch?v=OYjv8ogsEGE",
         "Description": "\"That's some good shit\" youtube video"
@@ -288,7 +288,7 @@
         "Description": "OPM ok"
     },
     {
-        "ResultType": 1,
+        "ResultType": 3,
         "Name": "kolega",
         "Value": "https://www.youtube.com/watch?v=y4nSn-OjPGw",
         "Description": "Upsurt - Kolega"
@@ -316,5 +316,23 @@
         "Name": "confusedScreaming",
         "Value": "https://i.kym-cdn.com/photos/images/newsfeed/001/172/010/6e4.jpg",
         "Description": "Confused screaming guy"
+    },
+    {
+        "ResultType": 1,
+        "Name": "torb",
+        "Value": "HARD VÖRK PÄJS ÅFF",
+        "Description": "u know it"
+    },
+    {
+        "ResultType": 2,
+        "Name": "accusedCat",
+        "Value": "https://memeworld.funnyjunk.com/gifs/Woman+yelling+at+a+cat+gif_ff475e_7348014.gif",
+        "Description": "Confused, wrongly accused cat"
+    },
+    {
+        "ResultType": 3,
+        "Name": "circleGame",
+        "Value": "https://2eu.funnyjunk.com/comments/I+love+you+man+_e4aef7dfe832d0da9797615f65e9a2b2.mp4",
+        "Description": "Christmas dance circle game"
     }
 ]
