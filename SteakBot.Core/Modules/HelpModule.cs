@@ -11,6 +11,8 @@ namespace SteakBot.Core.Modules
         private readonly MemeService _memeService;
         private readonly CommandService _commandService;
 
+        private readonly int _discordMsgMaxChars = 2000;
+
         public HelpModule(MemeService memeService, CommandService commandService)
         {
             _memeService = memeService;
@@ -21,7 +23,20 @@ namespace SteakBot.Core.Modules
         [Summary("Lists all available \"memes\"")]
         public async Task List()
         {
-            await ReplyAsync(string.Join("\r\n", _memeService.MemeCommands.Select(x => $"`{x.Name}` - {x.Description}")));
+            StringBuilder memeListStringBuilder = new StringBuilder();
+            foreach(var meme in _memeService.MemeCommands)
+            {
+                var currMemeFormatted = $"`{meme.Name}` - {meme.Description}";
+                if (memeListStringBuilder.Length + currMemeFormatted.Length >= _discordMsgMaxChars)
+                {
+                    await ReplyAsync(memeListStringBuilder.ToString());
+                    memeListStringBuilder.Clear();
+                }
+
+                memeListStringBuilder.AppendLine(currMemeFormatted);
+            }
+
+            await ReplyAsync(memeListStringBuilder.ToString());
         }
 
         [Command("help")]
