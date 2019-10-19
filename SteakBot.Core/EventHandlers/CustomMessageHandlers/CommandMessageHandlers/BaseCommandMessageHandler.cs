@@ -8,8 +8,8 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 {
     internal abstract class BaseCommandMessageHandler : ICustomMessageHandler
     {
-        protected const string CommandChar = "!";
-        protected const string DeleteMessageChar = "!";
+        protected const string CommandChar = "]";
+        protected const string DeleteMessageChar = "[";
 
         protected IEnumerable<string> CommandNames;
 
