@@ -13,7 +13,8 @@ namespace SteakBot.Core.Modules
         }
 
         [Command("say")]
-        [Summary("`say <something>` - Bot says something")]
+        [Summary("Bot says something")]
+        [Remarks("Usage: `say <something>`")]
         public async Task Say([Remainder]string message)
         {
             await ReplyAsync(message);

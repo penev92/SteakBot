@@ -2,6 +2,8 @@
 using System.Text;
 using System.Threading.Tasks;
 using Discord.Commands;
+using Discord.Commands.Builders;
+using SteakBot.Core.Extensions;
 using SteakBot.Core.Services;
 
 namespace SteakBot.Core.Modules
@@ -43,7 +45,7 @@ namespace SteakBot.Core.Modules
         [Summary("Lists all commands with their summaries")]
         public async Task Help()
         {
-            await ReplyAsync($"\n{ string.Join("\n", _commandService.Commands.Select(x => $"**`{x.Name}`** - {x.Summary}")) }\n");
+            await ReplyAsync($"{ string.Join("\n", _commandService.Commands.Select(x => x.CustomToString())) }");
         }
     }
 }
