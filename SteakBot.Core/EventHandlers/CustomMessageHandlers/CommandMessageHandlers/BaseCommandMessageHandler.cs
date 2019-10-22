@@ -8,8 +8,8 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 {
     internal abstract class BaseCommandMessageHandler : ICustomMessageHandler
     {
-        protected const string CommandChar = "!";
-        protected const string DeleteMessageChar = "!";
+        protected const string CommandChar = "]";
+        protected const string DeleteMessageChar = "[";
 
         protected IEnumerable<string> CommandNames;
 
@@ -30,10 +30,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 
         protected abstract bool InvokeInner(SocketUserMessage message);
 
-        protected virtual bool ShouldDeleteMessage(SocketUserMessage message)
-        {
-            return message.Content.EndsWith(DeleteMessageChar);
-        }
+        protected abstract bool ShouldDeleteMessage(SocketUserMessage message);
 
         protected virtual async Task DeleteMessageAsync(SocketUserMessage message)
         {

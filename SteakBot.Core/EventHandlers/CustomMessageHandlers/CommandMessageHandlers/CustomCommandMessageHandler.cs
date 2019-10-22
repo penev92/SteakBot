@@ -26,7 +26,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
             {
                 case MemeResultType.Text:
                 case MemeResultType.Video:
-                    channel.SendMessageAsync(command.Value).Wait();
+                    channel.SendMessageAsync($"{message.Author.Username}: {command.Value}").Wait();
                     return true;
 
                 case MemeResultType.Image:
@@ -34,12 +34,17 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
                     {
                         ImageUrl = command.Value
                     };
-                    channel.SendMessageAsync("", embed: embed.Build()).Wait();
+                    channel.SendMessageAsync($"{message.Author.Username}:", embed: embed.Build()).Wait();
                     return true;
 
                 default:
                     return false;
             }
+        }
+
+        protected override bool ShouldDeleteMessage(SocketUserMessage message)
+        {
+            return true;
         }
 
         #region Private methods
