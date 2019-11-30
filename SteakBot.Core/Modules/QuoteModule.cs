@@ -80,6 +80,20 @@ namespace SteakBot.Core.Modules
             return false;
         }
 
+        private static EmbedAuthorBuilder BuildAuthorEmbed(IUser author, string authorNameToUse)
+        {
+            if (author == null)
+            {
+                return null;
+            }
+
+            return new EmbedAuthorBuilder
+            {
+                Name = authorNameToUse,
+                IconUrl = author.GetAvatarUrl()
+            };
+        }
+
         private static EmbedFooterBuilder BuildFooterEmbed(IChannel referredChannel, string timestamp)
         {
             var footerText = string.Empty;
@@ -106,30 +120,16 @@ namespace SteakBot.Core.Modules
                 lines.RemoveAt(0);
             }
 
-            var embedAuthor = new EmbedAuthorBuilder();
-            var embedDescription = new StringBuilder();
-
             if (TryGetQuoteAuthorAndTimestamp(lines[0].Trim(), Context.Channel, out var author, out var authorName, out var timestamp))
             {
                 lines.RemoveAt(0);
-
-                embedAuthor = new EmbedAuthorBuilder
-                {
-                    Name = authorName,
-                    IconUrl = author.GetAvatarUrl()
-                };
-            }
-
-            foreach (var line in lines)
-            {
-                embedDescription.AppendLine(line);
             }
 
             var embed = new EmbedBuilder
             {
                 Color = Color.Blue,
-                Author = embedAuthor,
-                Description = embedDescription.ToString(),
+                Author = BuildAuthorEmbed(author, authorName),
+                Description = string.Join("\n", lines),
                 Footer = BuildFooterEmbed(referredChannel, timestamp)
             };
 
