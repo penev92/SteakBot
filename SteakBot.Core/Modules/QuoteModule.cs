@@ -20,6 +20,23 @@ namespace SteakBot.Core.Modules
             await ReplyAsync("", false, embed);
         }
 
+        [Command("quote")]
+        [Summary("Duuh, quotes...")]
+        public async Task Quote(string channelMention, ulong messageId)
+        {
+            if (!TryGetTextChannelByMention(channelMention, out var channel))
+            {
+                await ReplyAsync("Unknown channel specified.");
+                return;
+            }
+
+            await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
+
+            var message = await channel.GetMessageAsync(messageId);
+            var embed = CreateEmbed(message);
+            await ReplyAsync("", false, embed);
+        }
+
         #region Private methods
 
         private static IEnumerable<IUser> GetChannelUsers(IChannel channel)
@@ -130,6 +147,24 @@ namespace SteakBot.Core.Modules
                 Color = Color.Blue,
                 Author = BuildAuthorEmbed(author, authorName),
                 Description = string.Join("\n", lines),
+                Footer = BuildFooterEmbed(referredChannel, timestamp)
+            };
+
+            return embed.Build();
+        }
+
+        private static Embed CreateEmbed(IMessage message)
+        {
+            var author = message.Author;
+            var authorName = (author as SocketGuildUser)?.Nickname ?? author.Username;
+            var referredChannel = message.Channel;
+            var timestamp = message.Timestamp.ToString();
+
+            var embed = new EmbedBuilder
+            {
+                Color = Color.Blue,
+                Author = BuildAuthorEmbed(author, authorName),
+                Description = message.Content,
                 Footer = BuildFooterEmbed(referredChannel, timestamp)
             };
 
