@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -24,7 +24,7 @@ namespace SteakBot.Core.Modules
         [Summary("Duuh, quotes...")]
         public async Task Quote(string channelMention, ulong messageId)
         {
-            if (!TryGetTextChannelByMention(channelMention, out var channel))
+            if (!TryGetChannel(channelMention, out var channel))
             {
                 await ReplyAsync("Unknown channel specified.");
                 return;
@@ -41,7 +41,7 @@ namespace SteakBot.Core.Modules
         [Summary("Duuh, quotes...")]
         public async Task Quote(string channelMention, ulong firstMessageId, ulong lastMessageId)
         {
-            if (!TryGetTextChannelByMention(channelMention, out var channel))
+            if (!TryGetChannel(channelMention, out var channel))
             {
                 await ReplyAsync("Unknown channel specified.");
                 return;
@@ -75,6 +75,34 @@ namespace SteakBot.Core.Modules
             await ReplyAsync("", false, embed);
         }
 
+        [Command("quote")]
+        [Summary("Duuh, quotes...")]
+        public async Task Quote(Uri messageUri)
+        {
+            var parts = messageUri.AbsolutePath.Split('/').Reverse().ToArray();
+
+            if (!ulong.TryParse(parts[0], out var messageId) ||
+                !ulong.TryParse(parts[1], out var channelId) ||
+                !ulong.TryParse(parts[2], out var guildId))
+            {
+                return;
+            }
+
+            if (!TryGetGuild(guildId, out var guild))
+            {
+                return;
+            }
+
+            if (!TryGetChannel(guild, channelId, out var channel))
+            {
+                return;
+            }
+
+            var message = await channel.GetMessageAsync(messageId);
+            var embed = CreateEmbed(message);
+            await ReplyAsync("", false, embed);
+        }
+
         #region Private methods
 
         private static IEnumerable<IUser> GetChannelUsers(IChannel channel)
@@ -96,7 +124,7 @@ namespace SteakBot.Core.Modules
             return usersByName;
         }
 
-        private bool TryGetTextChannelByMention(string channelMention, out SocketTextChannel channel)
+        private bool TryGetChannel(string channelMention, out SocketTextChannel channel)
         {
             foreach (var socketGuildChannel in Context.Guild.Channels)
             {
@@ -108,6 +136,36 @@ namespace SteakBot.Core.Modules
             }
 
             channel = null;
+            return false;
+        }
+
+        private static bool TryGetChannel(SocketGuild guild, ulong channelId, out SocketTextChannel channel)
+        {
+            foreach (var socketGuildChannel in guild.Channels)
+            {
+                if (socketGuildChannel is SocketTextChannel tmpChannel && tmpChannel.Id == channelId)
+                {
+                    channel = tmpChannel;
+                    return true;
+                }
+            }
+
+            channel = null;
+            return false;
+        }
+
+        private bool TryGetGuild(ulong guildId, out SocketGuild guild)
+        {
+            foreach (var clientGuild in Context.Client.Guilds)
+            {
+                if (clientGuild.Id == guildId)
+                {
+                    guild = clientGuild;
+                    return true;
+                }
+            }
+
+            guild = null;
             return false;
         }
 
@@ -170,7 +228,7 @@ namespace SteakBot.Core.Modules
         {
             var lines = message.Split('\n').ToList();
 
-            if (TryGetTextChannelByMention(lines[0].Trim(), out var referredChannel))
+            if (TryGetChannel(lines[0].Trim(), out var referredChannel))
             {
                 lines.RemoveAt(0);
             }
