@@ -17,7 +17,7 @@ namespace SteakBot.Core.Modules
             await Context.Channel.DeleteMessageAsync(Context.Message);
 
             var embed = CreateEmbed(message);
-            await ReplyAsync("", false, embed);
+            await SendQuote(Context.User, embed);
         }
 
         [Command("quote")]
@@ -34,7 +34,7 @@ namespace SteakBot.Core.Modules
 
             var message = await channel.GetMessageAsync(messageId);
             var embed = CreateEmbed(message);
-            await ReplyAsync("", false, embed);
+            await SendQuote(Context.User, embed);
         }
 
         [Command("quote")]
@@ -51,7 +51,7 @@ namespace SteakBot.Core.Modules
 
             var messages = await GetMessageList(channel, firstMessageId, lastMessageId);
             var embed = CreateEmbed(messages);
-            await ReplyAsync("", false, embed);
+            await SendQuote(Context.User, embed);
         }
 
         [Command("quote")]
@@ -79,7 +79,7 @@ namespace SteakBot.Core.Modules
 
             var message = await channel.GetMessageAsync(messageId);
             var embed = CreateEmbed(message);
-            await ReplyAsync("", false, embed);
+            await SendQuote(Context.User, embed);
         }
 
         [Command("quote")]
@@ -115,7 +115,7 @@ namespace SteakBot.Core.Modules
 
             var messages = await GetMessageList(channel, firstMessageId, lastMessageId);
             var embed = CreateEmbed(messages);
-            await ReplyAsync("", false, embed);
+            await SendQuote(Context.User, embed);
         }
 
         #region Private methods
@@ -327,6 +327,11 @@ namespace SteakBot.Core.Modules
             };
 
             return embed.Build();
+        }
+
+        private async Task SendQuote(IUser user, Embed embed)
+        {
+            await ReplyAsync($"{user.Username}:", false, embed);
         }
 
         #endregion
