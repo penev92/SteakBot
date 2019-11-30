@@ -19,15 +19,10 @@ namespace SteakBot.Core.Modules
             var usersByName = GetChannelUsersDictionary(Context.Channel);
 
             var lines = message.Split('\n').ToList();
-            SocketTextChannel referredChannel = null;
 
-            foreach (var socketGuildChannel in Context.Guild.Channels)
+            if (TryGetTextChannelByMention(lines[0].Trim(), out var referredChannel))
             {
-                if (socketGuildChannel is SocketTextChannel channel && channel.Mention == lines[0].Trim())
-                {
-                    referredChannel = channel;
-                    lines.RemoveAt(0);
-                }
+                lines.RemoveAt(0);
             }
 
             var embedDescription = new StringBuilder();
@@ -105,6 +100,21 @@ namespace SteakBot.Core.Modules
             var usersByName = usersByNameTmp.ToDictionary(x => x.Key, y => y.SelectMany(z => z).ToList());
 
             return usersByName;
+        }
+
+        private bool TryGetTextChannelByMention(string channelMention, out SocketTextChannel channel)
+        {
+            foreach (var socketGuildChannel in Context.Guild.Channels)
+            {
+                if (socketGuildChannel is SocketTextChannel tmpChannel && tmpChannel.Mention == channelMention)
+                {
+                    channel = tmpChannel;
+                    return true;
+                }
+            }
+
+            channel = null;
+            return false;
         }
 
         #endregion
