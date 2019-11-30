@@ -16,11 +16,7 @@ namespace SteakBot.Core.Modules
         {
             await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
 
-            var users = GetUsers().ToList();
-            var usersByUsername = users.GroupBy(x => x.Username);
-            var usersByNickname = users.Cast<SocketGuildUser>().Where(x => !string.IsNullOrWhiteSpace(x.Nickname)).GroupBy(x => x.Nickname);
-            var usersByNameTmp = usersByNickname.Union(usersByUsername).GroupBy(x => x.Key);
-            var usersByName = usersByNameTmp.ToDictionary(x => x.Key, y => y.SelectMany(z => z).ToList());
+            var usersByName = GetChannelUsersDictionary(Context.Channel);
 
             var lines = message.Split('\n').ToList();
             SocketTextChannel referredChannel = null;
@@ -90,12 +86,27 @@ namespace SteakBot.Core.Modules
             await ReplyAsync("", false, embed.Build());
         }
 
-        private IEnumerable<IUser> GetUsers()
+        #region Private methods
+
+        private static IEnumerable<IUser> GetChannelUsers(IChannel channel)
         {
-            var usersAdapter = Context.Channel.GetUsersAsync();
+            var usersAdapter = channel.GetUsersAsync();
             var users = usersAdapter.ToList().Result.SelectMany(x => x);
 
             return users;
         }
+
+        private static Dictionary<string, List<IUser>> GetChannelUsersDictionary(IChannel channel)
+        {
+            var users = GetChannelUsers(channel).ToList();
+            var usersByUsername = users.GroupBy(x => x.Username);
+            var usersByNickname = users.Cast<SocketGuildUser>().Where(x => !string.IsNullOrWhiteSpace(x.Nickname)).GroupBy(x => x.Nickname);
+            var usersByNameTmp = usersByNickname.Union(usersByUsername).GroupBy(x => x.Key);
+            var usersByName = usersByNameTmp.ToDictionary(x => x.Key, y => y.SelectMany(z => z).ToList());
+
+            return usersByName;
+        }
+
+        #endregion
     }
 }
