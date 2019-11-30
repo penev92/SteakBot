@@ -14,7 +14,7 @@ namespace SteakBot.Core.Modules
         [Summary("Duuh, quotes...")]
         public async Task Quote([Remainder]string message)
         {
-            await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
+            await Context.Channel.DeleteMessageAsync(Context.Message);
 
             var lines = message.Split('\n').ToList();
 
