@@ -77,6 +77,8 @@ namespace SteakBot.Core.Modules
                 return;
             }
 
+            await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
+
             var message = await channel.GetMessageAsync(messageId);
             var embed = CreateEmbed(message);
             await SendQuote(Context.User, embed);
