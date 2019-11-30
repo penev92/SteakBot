@@ -42,8 +42,9 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
             }
         }
 
-        protected override bool ShouldDeleteMessage(SocketUserMessage message)
+        protected override bool ShouldDeleteMessage(SocketUserMessage message, out string deleteReason)
         {
+            deleteReason = "Automatically deleting a meme command.";
             return true;
         }
 

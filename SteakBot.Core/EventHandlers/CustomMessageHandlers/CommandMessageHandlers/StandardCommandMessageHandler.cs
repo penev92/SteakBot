@@ -37,9 +37,16 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
             return result.IsSuccess;
         }
 
-        protected override bool ShouldDeleteMessage(SocketUserMessage message)
+        protected override bool ShouldDeleteMessage(SocketUserMessage message, out string deleteReason)
         {
-            return message.Content.EndsWith(DeleteMessageChar);
+            if (message.Content.EndsWith(DeleteMessageChar))
+            {
+                deleteReason = "User command ended with the DeleteMessageCharacter";
+                return true;
+            }
+
+            deleteReason = string.Empty;
+            return false;
         }
     }
 }

@@ -22,19 +22,22 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 
         public void Invoke(SocketUserMessage message)
         {
-            if (InvokeInner(message) && ShouldDeleteMessage(message))
+            if (InvokeInner(message) && ShouldDeleteMessage(message, out var deleteReason))
             {
-                DeleteMessageAsync(message).Wait();
+                DeleteMessageAsync(message, deleteReason).Wait();
             }
         }
 
         protected abstract bool InvokeInner(SocketUserMessage message);
 
-        protected abstract bool ShouldDeleteMessage(SocketUserMessage message);
+        protected abstract bool ShouldDeleteMessage(SocketUserMessage message, out string deleteReason);
 
-        protected virtual async Task DeleteMessageAsync(SocketUserMessage message)
+        protected virtual async Task DeleteMessageAsync(SocketUserMessage message, string deleteReason = "")
         {
-            await message.Channel.DeleteMessageAsync(message, RequestOptions.Default);
+            await message.Channel.DeleteMessageAsync(message,
+                string.IsNullOrEmpty(deleteReason)
+                    ? RequestOptions.Default
+                    : new RequestOptions { AuditLogReason = deleteReason });
         }
     }
 }
