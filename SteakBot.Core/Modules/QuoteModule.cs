@@ -49,28 +49,7 @@ namespace SteakBot.Core.Modules
 
             await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
 
-            var firstMessage = await channel.GetMessageAsync(firstMessageId);
-            var downloadedMessages = channel.GetMessagesAsync(firstMessageId, Direction.After, 25);
-            var firstPage = (await downloadedMessages.First()).ToArray();
-
-            var messages = new List<IMessage>
-            {
-                firstMessage
-            };
-
-            for (var i = firstPage.Length - 1; i >= 0; i--)
-            {
-                if (firstPage[i].Author == firstMessage.Author)
-                {
-                    messages.Add(firstPage[i]);
-                }
-
-                if (firstPage[i].Id == lastMessageId)
-                {
-                    break;
-                }
-            }
-
+            var messages = await GetMessageList(channel, firstMessageId, lastMessageId);
             var embed = CreateEmbed(messages);
             await ReplyAsync("", false, embed);
         }
@@ -100,6 +79,42 @@ namespace SteakBot.Core.Modules
 
             var message = await channel.GetMessageAsync(messageId);
             var embed = CreateEmbed(message);
+            await ReplyAsync("", false, embed);
+        }
+
+        [Command("quote")]
+        [Summary("Duuh, quotes...")]
+        public async Task Quote(Uri firstMessageUri, Uri lastMessageUri)
+        {
+            var parts = firstMessageUri.AbsolutePath.Split('/').Reverse().ToArray();
+
+            if (!ulong.TryParse(parts[0], out var firstMessageId) ||
+                !ulong.TryParse(parts[1], out var channelId) ||
+                !ulong.TryParse(parts[2], out var guildId))
+            {
+                return;
+            }
+
+            if (!TryGetGuild(guildId, out var guild))
+            {
+                return;
+            }
+
+            if (!TryGetChannel(guild, channelId, out var channel))
+            {
+                return;
+            }
+
+            var lastMessageIdentifier = lastMessageUri.AbsolutePath.Split('/').Last();
+            if (!ulong.TryParse(lastMessageIdentifier, out var lastMessageId))
+            {
+                return;
+            }
+
+            await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
+
+            var messages = await GetMessageList(channel, firstMessageId, lastMessageId);
+            var embed = CreateEmbed(messages);
             await ReplyAsync("", false, embed);
         }
 
@@ -167,6 +182,34 @@ namespace SteakBot.Core.Modules
 
             guild = null;
             return false;
+        }
+
+        private async Task<List<IMessage>> GetMessageList(SocketTextChannel channel, ulong firstMessageId, ulong lastMessageId)
+        {
+            var firstMessage = await channel.GetMessageAsync(firstMessageId);
+
+            var downloadedMessages = channel.GetMessagesAsync(firstMessageId, Direction.After, 25);
+            var firstPage = (await downloadedMessages.First()).ToArray();
+
+            var messages = new List<IMessage>
+            {
+                firstMessage
+            };
+
+            for (var i = firstPage.Length - 1; i >= 0; i--)
+            {
+                if (firstPage[i].Author == firstMessage.Author)
+                {
+                    messages.Add(firstPage[i]);
+                }
+
+                if (firstPage[i].Id == lastMessageId)
+                {
+                    break;
+                }
+            }
+
+            return messages;
         }
 
         private static bool TryGetQuoteAuthorAndTimestamp(string messageLine, IChannel channel, out IUser author, out string authorName, out string timestamp)
