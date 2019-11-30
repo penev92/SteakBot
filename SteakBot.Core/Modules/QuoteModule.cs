@@ -37,6 +37,44 @@ namespace SteakBot.Core.Modules
             await ReplyAsync("", false, embed);
         }
 
+        [Command("quote")]
+        [Summary("Duuh, quotes...")]
+        public async Task Quote(string channelMention, ulong firstMessageId, ulong lastMessageId)
+        {
+            if (!TryGetTextChannelByMention(channelMention, out var channel))
+            {
+                await ReplyAsync("Unknown channel specified.");
+                return;
+            }
+
+            await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
+
+            var firstMessage = await channel.GetMessageAsync(firstMessageId);
+            var downloadedMessages = channel.GetMessagesAsync(firstMessageId, Direction.After, 25);
+            var firstPage = (await downloadedMessages.First()).ToArray();
+
+            var messages = new List<IMessage>
+            {
+                firstMessage
+            };
+
+            for (var i = firstPage.Length - 1; i >= 0; i--)
+            {
+                if (firstPage[i].Author == firstMessage.Author)
+                {
+                    messages.Add(firstPage[i]);
+                }
+
+                if (firstPage[i].Id == lastMessageId)
+                {
+                    break;
+                }
+            }
+
+            var embed = CreateEmbed(messages);
+            await ReplyAsync("", false, embed);
+        }
+
         #region Private methods
 
         private static IEnumerable<IUser> GetChannelUsers(IChannel channel)
@@ -165,6 +203,25 @@ namespace SteakBot.Core.Modules
                 Color = Color.Blue,
                 Author = BuildAuthorEmbed(author, authorName),
                 Description = message.Content,
+                Footer = BuildFooterEmbed(referredChannel, timestamp)
+            };
+
+            return embed.Build();
+        }
+
+        private static Embed CreateEmbed(IList<IMessage> messages)
+        {
+            var message = messages.First();
+            var author = message.Author;
+            var authorName = (author as SocketGuildUser)?.Nickname ?? author.Username;
+            var referredChannel = message.Channel;
+            var timestamp = message.Timestamp.ToString();
+
+            var embed = new EmbedBuilder
+            {
+                Color = Color.Blue,
+                Author = BuildAuthorEmbed(author, authorName),
+                Description = string.Join("\n", messages.Select(x => x.Content)),
                 Footer = BuildFooterEmbed(referredChannel, timestamp)
             };
 
