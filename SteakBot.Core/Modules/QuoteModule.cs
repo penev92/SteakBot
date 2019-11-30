@@ -42,24 +42,12 @@ namespace SteakBot.Core.Modules
                 embedDescription.AppendLine(line);
             }
 
-            var footerText = string.Empty;
-
-            if (!string.IsNullOrEmpty(timestamp))
-            {
-                footerText = $"  -  {timestamp}";
-            }
-
-            if (referredChannel != null)
-            {
-                footerText += $", in #{referredChannel.Name}";
-            }
-
             var embed = new EmbedBuilder
             {
                 Color = Color.Blue,
                 Author = embedAuthor,
                 Description = embedDescription.ToString(),
-                Footer = new EmbedFooterBuilder { Text = footerText }
+                Footer = BuildFooterEmbed(referredChannel, timestamp)
             };
 
             await ReplyAsync("", false, embed.Build());
@@ -123,6 +111,23 @@ namespace SteakBot.Core.Modules
             authorName = null;
             timestamp = null;
             return false;
+        }
+
+        private static EmbedFooterBuilder BuildFooterEmbed(IChannel referredChannel, string timestamp)
+        {
+            var footerText = string.Empty;
+
+            if (!string.IsNullOrEmpty(timestamp))
+            {
+                footerText = $"  -  {timestamp}";
+            }
+
+            if (referredChannel != null)
+            {
+                footerText += $", in #{referredChannel.Name}";
+            }
+
+            return new EmbedFooterBuilder { Text = footerText };
         }
 
         #endregion
