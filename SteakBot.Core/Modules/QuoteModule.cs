@@ -16,41 +16,8 @@ namespace SteakBot.Core.Modules
         {
             await Context.Channel.DeleteMessageAsync(Context.Message);
 
-            var lines = message.Split('\n').ToList();
-
-            if (TryGetTextChannelByMention(lines[0].Trim(), out var referredChannel))
-            {
-                lines.RemoveAt(0);
-            }
-
-            var embedAuthor = new EmbedAuthorBuilder();
-            var embedDescription = new StringBuilder();
-
-            if (TryGetQuoteAuthorAndTimestamp(lines[0].Trim(), Context.Channel, out var author, out var authorName, out var timestamp))
-            {
-                lines.RemoveAt(0);
-
-                embedAuthor = new EmbedAuthorBuilder
-                {
-                    Name = authorName,
-                    IconUrl = author.GetAvatarUrl()
-                };
-            }
-
-            foreach (var line in lines)
-            {
-                embedDescription.AppendLine(line);
-            }
-
-            var embed = new EmbedBuilder
-            {
-                Color = Color.Blue,
-                Author = embedAuthor,
-                Description = embedDescription.ToString(),
-                Footer = BuildFooterEmbed(referredChannel, timestamp)
-            };
-
-            await ReplyAsync("", false, embed.Build());
+            var embed = CreateEmbed(message);
+            await ReplyAsync("", false, embed);
         }
 
         #region Private methods
@@ -128,6 +95,45 @@ namespace SteakBot.Core.Modules
             }
 
             return new EmbedFooterBuilder { Text = footerText };
+        }
+
+        private Embed CreateEmbed(string message)
+        {
+            var lines = message.Split('\n').ToList();
+
+            if (TryGetTextChannelByMention(lines[0].Trim(), out var referredChannel))
+            {
+                lines.RemoveAt(0);
+            }
+
+            var embedAuthor = new EmbedAuthorBuilder();
+            var embedDescription = new StringBuilder();
+
+            if (TryGetQuoteAuthorAndTimestamp(lines[0].Trim(), Context.Channel, out var author, out var authorName, out var timestamp))
+            {
+                lines.RemoveAt(0);
+
+                embedAuthor = new EmbedAuthorBuilder
+                {
+                    Name = authorName,
+                    IconUrl = author.GetAvatarUrl()
+                };
+            }
+
+            foreach (var line in lines)
+            {
+                embedDescription.AppendLine(line);
+            }
+
+            var embed = new EmbedBuilder
+            {
+                Color = Color.Blue,
+                Author = embedAuthor,
+                Description = embedDescription.ToString(),
+                Footer = BuildFooterEmbed(referredChannel, timestamp)
+            };
+
+            return embed.Build();
         }
 
         #endregion
