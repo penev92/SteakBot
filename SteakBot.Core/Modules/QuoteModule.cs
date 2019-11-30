@@ -16,8 +16,6 @@ namespace SteakBot.Core.Modules
         {
             await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
 
-            var usersByName = GetChannelUsersDictionary(Context.Channel);
-
             var lines = message.Split('\n').ToList();
 
             if (TryGetTextChannelByMention(lines[0].Trim(), out var referredChannel))
@@ -25,37 +23,23 @@ namespace SteakBot.Core.Modules
                 lines.RemoveAt(0);
             }
 
-            var embedDescription = new StringBuilder();
             var embedAuthor = new EmbedAuthorBuilder();
+            var embedDescription = new StringBuilder();
 
-            var timestamp = string.Empty;
+            if (TryGetQuoteAuthorAndTimestamp(lines[0].Trim(), Context.Channel, out var author, out var authorName, out var timestamp))
+            {
+                lines.RemoveAt(0);
+
+                embedAuthor = new EmbedAuthorBuilder
+                {
+                    Name = authorName,
+                    IconUrl = author.GetAvatarUrl()
+                };
+            }
 
             foreach (var line in lines)
             {
-                var isAuthorLine = false;
-                foreach (var userList in usersByName)
-                {
-                    if (line.StartsWith(userList.Key))
-                    {
-                        embedAuthor = new EmbedAuthorBuilder
-                        {
-                            Name = userList.Key,
-                            IconUrl = userList.Value.Count == 1 ? userList.Value.First().GetAvatarUrl() : null
-                        };
-
-                        isAuthorLine = true;
-
-                        var trim = line.Substring(userList.Key.Length);
-                        timestamp = trim.Trim();
-
-                        break;
-                    }
-                }
-
-                if (!isAuthorLine)
-                {
-                    embedDescription.AppendLine(line);
-                }
+                embedDescription.AppendLine(line);
             }
 
             var footerText = string.Empty;
@@ -114,6 +98,30 @@ namespace SteakBot.Core.Modules
             }
 
             channel = null;
+            return false;
+        }
+
+        private static bool TryGetQuoteAuthorAndTimestamp(string messageLine, IChannel channel, out IUser author, out string authorName, out string timestamp)
+        {
+            var usersByName = GetChannelUsersDictionary(channel);
+
+            foreach (var userList in usersByName)
+            {
+                if (messageLine.StartsWith(userList.Key))
+                {
+                    author = userList.Value.Count == 1 ? userList.Value.First() : null;
+                    authorName = userList.Key;
+
+                    var trim = messageLine.Substring(userList.Key.Length);
+                    timestamp = trim.Trim();
+
+                    return true;
+                }
+            }
+
+            author = null;
+            authorName = null;
+            timestamp = null;
             return false;
         }
 
