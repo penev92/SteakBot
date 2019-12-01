@@ -68,12 +68,7 @@ namespace SteakBot.Core.Modules
                 return;
             }
 
-            if (!TryGetGuild(guildId, out var guild))
-            {
-                return;
-            }
-
-            if (!TryGetChannel(guild, channelId, out var channel))
+            if (!TryGetGuild(guildId, out var guild) || !TryGetChannel(guild, channelId, out var channel))
             {
                 return;
             }
@@ -99,12 +94,7 @@ namespace SteakBot.Core.Modules
                 return;
             }
 
-            if (!TryGetGuild(guildId, out var guild))
-            {
-                return;
-            }
-
-            if (!TryGetChannel(guild, channelId, out var channel))
+            if (!TryGetGuild(guildId, out var guild) || !TryGetChannel(guild, channelId, out var channel))
             {
                 return;
             }
@@ -268,7 +258,10 @@ namespace SteakBot.Core.Modules
                 footerText += $", in #{referredChannel.Name}";
             }
 
-            return new EmbedFooterBuilder { Text = footerText };
+            return new EmbedFooterBuilder
+            {
+                Text = footerText
+            };
         }
 
         private Embed CreateEmbed(string message)
