@@ -11,7 +11,7 @@ namespace SteakBot.Core.Modules
     public class QuoteModule : ModuleBase<SocketCommandContext>
     {
         [Command("quote")]
-        [Summary("Duuh, quotes...")]
+        [Summary("Quotes an arbitrary message with optional author, source channel and timestamp.")]
         public async Task Quote([Remainder]string message)
         {
             await Context.Channel.DeleteMessageAsync(Context.Message);
@@ -21,7 +21,7 @@ namespace SteakBot.Core.Modules
         }
 
         [Command("quote")]
-        [Summary("Duuh, quotes...")]
+        [Summary("Quotes a single message specified by Message ID.")]
         public async Task Quote(string channelMention, ulong messageId)
         {
             if (!TryGetChannel(channelMention, out var channel))
@@ -38,7 +38,8 @@ namespace SteakBot.Core.Modules
         }
 
         [Command("quote")]
-        [Summary("Duuh, quotes...")]
+        [Summary("Quotes a group of messages specified by Message ID of the first and last messages." +
+                 "Only takes messages that belong to the author of the first one.")]
         public async Task Quote(string channelMention, ulong firstMessageId, ulong lastMessageId)
         {
             if (!TryGetChannel(channelMention, out var channel))
@@ -55,7 +56,7 @@ namespace SteakBot.Core.Modules
         }
 
         [Command("quote")]
-        [Summary("Duuh, quotes...")]
+        [Summary("Quotes a single message specified by Message URI.")]
         public async Task Quote(Uri messageUri)
         {
             var parts = messageUri.AbsolutePath.Split('/').Reverse().ToArray();
@@ -85,7 +86,8 @@ namespace SteakBot.Core.Modules
         }
 
         [Command("quote")]
-        [Summary("Duuh, quotes...")]
+        [Summary("Quotes a group of messages specified by Message URI of the first and last messages." +
+                 "Only takes messages that belong to the author of the first one.")]
         public async Task Quote(Uri firstMessageUri, Uri lastMessageUri)
         {
             var parts = firstMessageUri.AbsolutePath.Split('/').Reverse().ToArray();
