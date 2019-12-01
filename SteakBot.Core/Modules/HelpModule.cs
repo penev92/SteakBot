@@ -45,7 +45,9 @@ namespace SteakBot.Core.Modules
         [Summary("Lists all commands with their summaries")]
         public async Task Help()
         {
-            await ReplyAsync($"{ string.Join("\n", _commandService.Commands.Select(x => x.CustomToString())) }");
+            // This is set up to use a more streamlined look than previous versions and takes inspiration from the Markdown example at
+            // https://gist.github.com/Almeeida/41a664d8d5f3a8855591c2f1e0e07b19
+            await ReplyAsync($"```md\n{ string.Join("\n", _commandService.Commands.Select(x => x.CustomToString())) }\n```");
         }
     }
 }

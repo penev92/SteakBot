@@ -6,10 +6,10 @@ namespace SteakBot.Core.Extensions
     {
         public static string CustomToString(this CommandInfo commandInfo)
         {
-            var res = $"**`{commandInfo.Name}`** - {commandInfo.Summary}";
+            var res = $"<{commandInfo.Name}> - {commandInfo.Summary}";
             if (!string.IsNullOrWhiteSpace(commandInfo.Remarks))
             {
-                res += $"\n``` {commandInfo.Remarks} ```";
+                res += $"\n    {commandInfo.Remarks}";
             }
 
             return res;
