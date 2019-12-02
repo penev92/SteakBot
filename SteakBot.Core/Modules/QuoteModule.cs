@@ -12,6 +12,7 @@ namespace SteakBot.Core.Modules
     {
         [Command("quote")]
         [Summary("Quotes an arbitrary message with optional author, source channel and timestamp.")]
+        [Remarks("Usage: `quote [#channel_name]\n[author][time]\n<text to quote>`")]
         public async Task Quote([Remainder]string message)
         {
             await Context.Channel.DeleteMessageAsync(Context.Message);
@@ -22,6 +23,7 @@ namespace SteakBot.Core.Modules
 
         [Command("quote")]
         [Summary("Quotes a single message specified by Message ID.")]
+        [Remarks("Usage: `quote <#channel_name> <messageId>`")]
         public async Task Quote(string channelMention, ulong messageId)
         {
             if (!TryGetChannel(channelMention, out var channel))
@@ -40,6 +42,7 @@ namespace SteakBot.Core.Modules
         [Command("quote")]
         [Summary("Quotes a group of messages specified by Message ID of the first and last messages." +
                  "Only takes messages that belong to the author of the first one.")]
+        [Remarks("Usage: `quote <#channel_name> <firstMessageId> <lastMessageId>`")]
         public async Task Quote(string channelMention, ulong firstMessageId, ulong lastMessageId)
         {
             if (!TryGetChannel(channelMention, out var channel))
@@ -57,6 +60,7 @@ namespace SteakBot.Core.Modules
 
         [Command("quote")]
         [Summary("Quotes a single message specified by Message URI.")]
+        [Remarks("Usage: `quote <messageUri>`")]
         public async Task Quote(Uri messageUri)
         {
             var parts = messageUri.AbsolutePath.Split('/').Reverse().ToArray();
@@ -83,6 +87,7 @@ namespace SteakBot.Core.Modules
         [Command("quote")]
         [Summary("Quotes a group of messages specified by Message URI of the first and last messages." +
                  "Only takes messages that belong to the author of the first one.")]
+        [Remarks("Usage: `quote <firstMessageUri> <lastMessageUri>`")]
         public async Task Quote(Uri firstMessageUri, Uri lastMessageUri)
         {
             var parts = firstMessageUri.AbsolutePath.Split('/').Reverse().ToArray();
