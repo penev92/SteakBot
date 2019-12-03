@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using System;
+using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using SteakBot.Core.EventHandlers;
@@ -7,6 +8,7 @@ using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
 using SteakBot.Core.Modules;
 using SteakBot.Core.Services;
+using SteakBot.Core.TypeReaders;
 
 namespace SteakBot.Core.DependencyInjection
 {
@@ -26,6 +28,12 @@ namespace SteakBot.Core.DependencyInjection
                 .AddSingleton<IMessageEventHandler, MessageEventHandler>()
                 .AddSingleton<IReactionEventHandler, ReactionEventHandler>()
                 .AddSingleton<IVoiceStateEventHandler, VoiceStateEventHandler>();
+        }
+
+        public static IServiceCollection AddCustomTypeReaders(this IServiceCollection serviceCollection)
+        {
+            return serviceCollection
+                .AddSingleton<BaseTypeReader, UriTypeReader>();
         }
 
         public static IServiceCollection AddDefaultModules(this IServiceCollection serviceCollection)

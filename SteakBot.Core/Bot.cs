@@ -6,6 +6,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using SteakBot.Core.EventHandlers.Abstraction;
+using SteakBot.Core.TypeReaders;
 
 namespace SteakBot.Core
 {
@@ -70,7 +71,13 @@ namespace SteakBot.Core
 
         private void RegisterCommandModules()
         {
-            var modules = _serviceProvider.GetServices(typeof(ModuleBase<SocketCommandContext>));
+            var typeReaders = _serviceProvider.GetServices<BaseTypeReader>();
+            foreach (var typeReader in typeReaders)
+            {
+                _commands.AddTypeReader(typeReader.SupportedType, typeReader);
+            }
+
+            var modules = _serviceProvider.GetServices<ModuleBase<SocketCommandContext>>();
             foreach (var module in modules)
             {
                 _commands.AddModuleAsync(module.GetType(), _serviceProvider).Wait();

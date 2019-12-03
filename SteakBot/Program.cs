@@ -11,6 +11,7 @@ namespace SteakBot
             var serviceProvider = new ServiceCollection()
                 .AddBasicDiscordServices()
                 .AddDefaultEventHandlerServices()
+                .AddCustomTypeReaders()
                 .AddDefaultModules()
                 .AddDefaultCustomMessageHandlers()
                 .BuildServiceProvider();
