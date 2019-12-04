@@ -466,5 +466,107 @@
         "Name": "gtfo",
         "Value": "https://www.youtube.com/watch?v=DkMMTVsqOxc",
         "Description": "Get the fuck out of here sound/video"
+    },
+    {
+        "ResultType": 2,
+        "Name": "whatTheFuck",
+        "Value": "http://giphygifs.s3.amazonaws.com/media/aZ3LDBs1ExsE8/giphy.gif",
+        "Description": "Blink 182 WTF gif"
+    },
+    {
+        "ResultType": 2,
+        "Name": "excuseMeWtf",
+        "Value": "https://i.lensdump.com/i/APtKcx.png",
+        "Description": "Fallout wtf"
+    },
+    {
+        "ResultType": 2,
+        "Name": "homerBushes",
+        "Value": "http://giphygifs.s3.amazonaws.com/media/4pMX5rJ4PYAEM/giphy.gif",
+        "Description": "Homer Simpson backing away slowly in the bushes gif."
+    },
+    {
+        "ResultType": 2,
+        "Name": "lessWeirdShit",
+        "Value": "https://i.imgur.com/yRpOcWy.jpg",
+        "Description": "Spiderman will come back when there is less weird shit."
+    },
+    {
+        "ResultType": 2,
+        "Name": "agree",
+        "Value": "https://i.kym-cdn.com/entries/icons/original/000/012/468/shakeee.jpg",
+        "Description": "arms agree"
+    },
+    {
+        "ResultType": 2,
+        "Name": "badum",
+        "Value": "https://media1.tenor.com/images/e60ad7dfe023c77163d96d2ae1c675f7/tenor.gif",
+        "Description": "Ba-dum-tsss troll gif."
+    },
+    {
+        "ResultType": 2,
+        "Name": "jojoNo",
+        "Value": "https://thumbs.gfycat.com/BruisedElementaryBedlingtonterrier-size_restricted.gif",
+        "Description": "Jotaro no"
+    },
+    {
+        "ResultType": 2,
+        "Name": "jojoYes",
+        "Value": "https://thumbs.gfycat.com/ElatedGlamorousAmericanindianhorse-size_restricted.gif",
+        "Description": "Jotaro  yes"
+    },
+    {
+        "ResultType": 2,
+        "Name": "run",
+        "Value": "https://bigmemes.funnyjunk.com/gifs/Tart+nappy+president_7d84bb_7373561.gif",
+        "Description": "run"
+    },
+    {
+        "ResultType": 1,
+        "Name": "gotEem",
+        "Value": "|| https://i.imgur.com/rqSvE0T.png ||",
+        "Description": "get fuckd"
+    },
+    {
+        "ResultType": 2,
+        "Name": "rekt",
+        "Value": "https://i.imgur.com/DGFMBIW.gif",
+        "Description": "Some niggas"
+    },
+    {
+        "ResultType": 3,
+        "Name": "fæst",
+        "Value": "https://2eu.funnyjunk.com/comments/+_bdec944ade751242f94a81c173b0fdbc.mp4",
+        "Description": "fæst"
+    },
+    {
+        "ResultType": 3,
+        "Name": "kindaGay",
+        "Value": "https://bigmemes.funnyjunk.com/comments/+_03bef6b9bf280991156e904e5b5f5314.mp4",
+        "Description": "pink guy kinda gay"
+    },
+    {
+        "ResultType": 3,
+        "Name": "conflicted",
+        "Value": "https://2eu.funnyjunk.com/comments/I+both+hate+and+want+it+at+the+same+time+_15d60272610e3d0.mp4",
+        "Description": "The Boulder feels conflicted."
+    },
+    {
+        "ResultType": 2,
+        "Name": "losingIt",
+        "Value": "https://memeworld.funnyjunk.com/thumbnails/comments/+_fb4f91c1158c19804d0d71c752958921.gif",
+        "Description": "Kermit losing it"
+    },
+    {
+        "ResultType": 2,
+        "Name": "losingItWeeb",
+        "Value": "https://memeworld.funnyjunk.com/thumbnails/comments/Saw+the+top+bit+of+the+thumbnail+and+was+about+_a129450f28135a98f03793d26582d59a.gif",
+        "Description": "losing it weeb edition"
+    },
+    {
+        "ResultType": 3,
+        "Name": "suffering",
+        "Value": "https://bigcdn.funnyjunk.com/comments/+_47a222d324a2c1b2ad1ac8387b66a974.mp4",
+        "Description": "beyond cringe"
     }
 ]
