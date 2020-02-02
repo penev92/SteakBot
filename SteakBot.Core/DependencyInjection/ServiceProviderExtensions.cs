@@ -47,7 +47,8 @@ namespace SteakBot.Core.DependencyInjection
                 .AddSingleton<ModuleBase<SocketCommandContext>, QuoteModule>()
                 .AddSingleton<ModuleBase<SocketCommandContext>, MemeModule>()
                 .AddSingleton<AudioService>()
-                .AddSingleton<MemeService>();
+                .AddSingleton<MemeService>()
+                .AddSingleton<QuotingService>();
         }
 
         public static IServiceCollection AddDefaultCustomMessageHandlers(this IServiceCollection serviceCollection)
