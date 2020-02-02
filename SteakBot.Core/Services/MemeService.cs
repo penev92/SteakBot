@@ -11,7 +11,7 @@ namespace SteakBot.Core.Services
 {
     public class MemeService
     {
-        public IList<MemeCommand> MemeCommands { get; private set; }
+        public ICollection<MemeCommand> MemeCommands { get; private set; }
 
         public delegate void ReloadCommands();
         public event ReloadCommands OnReloadCommands;
