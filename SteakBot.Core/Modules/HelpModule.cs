@@ -15,7 +15,6 @@ namespace SteakBot.Core.Modules
 
         private readonly MemeService _memeService;
         private readonly CommandService _commandService;
-
         private readonly int _discordMsgMaxChars = 2000;
 
         public HelpModule(MemeService memeService, CommandService commandService)
@@ -65,7 +64,8 @@ namespace SteakBot.Core.Modules
             {
                 commands = commands
                     .Where(x => x.Name.Contains(filter) ||
-                                (x.Remarks != null && x.Remarks.Contains(filter)));
+                                (x.Remarks != null && x.Remarks.Contains(filter)) ||
+                                (x.Summary != null && x.Summary.Contains(filter)));
             }
 
             await ReplyHelpMessage(commands);
