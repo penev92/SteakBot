@@ -1,16 +1,18 @@
-﻿using Discord.Commands;
-using SteakBot.Core.Extensions;
-using SteakBot.Core.Objects;
-using SteakBot.Core.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Discord.Commands;
+using SteakBot.Core.Extensions;
+using SteakBot.Core.Objects;
+using SteakBot.Core.Services;
 
 namespace SteakBot.Core.Modules
 {
     public class HelpModule : ModuleBase<SocketCommandContext>
     {
+        // This is set up to use a more streamlined look than previous versions and takes inspiration from the Markdown example at
+        // https://gist.github.com/Almeeida/41a664d8d5f3a8855591c2f1e0e07b19
         private const string HelpMessageFormat = "```md\n{0}\n```";
 
         private readonly MemeService _memeService;
@@ -51,7 +53,7 @@ namespace SteakBot.Core.Modules
         [Summary("Lists all commands with their summaries")]
         public async Task Help()
         {
-            await ReplyHelpMessage(_commandService.Commands);
+            await ReplyHelpMessage(_commandService.Commands.ToArray());
         }
 
         [Command("help")]
@@ -68,45 +70,50 @@ namespace SteakBot.Core.Modules
                                 (x.Summary != null && x.Summary.Contains(filter)));
             }
 
-            await ReplyHelpMessage(commands);
+            await ReplyHelpMessage(commands.ToArray());
         }
 
         #region Private Methods
 
-        private async Task ReplyMemeCommands(ICollection<MemeCommand> memeCommands)
+        private async Task ReplyMemeCommands(IEnumerable<MemeCommand> memeCommands)
         {
-            StringBuilder memeListStringBuilder = new StringBuilder();
+            var memeListStringBuilder = new StringBuilder();
             foreach (var meme in memeCommands)
             {
-                var currMemeFormatted = $"`{meme.Name}` - {meme.Description}";
-                if (memeListStringBuilder.Length + currMemeFormatted.Length >= _discordMsgMaxChars)
+                var currentMemeFormatted = $"`{meme.Name}` - {meme.Description}";
+                if (memeListStringBuilder.Length + currentMemeFormatted.Length >= _discordMsgMaxChars)
                 {
                     await ReplyAsync(memeListStringBuilder.ToString());
                     memeListStringBuilder.Clear();
                 }
 
-                memeListStringBuilder.AppendLine(currMemeFormatted);
+                memeListStringBuilder.AppendLine(currentMemeFormatted);
             }
 
-            string result = memeListStringBuilder.ToString();
+            var result = memeListStringBuilder.ToString();
             if (!string.IsNullOrEmpty(result))
             {
                 await ReplyAsync(result);
             }
         }
 
-        private async Task ReplyHelpMessage(IEnumerable<CommandInfo> commands)
+        private async Task ReplyHelpMessage(ICollection<CommandInfo> commands)
         {
-            // This is set up to use a more streamlined look than previous versions and takes inspiration from the Markdown example at
-            // https://gist.github.com/Almeeida/41a664d8d5f3a8855591c2f1e0e07b19
-            string commandHelp = string.Join("\n", commands.Select(x => x.CustomToString()));
-            if (!string.IsNullOrEmpty(commandHelp))
+            foreach (var block in GenerateHelpBlocks(commands))
             {
-                string helpMessage = string.Format(HelpMessageFormat, commandHelp);
-                await ReplyAsync(helpMessage);
+                if (!string.IsNullOrWhiteSpace(block))
+                {
+                    await ReplyAsync(string.Format(HelpMessageFormat, block));
+                }
             }
         }
 
-        #endregion Private Methods
+        private IEnumerable<string> GenerateHelpBlocks(ICollection<CommandInfo> commands)
+        {
+            yield return string.Join("\n", commands.Where(x => x.Module.Name != nameof(QuoteModule)).Select(x => x.CustomToString()));
+            yield return string.Join("\n", commands.Where(x => x.Module.Name == nameof(QuoteModule)).Select(x => x.CustomToString()));
+        }
+
+        #endregion
     }
 }
