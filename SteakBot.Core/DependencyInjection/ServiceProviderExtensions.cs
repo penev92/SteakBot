@@ -33,7 +33,8 @@ namespace SteakBot.Core.DependencyInjection
         public static IServiceCollection AddCustomTypeReaders(this IServiceCollection serviceCollection)
         {
             return serviceCollection
-                .AddSingleton<BaseTypeReader, UriTypeReader>();
+                .AddSingleton<BaseTypeReader, UriTypeReader>()
+                .AddSingleton<BaseTypeReader, DiscordMessageIdentifierTypeReader>();
         }
 
         public static IServiceCollection AddDefaultModules(this IServiceCollection serviceCollection)
