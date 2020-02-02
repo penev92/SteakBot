@@ -278,7 +278,7 @@ namespace SteakBot.Core.Modules
                 lines.RemoveAt(0);
             }
 
-            if (TryGetQuoteAuthorAndTimestamp(lines[0].Trim(), Context.Channel, out var author, out var authorName, out var timestamp))
+            if (TryGetQuoteAuthorAndTimestamp(lines[0].Trim(), referredChannel, out var author, out var authorName, out var timestamp))
             {
                 lines.RemoveAt(0);
             }
