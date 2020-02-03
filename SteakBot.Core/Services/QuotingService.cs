@@ -81,7 +81,7 @@ namespace SteakBot.Core.Services
             var downloadedMessages = channel.GetMessagesAsync(firstMessageId, Direction.After, 25);
             var firstPage = (await downloadedMessages.First()).ToArray();
 
-            var messages = new List<IMessage>
+            var messages = new List<IMessage>(firstPage.Length + 1)    // The downloaded list does not include `firstMessage`.
             {
                 firstMessage
             };
