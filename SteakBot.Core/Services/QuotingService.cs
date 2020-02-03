@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using SteakBot.Core.Objects;
 
 namespace SteakBot.Core.Services
 {
@@ -111,7 +112,7 @@ namespace SteakBot.Core.Services
                 lines.RemoveAt(0);
             }
 
-            if (TryGetQuoteAuthorAndTimestamp(lines[0].Trim(), referredChannel, out var author, out var authorName, out var timestamp))
+            if (TryGetQuoteMetadata(lines[0].Trim(), referredChannel, out var quoteMetadata))
             {
                 lines.RemoveAt(0);
             }
@@ -119,9 +120,9 @@ namespace SteakBot.Core.Services
             var embed = new EmbedBuilder
             {
                 Color = Color.Blue,
-                Author = BuildAuthorEmbed(author, authorName),
+                Author = BuildAuthorEmbed(quoteMetadata.Author, quoteMetadata.AuthorName),
                 Description = string.Join("\n", lines),
-                Footer = BuildFooterEmbed(referredChannel, timestamp)
+                Footer = BuildFooterEmbed(referredChannel, quoteMetadata.Timestamp)
             };
 
             return embed.Build();
@@ -187,7 +188,7 @@ namespace SteakBot.Core.Services
             return usersByName;
         }
 
-        private static bool TryGetQuoteAuthorAndTimestamp(string messageLine, IChannel channel, out IUser author, out string authorName, out string timestamp)
+        private static bool TryGetQuoteMetadata(string messageLine, IChannel channel, out QuoteMetadata quoteMetadata)
         {
             var usersByName = GetChannelUsersDictionary(channel);
 
@@ -195,19 +196,18 @@ namespace SteakBot.Core.Services
             {
                 if (messageLine.StartsWith(userList.Key))
                 {
-                    author = userList.Value.Count == 1 ? userList.Value.First() : null;
-                    authorName = userList.Key;
+                    var author = userList.Value.Count == 1 ? userList.Value.First() : null;
+                    var authorName = userList.Key;
 
                     var trim = messageLine.Substring(userList.Key.Length);
-                    timestamp = trim.Trim();
+                    var timestamp = trim.Trim();
 
+                    quoteMetadata = new QuoteMetadata(author, authorName, timestamp);
                     return true;
                 }
             }
 
-            author = null;
-            authorName = null;
-            timestamp = null;
+            quoteMetadata = null;
             return false;
         }
 
