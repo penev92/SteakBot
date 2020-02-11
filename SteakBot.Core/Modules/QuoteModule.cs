@@ -200,7 +200,7 @@ namespace SteakBot.Core.Modules
 
         private async void HandleQuote(SocketGuild guild, string message)
         {
-            var embed = _quotingService.CreateEmbed(guild, message);
+            var embed = _quotingService.CreateEmbed(guild, message, Context.Channel);
             await Context.Channel.DeleteMessageAsync(Context.Message, RequestOptions.Default);
             await SendQuote(Context.User, embed);
         }

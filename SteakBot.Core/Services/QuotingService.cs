@@ -103,7 +103,7 @@ namespace SteakBot.Core.Services
             return messages;
         }
 
-        public Embed CreateEmbed(SocketGuild guild, string message)
+        public Embed CreateEmbed(SocketGuild guild, string message, IChannel fallbackChannel)
         {
             var lines = message.Split('\n').ToList();
 
@@ -112,7 +112,7 @@ namespace SteakBot.Core.Services
                 lines.RemoveAt(0);
             }
 
-            if (TryGetQuoteMetadata(lines[0].Trim(), referredChannel, out var quoteMetadata))
+            if (TryGetQuoteMetadata(lines[0].Trim(), referredChannel ?? fallbackChannel, out var quoteMetadata))
             {
                 lines.RemoveAt(0);
             }
