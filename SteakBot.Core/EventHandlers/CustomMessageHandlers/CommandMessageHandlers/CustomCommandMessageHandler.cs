@@ -20,8 +20,21 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
         protected override bool InvokeInner(SocketUserMessage message)
         {
             var channel = message.Channel;
-            var commandText = message.Content.Replace(CommandChar, "").Replace(DeleteMessageChar, "");
-            var command = _memeService.MemeCommands.Single(x => x.Name == commandText);
+            var messageText = message.Content;
+
+            var startIndex = 0;
+            var endIndex = messageText.Length;
+            if (messageText.StartsWith(GlobalConstants.CommandChar))
+            {
+                startIndex++;
+            }
+            if (messageText.EndsWith(GlobalConstants.DeleteMessageChar))
+            {
+                endIndex--;
+            }
+            var commandName = messageText.Substring(startIndex, endIndex);
+
+            var command = _memeService.MemeCommands.Single(x => x.Name == commandName);
             switch (command.ResultType)
             {
                 case MemeResultType.Text:

@@ -17,6 +17,10 @@ namespace SteakBot.Core.Modules
         [Remarks("Usage: `say <something>`")]
         public async Task Say([Remainder]string message)
         {
+            if (message.EndsWith(GlobalConstants.DeleteMessageChar))
+            {
+                message = message.Substring(0, message.Length - 1);
+            }
             await ReplyAsync(message);
         }
     }

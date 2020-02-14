@@ -18,7 +18,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
             _client = client;
             _commands = commands;
             _serviceProvider = serviceProvider;
-            _commandChar = CommandChar[0];
+            _commandChar = GlobalConstants.CommandChar[0];
             CommandNames = _commands.Commands.Select(x => x.Name);
         }
 
@@ -28,6 +28,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
             message.HasCharPrefix(_commandChar, ref argumentPosition);
 
             var context = new SocketCommandContext(_client, message);
+
             var result = _commands.ExecuteAsync(context, argumentPosition, _serviceProvider).Result;
             if (!result.IsSuccess)
             {
@@ -39,7 +40,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 
         protected override bool ShouldDeleteMessage(SocketUserMessage message)
         {
-            return message.Content.EndsWith(DeleteMessageChar);
+            return message.Content.EndsWith(GlobalConstants.DeleteMessageChar);
         }
     }
 }
