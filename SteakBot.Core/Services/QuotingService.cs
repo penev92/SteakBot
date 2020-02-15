@@ -120,9 +120,9 @@ namespace SteakBot.Core.Services
             var embed = new EmbedBuilder
             {
                 Color = Color.Blue,
-                Author = BuildAuthorEmbed(quoteMetadata.Author, quoteMetadata.AuthorName),
+                Author = BuildAuthorEmbed(quoteMetadata?.Author, quoteMetadata?.AuthorName),
                 Description = string.Join("\n", lines),
-                Footer = BuildFooterEmbed(referredChannel, quoteMetadata.Timestamp)
+                Footer = BuildFooterEmbed(referredChannel, quoteMetadata?.Timestamp)
             };
 
             return embed.Build();
