@@ -9,7 +9,7 @@ namespace SteakBot.Core.Modules
         [Summary("Bot says \"Hi\"")]
         public async Task Hi()
         {
-            await ReplyAsync($"Hi, {Context.User.Mention} !");
+            await ReplyAsync($"Hi, {Context.User.Mention}!");
         }
 
         [Command("say")]
@@ -21,6 +21,7 @@ namespace SteakBot.Core.Modules
             {
                 message = message.Substring(0, message.Length - 1);
             }
+
             await ReplyAsync(message);
         }
     }
