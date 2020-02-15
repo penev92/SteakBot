@@ -37,12 +37,13 @@ namespace SteakBot.Core.Modules
         [Remarks("Usage: `list <filter(text)>`")]
         public async Task List(string filter)
         {
+            var filterToLower = filter.ToLower();
             var memeCommands = _memeService.MemeCommands;
             if (!string.IsNullOrWhiteSpace(filter))
             {
                 memeCommands = memeCommands
-                    .Where(x => x.Name.Contains(filter) ||
-                                x.Description.Contains(filter))
+                    .Where(x => x.Name.ToLower().Contains(filterToLower) ||
+                                x.Description.ToLower().Contains(filterToLower))
                     .ToList();
             }
 
@@ -61,13 +62,15 @@ namespace SteakBot.Core.Modules
         [Remarks("Usage: `help <filter(text)>`")]
         public async Task Help(string filter)
         {
+            var filterToLower = filter.ToLower();
+
             var commands = _commandService.Commands;
             if (!string.IsNullOrWhiteSpace(filter))
             {
                 commands = commands
-                    .Where(x => x.Name.Contains(filter) ||
-                                (x.Remarks != null && x.Remarks.Contains(filter)) ||
-                                (x.Summary != null && x.Summary.Contains(filter)));
+                    .Where(x => x.Name.ToLower().Contains(filterToLower) ||
+                                (x.Remarks != null && x.Remarks.ToLower().Contains(filterToLower)) ||
+                                (x.Summary != null && x.Summary.ToLower().Contains(filterToLower)));
             }
 
             await ReplyHelpMessage(commands.ToArray());
