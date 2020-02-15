@@ -2,7 +2,7 @@
 using Discord.WebSocket;
 using SteakBot.Core.EventHandlers.Abstraction;
 using System;
-using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SteakBot.Core.EventHandlers
@@ -33,27 +33,17 @@ namespace SteakBot.Core.EventHandlers
             await channel.SendMessageAsync("", embed: notificationEmbedBuilder.Build());
         }
 
-        private static async Task<bool> ShouldSkipReaction(ISocketMessageChannel channel, IMessage message)
+        private static async Task<bool> ShouldSkipReaction(IMessageChannel channel, IMessage message)
         {
-            var messageTimeSpan = (DateTime.UtcNow - message.Timestamp.UtcDateTime);
+            var messageTimeSpan = DateTime.UtcNow - message.Timestamp.UtcDateTime;
             if (messageTimeSpan.TotalHours < MinReactionMessageHours)
             {
                 return true;
             }
 
-            var messages = channel.GetMessagesAsync(fromMessage: message, dir: Direction.After, limit: MessagesAfterCurrentLimit + 1);
-            var enumerator = messages.GetEnumerator();
-            var cancellationToken = new CancellationToken();
-            while (await enumerator.MoveNext(cancellationToken))
-            {
-                var messagesInChannel = enumerator.Current;
-                if (messagesInChannel.Count < MessagesAfterCurrentLimit)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            var messages = await channel.GetMessagesAsync(message, Direction.After, MessagesAfterCurrentLimit + 1).ToArray();
+            bool shouldSkip = messages.SelectMany(x => x).Count() < MessagesAfterCurrentLimit;
+            return shouldSkip;
         }
     }
 }
