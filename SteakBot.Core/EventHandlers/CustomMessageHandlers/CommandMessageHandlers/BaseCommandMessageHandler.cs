@@ -8,16 +8,13 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandle
 {
     internal abstract class BaseCommandMessageHandler : ICustomMessageHandler
     {
-        protected const string CommandChar = "]";
-        protected const string DeleteMessageChar = "[";
-
         protected IEnumerable<string> CommandNames;
 
         public bool CanHandle(SocketUserMessage message)
         {
             var messageString = message.Content;
-            var commandText = messageString.Replace(CommandChar, "").Replace(DeleteMessageChar, "").Split(' ', '\n')[0];
-            return messageString.StartsWith(CommandChar) && CommandNames.Any(x => x == commandText);
+            var commandText = messageString.Replace(GlobalConstants.CommandChar, "").Split(' ', '\n')[0];
+            return messageString.StartsWith(GlobalConstants.CommandChar) && CommandNames.Any(x => x == commandText);
         }
 
         public void Invoke(SocketUserMessage message)
