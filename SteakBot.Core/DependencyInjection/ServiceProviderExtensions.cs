@@ -1,11 +1,11 @@
-﻿using System;
-using Discord.Commands;
+﻿using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using SteakBot.Core.EventHandlers;
 using SteakBot.Core.EventHandlers.Abstraction;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
+using SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.GitHubIssueNumberMessageHandlers;
 using SteakBot.Core.Modules;
 using SteakBot.Core.Services;
 using SteakBot.Core.TypeReaders;
@@ -56,6 +56,12 @@ namespace SteakBot.Core.DependencyInjection
             return serviceCollection
                 .AddSingleton<ICustomMessageHandler, CustomCommandMessageHandler>()
                 .AddSingleton<ICustomMessageHandler, StandardCommandMessageHandler>();
+        }
+
+        public static IServiceCollection AddGitHubIntegrationServices(this IServiceCollection serviceCollection)
+        {
+            return serviceCollection
+                .AddSingleton<ICustomMessageHandler, SteakBotGitHubNumberParsingMessageHandler>();
         }
     }
 }

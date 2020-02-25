@@ -14,6 +14,7 @@ namespace SteakBot
                 .AddCustomTypeReaders()
                 .AddDefaultModules()
                 .AddDefaultCustomMessageHandlers()
+                .AddGitHubIntegrationServices()
                 .BuildServiceProvider();
 
             using (var bot = new Bot(serviceProvider))
