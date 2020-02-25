@@ -1,6 +1,7 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using Octokit;
 using SteakBot.Core.EventHandlers;
 using SteakBot.Core.EventHandlers.Abstraction;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers;
@@ -61,6 +62,7 @@ namespace SteakBot.Core.DependencyInjection
         public static IServiceCollection AddGitHubIntegrationServices(this IServiceCollection serviceCollection)
         {
             return serviceCollection
+                .AddSingleton<IGitHubClient>(provider => new GitHubClient(new ProductHeaderValue("SteakBot")))
                 .AddSingleton<ICustomMessageHandler, SteakBotGitHubNumberParsingMessageHandler>();
         }
     }

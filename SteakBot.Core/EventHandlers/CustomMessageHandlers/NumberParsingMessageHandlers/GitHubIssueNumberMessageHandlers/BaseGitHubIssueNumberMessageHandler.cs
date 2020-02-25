@@ -15,6 +15,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
 
         private static readonly string IssueIconBaseUrl = ConfigurationManager.AppSettings["GitHubIconsBaseUrl"];
 
+        private readonly IGitHubClient _gitHubClient;
         private readonly Dictionary<string, Color> _colorPerStatus = new Dictionary<string, Color>
         {
             { "open", Color.Green },
@@ -22,13 +23,17 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             { "merged", Color.Purple }
         };
 
+        protected BaseGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient)
+        {
+            _gitHubClient = gitHubClient;
+        }
+
         public override void Invoke(SocketUserMessage message)
         {
-            var client = new GitHubClient(new ProductHeaderValue("SteakBot"));
-            var ownerUser = client.User.Get(RepositoryOwner).Result;
+            var ownerUser = _gitHubClient.User.Get(RepositoryOwner).Result;
             foreach (var number in GetMatchedNumbers(message.Content))
             {
-                var issue = client.Issue.Get(RepositoryOwner, RepositoryName, number).Result;
+                var issue = _gitHubClient.Issue.Get(RepositoryOwner, RepositoryName, number).Result;
                 var isIssue = issue.PullRequest == null;
                 var type = isIssue ? "Issue" : "Pull request";
                 var labels = string.Join(", ", issue.Labels?.Select(x => x.Name) ?? Enumerable.Empty<string>());
@@ -47,7 +52,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
 
                 if (!isIssue && status == "Closed")
                 {
-                    var pullRequest = client.PullRequest.Get(RepositoryOwner, RepositoryName, number).Result;
+                    var pullRequest = _gitHubClient.PullRequest.Get(RepositoryOwner, RepositoryName, number).Result;
 
                     embedFields.Add(new EmbedFieldBuilder
                     {
