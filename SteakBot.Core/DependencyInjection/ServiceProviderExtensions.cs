@@ -63,7 +63,8 @@ namespace SteakBot.Core.DependencyInjection
         {
             return serviceCollection
                 .AddSingleton<IGitHubClient>(provider => new GitHubClient(new ProductHeaderValue("SteakBot")))
-                .AddSingleton<ICustomMessageHandler, SteakBotGitHubNumberParsingMessageHandler>();
+                .AddSingleton<ICustomMessageHandler, SteakBotGitHubNumberParsingMessageHandler>()
+                .AddSingleton<ICustomMessageHandler, OpenRaGitHubIssueNumberMessageHandler>();
         }
     }
 }
