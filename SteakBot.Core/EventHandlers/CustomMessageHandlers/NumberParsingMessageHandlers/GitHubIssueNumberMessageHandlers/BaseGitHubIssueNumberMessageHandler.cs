@@ -15,6 +15,8 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
 
         private static readonly string IssueIconBaseUrl = ConfigurationManager.AppSettings["GitHubIconsBaseUrl"];
 
+        private static readonly bool ShouldShowRepositoryIcon = bool.Parse(ConfigurationManager.AppSettings["ShowRepositoryIcon"]);
+
         private readonly IGitHubClient _gitHubClient;
         private readonly Dictionary<string, Color> _colorPerStatus = new Dictionary<string, Color>
         {
@@ -89,7 +91,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
                     Footer = new EmbedFooterBuilder
                     {
                         Text = $"Created at {issue.CreatedAt.ToString("s").Replace('T', ' ') + " UTC"}",
-                        IconUrl = ownerUser.AvatarUrl
+                        IconUrl = ShouldShowRepositoryIcon ? ownerUser.AvatarUrl : null
                     },
                     Timestamp = issue.UpdatedAt,
                     Color = _colorPerStatus[status.StringValue]
