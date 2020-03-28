@@ -25,7 +25,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             { "merged", Color.Purple }
         };
 
-        protected BaseGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient)
+        internal BaseGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient)
         {
             _gitHubClient = gitHubClient;
         }
@@ -33,9 +33,9 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
         public override void Invoke(SocketUserMessage message)
         {
             var ownerUser = _gitHubClient.User.Get(RepositoryOwner).Result;
-            foreach (var number in GetMatchedNumbers(message.Content))
+            foreach (var numberResult in GetMatchedNumbers(message.Content))
             {
-                var issue = _gitHubClient.Issue.Get(RepositoryOwner, RepositoryName, number).Result;
+                var issue = _gitHubClient.Issue.Get(RepositoryOwner, RepositoryName, numberResult.Number).Result;
                 var isIssue = issue.PullRequest == null;
                 var type = isIssue ? "Issue" : "Pull request";
                 var labels = string.Join(", ", issue.Labels?.Select(x => x.Name) ?? Enumerable.Empty<string>());
@@ -54,7 +54,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
 
                 if (!isIssue && status == "Closed")
                 {
-                    var pullRequest = _gitHubClient.PullRequest.Get(RepositoryOwner, RepositoryName, number).Result;
+                    var pullRequest = _gitHubClient.PullRequest.Get(RepositoryOwner, RepositoryName, numberResult.Number).Result;
 
                     embedFields.Add(new EmbedFieldBuilder
                     {
@@ -83,7 +83,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
                     Description = issue.Body.Length > 250 ? issue.Body.Substring(0, 250) + "..." : issue.Body,
                     Author = new EmbedAuthorBuilder
                     {
-                        Name = $"{type} #{number} by {issue.User?.Login}  ({status})",
+                        Name = $"{type} #{numberResult.Number} by {issue.User?.Login}  ({status})",
                         IconUrl = GetIssueIconUrl(isIssue, status.StringValue),
                         Url = issue.HtmlUrl
                     },

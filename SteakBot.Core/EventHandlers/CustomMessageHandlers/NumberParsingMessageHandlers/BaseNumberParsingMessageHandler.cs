@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Discord.WebSocket;
+using SteakBot.Core.Objects;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers
 {
@@ -46,7 +47,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
 
         public abstract void Invoke(SocketUserMessage message);
 
-        protected IEnumerable<int> GetMatchedNumbers(string message)
+        protected IEnumerable<NumberParsingResult> GetMatchedNumbers(string message)
         {
             // This can be simplified when the codebase is migrated to C# 8 / .NET Standard 2.1
             var matchCollectionForPattern = _regexMatchPatterns.Select(regexMatchPattern => Regex.Matches(message, regexMatchPattern, _regexOptions));
@@ -54,7 +55,8 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             {
                 foreach (Match match in matchCollection)
                 {
-                    yield return int.Parse(match.Groups[match.Groups.Count - 1].Value.Split('#')[1]);
+                    var split = match.Groups[match.Groups.Count - 1].Value.Split('#');
+                    yield return new NumberParsingResult(split[0], int.Parse(split[1]));
                 }
             }
         }
