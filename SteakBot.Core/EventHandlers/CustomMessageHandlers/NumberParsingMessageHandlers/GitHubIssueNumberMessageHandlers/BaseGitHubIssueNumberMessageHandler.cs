@@ -7,7 +7,7 @@ using Octokit;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.GitHubIssueNumberMessageHandlers
 {
-    internal abstract class BaseGitHubIssueNumberMessageHandler : BaseNumberParsingMessageHandler
+    internal abstract class BaseGitHubIssueNumberMessageHandler : BaseSimpleNumberParsingMessageHandler
     {
         protected abstract string RepositoryOwner { get; }
 
