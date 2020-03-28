@@ -13,6 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="SharpBucket">
+      <HintPath>..\lib\SharpBucket.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Assets\gg.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
