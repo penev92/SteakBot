@@ -2,10 +2,12 @@
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Octokit;
+using SharpBucket.V2;
 using SteakBot.Core.EventHandlers;
 using SteakBot.Core.EventHandlers.Abstraction;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
+using SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.BitBucketIssueNumberMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.GitHubIssueNumberMessageHandlers;
 using SteakBot.Core.Modules;
 using SteakBot.Core.Services;
@@ -66,6 +68,12 @@ namespace SteakBot.Core.DependencyInjection
                 .AddSingleton<IGitHubClient>(provider => new GitHubClient(new ProductHeaderValue("SteakBot")))
                 .AddSingleton<ICustomMessageHandler, SteakBotGitHubNumberParsingMessageHandler>()
                 .AddSingleton<ICustomMessageHandler, OpenRaGitHubIssueNumberMessageHandler>();
+        }
+
+        public static IServiceCollection AddBitBucketIntegrationServices(this IServiceCollection serviceCollection)
+        {
+            return serviceCollection
+                .AddSingleton<SharpBucketV2>();
         }
     }
 }
