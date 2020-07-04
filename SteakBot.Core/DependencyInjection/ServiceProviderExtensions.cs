@@ -46,6 +46,7 @@ namespace SteakBot.Core.DependencyInjection
                 .AddSingleton<ModuleBase<SocketCommandContext>, ChatModule>()
                 .AddSingleton<ModuleBase<SocketCommandContext>, QuoteModule>()
                 .AddSingleton<ModuleBase<SocketCommandContext>, MemeModule>()
+                .AddSingleton<ModuleBase<SocketCommandContext>, RollModule>()
                 .AddSingleton<AudioService>()
                 .AddSingleton<MemeService>()
                 .AddSingleton<QuotingService>();
