@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Discord.WebSocket;
 
-namespace SteakBot.Core.EventHandlers.Abstraction
+namespace SteakBot.Core.Abstractions.Handlers
 {
     public interface IMessageEventHandler
     {

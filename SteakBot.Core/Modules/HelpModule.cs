@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord.Commands;
 using SteakBot.Core.Extensions;
+using SteakBot.Core.Modules.Quotes;
 using SteakBot.Core.Objects;
 using SteakBot.Core.Services;
 

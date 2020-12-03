@@ -1,9 +1,10 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using SteakBot.Core.EventHandlers.Abstraction;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SteakBot.Core.Abstractions;
+using SteakBot.Core.Abstractions.Handlers;
 
 namespace SteakBot.Core.EventHandlers
 {
@@ -41,9 +42,10 @@ namespace SteakBot.Core.EventHandlers
                 return true;
             }
 
-            var messages = await channel.GetMessagesAsync(message, Direction.After, MessagesAfterCurrentLimit + 1).ToArray();
-            bool shouldSkip = messages.SelectMany(x => x).Count() < MessagesAfterCurrentLimit;
-            return shouldSkip;
+            var messageCount = await channel
+                .GetMessagesAsync(message, Direction.After, MessagesAfterCurrentLimit + 1)
+                .CountAsync();
+            return messageCount < MessagesAfterCurrentLimit;
         }
     }
 }

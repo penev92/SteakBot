@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using SteakBot.Core;
 using SteakBot.Core.DependencyInjection;
 
@@ -6,9 +7,10 @@ namespace SteakBot
 {
     internal class Program
     {
-        private static void Main()
+        private static async Task Main()
         {
-            var serviceProvider = new ServiceCollection()
+            using var serviceProvider = new ServiceCollection()
+                .AddSingleton<Bot>()
                 .AddBasicDiscordServices()
                 .AddDefaultEventHandlerServices()
                 .AddCustomTypeReaders()
@@ -18,10 +20,9 @@ namespace SteakBot
                 .AddBitBucketIntegrationServices()
                 .BuildServiceProvider();
 
-            using (var bot = new Bot(serviceProvider))
-            {
-                bot.RunAsync().Wait();
-            }
+            await serviceProvider
+                .GetService<Bot>()
+                .RunAsync();
         }
     }
 }

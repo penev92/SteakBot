@@ -80,7 +80,7 @@ namespace SteakBot.Core.Services
             }
 
             var downloadedMessages = channel.GetMessagesAsync(firstMessageId, Direction.After, 25);
-            var firstPage = (await downloadedMessages.First()).ToArray();
+            var firstPage = (await downloadedMessages.FirstAsync()).ToArray();
 
             var messages = new List<IMessage>(firstPage.Length + 1)    // The downloaded list does not include `firstMessage`.
             {
@@ -172,7 +172,7 @@ namespace SteakBot.Core.Services
         private static IEnumerable<IUser> GetChannelUsers(IChannel channel)
         {
             var usersAdapter = channel.GetUsersAsync();
-            var users = usersAdapter.ToList().Result.SelectMany(x => x);
+            var users = usersAdapter.ToListAsync().Result.SelectMany(x => x);
 
             return users;
         }

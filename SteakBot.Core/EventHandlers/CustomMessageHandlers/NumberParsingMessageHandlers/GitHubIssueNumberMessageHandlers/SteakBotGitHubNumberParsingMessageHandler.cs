@@ -14,6 +14,8 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             { "bot", 0 }
         };
 
-        public SteakBotGitHubNumberParsingMessageHandler(IGitHubClient gitHubClient) : base(gitHubClient) { }
+        public SteakBotGitHubNumberParsingMessageHandler(IGitHubClient gitHubClient,
+            IGitHubIssueNumberOptions options) 
+            : base(gitHubClient, options) { }
     }
 }

@@ -1,24 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using SteakBot.Core.Abstractions;
+using SteakBot.Core.Abstractions.Options;
 using SteakBot.Core.Objects;
 using SteakBot.Core.Services;
 
-namespace SteakBot.Core.Modules
+namespace SteakBot.Core.Modules.Quotes
 {
     public class QuoteModule : ModuleBase<SocketCommandContext>
     {
         private readonly QuotingService _quotingService;
-        private readonly string[] _trustedRoles = ConfigurationManager.AppSettings["TrustedRoles"].Split(';').Select(x => x.Trim()).ToArray();
+        private readonly IQuoteModuleOptions _options;
 
-        public QuoteModule(QuotingService quotingService)
+        public QuoteModule(QuotingService quotingService, 
+            IQuoteModuleOptions options)
         {
             _quotingService = quotingService;
+            _options = options;
         }
 
         [Command("quote")]
@@ -27,9 +30,12 @@ namespace SteakBot.Core.Modules
         public async Task Quote([Remainder]string message)
         {
             var userRoles = (Context.User as SocketGuildUser)?.Roles;
-            if (userRoles == null || !userRoles.Select(x => x.Name).Intersect(_trustedRoles).Any())
+            if (userRoles == null || !userRoles
+                    .Select(x => x.Name)
+                    .Intersect(_options.TrustedRoles)
+                    .Any())
             {
-                await ReplyAsync("No rights!");
+                await ReplyAsync("Access DENIED!!! Sorry, Dexter!");
                 return;
             }
 

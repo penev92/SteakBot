@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using Discord;
 using Discord.WebSocket;
@@ -10,14 +9,12 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
     internal abstract class BaseGitHubIssueNumberMessageHandler : BaseSimpleNumberParsingMessageHandler
     {
         protected abstract string RepositoryOwner { get; }
-
         protected abstract string RepositoryName { get; }
+        //private static readonly string IssueIconBaseUrl = ConfigurationManager.AppSettings["GitHubIconsBaseUrl"];
+        //private static readonly bool ShouldShowRepositoryIcon = bool.Parse(ConfigurationManager.AppSettings["ShowRepositoryIcon"]);
+        protected readonly IGitHubIssueNumberOptions Options;
+        protected readonly IGitHubClient GitHubClient;
 
-        private static readonly string IssueIconBaseUrl = ConfigurationManager.AppSettings["GitHubIconsBaseUrl"];
-
-        private static readonly bool ShouldShowRepositoryIcon = bool.Parse(ConfigurationManager.AppSettings["ShowRepositoryIcon"]);
-
-        private readonly IGitHubClient _gitHubClient;
         private readonly Dictionary<string, Color> _colorPerStatus = new Dictionary<string, Color>
         {
             { "open", Color.Green },
@@ -25,17 +22,19 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             { "merged", Color.Purple }
         };
 
-        internal BaseGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient)
+        internal BaseGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient,
+            IGitHubIssueNumberOptions options)
         {
-            _gitHubClient = gitHubClient;
+            GitHubClient = gitHubClient;
+            Options = options;
         }
 
         public override void Invoke(SocketUserMessage message)
         {
-            var ownerUser = _gitHubClient.User.Get(RepositoryOwner).Result;
+            var ownerUser = GitHubClient.User.Get(RepositoryOwner).Result;
             foreach (var numberResult in GetMatchedNumbers(message.Content))
             {
-                var issue = _gitHubClient.Issue.Get(RepositoryOwner, RepositoryName, numberResult.Number).Result;
+                var issue = GitHubClient.Issue.Get(RepositoryOwner, RepositoryName, numberResult.Number).Result;
                 var isIssue = issue.PullRequest == null;
                 var type = isIssue ? "Issue" : "Pull request";
                 var labels = string.Join(", ", issue.Labels?.Select(x => x.Name) ?? Enumerable.Empty<string>());
@@ -54,7 +53,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
 
                 if (!isIssue && status == "Closed")
                 {
-                    var pullRequest = _gitHubClient.PullRequest.Get(RepositoryOwner, RepositoryName, numberResult.Number).Result;
+                    var pullRequest = GitHubClient.PullRequest.Get(RepositoryOwner, RepositoryName, numberResult.Number).Result;
 
                     embedFields.Add(new EmbedFieldBuilder
                     {
@@ -91,7 +90,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
                     Footer = new EmbedFooterBuilder
                     {
                         Text = $"Created at {issue.CreatedAt.ToString("s").Replace('T', ' ') + " UTC"}",
-                        IconUrl = ShouldShowRepositoryIcon ? ownerUser.AvatarUrl : null
+                        IconUrl = Options.ShouldShowRepositoryIcon ? ownerUser.AvatarUrl : null
                     },
                     Timestamp = issue.UpdatedAt,
                     Color = _colorPerStatus[status.StringValue]
@@ -101,9 +100,9 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             }
         }
 
-        private static string GetIssueIconUrl(bool isIssue, string status)
+        private string GetIssueIconUrl(bool isIssue, string status)
         {
-            return $"{IssueIconBaseUrl}/github-{(isIssue ? "issue" : "pr")}-{status}.png";
+            return $"{Options.IssueIconBaseUrl}/github-{(isIssue ? "issue" : "pr")}-{status}.png";
         }
     }
 }

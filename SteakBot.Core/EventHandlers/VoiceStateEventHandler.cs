@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SteakBot.Core.EventHandlers.Abstraction;
 using Discord.WebSocket;
+using SteakBot.Core.Abstractions;
+using SteakBot.Core.Abstractions.Handlers;
 
 namespace SteakBot.Core.EventHandlers
 {

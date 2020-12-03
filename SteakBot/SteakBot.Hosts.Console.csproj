@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -44,6 +46,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Options\ConfigurationManagerQuoteModuleOptions - Copy %282%29.cs" />
+    <Compile Include="Options\ConfigurationManagerQuoteModuleOptions - Copy %283%29.cs" />
+    <Compile Include="Options\ConfigurationManagerQuoteModuleOptions - Copy %284%29.cs" />
+    <Compile Include="Options\ConfigurationManagerMemeServiceOptions.cs" />
+    <Compile Include="Options\ConfigurationManagerQuoteModuleOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -56,11 +63,16 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SteakBot.Core.Abstractions\SteakBot.Core.Abstractions.csproj">
+      <Project>{E5482B43-01F9-40BC-A2FB-293E46DAE53E}</Project>
+      <Name>SteakBot.Core.Abstractions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SteakBot.Core\SteakBot.Core.csproj">
       <Project>{a8eba8cf-0b46-4507-afde-a58bbe9fba00}</Project>
       <Name>SteakBot.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(SolutionDir)lib\libsodium.dll" "$(TargetDir)libsodium.dll"

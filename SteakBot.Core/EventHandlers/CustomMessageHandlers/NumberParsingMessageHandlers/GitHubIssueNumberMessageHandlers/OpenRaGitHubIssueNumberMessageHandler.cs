@@ -15,6 +15,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             { "ora", 0 }
         };
 
-        public OpenRaGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient) : base(gitHubClient) { }
+        public OpenRaGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient, 
+            IGitHubIssueNumberOptions options) : base(gitHubClient, options) { }
     }
 }

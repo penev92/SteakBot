@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using SteakBot.Core.EventHandlers.Abstraction;
+using SteakBot.Core.Abstractions;
+using SteakBot.Core.Abstractions.Handlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 
 namespace SteakBot.Core.EventHandlers

@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using SteakBot.Core.EventHandlers.Abstraction;
+using SteakBot.Core.Abstractions;
+using SteakBot.Core.Abstractions.Handlers;
+using SteakBot.Core.Abstractions.Options;
 using SteakBot.Core.TypeReaders;
 
 namespace SteakBot.Core
 {
     public class Bot : IDisposable
     {
-        private static readonly string DiscordBotToken = ConfigurationManager.AppSettings["BotToken"];
-
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IBotOptions _botOptions;
 
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
@@ -23,17 +24,31 @@ namespace SteakBot.Core
         private readonly IMessageEventHandler _messageEventHandler;
         private readonly IReactionEventHandler _reactionEventHandler;
         private readonly IVoiceStateEventHandler _voiceStateEventHandler;
+        private readonly IEnumerable<BaseTypeReader> _typeReaders;
+        private readonly IEnumerable<ModuleBase<SocketCommandContext>> _modules;
+        private IServiceProvider _serviceProvider;
 
-        public Bot(IServiceProvider serviceProvider)
+        public Bot(DiscordSocketClient client,
+            CommandService commands,
+            ILogEventHandler logEventHandler,
+            IMessageEventHandler messageEventHandler,
+            IReactionEventHandler reactionEventHandler,
+            IVoiceStateEventHandler voiceStateEventHandler, 
+            IEnumerable<ModuleBase<SocketCommandContext>> modules,
+            IEnumerable<BaseTypeReader> typeReaders,
+            IServiceProvider serviceProvider, 
+            IBotOptions botOptions)
         {
+            _client = client;
+            _commands = commands;
+            _logEventHandler = logEventHandler;
+            _messageEventHandler = messageEventHandler;
+            _reactionEventHandler = reactionEventHandler;
+            _voiceStateEventHandler = voiceStateEventHandler;
+            _modules = modules;
+            _typeReaders = typeReaders;
             _serviceProvider = serviceProvider;
-
-            _client = _serviceProvider.GetService<DiscordSocketClient>();
-            _commands = _serviceProvider.GetService<CommandService>();
-            _logEventHandler = _serviceProvider.GetService<ILogEventHandler>();
-            _messageEventHandler = _serviceProvider.GetService<IMessageEventHandler>();
-            _reactionEventHandler = _serviceProvider.GetService<IReactionEventHandler>();
-            _voiceStateEventHandler = _serviceProvider.GetService<IVoiceStateEventHandler>();
+            _botOptions = botOptions;
 
             AttachEventHandlers();
             RegisterCommandModules();
@@ -41,7 +56,7 @@ namespace SteakBot.Core
 
         public async Task RunAsync()
         {
-            await _client.LoginAsync(TokenType.Bot, DiscordBotToken);
+            await _client.LoginAsync(TokenType.Bot, _botOptions.BotToken);
             await _client.StartAsync();
 
             Console.ReadLine();
@@ -71,14 +86,12 @@ namespace SteakBot.Core
 
         private void RegisterCommandModules()
         {
-            var typeReaders = _serviceProvider.GetServices<BaseTypeReader>();
-            foreach (var typeReader in typeReaders)
+            foreach (var typeReader in _typeReaders)
             {
                 _commands.AddTypeReader(typeReader.SupportedType, typeReader);
             }
 
-            var modules = _serviceProvider.GetServices<ModuleBase<SocketCommandContext>>();
-            foreach (var module in modules)
+            foreach (var module in _modules)
             {
                 _commands.AddModuleAsync(module.GetType(), _serviceProvider).Wait();
             }

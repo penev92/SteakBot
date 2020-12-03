@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using SteakBot.Core.Abstractions;
+using SteakBot.Core.Abstractions.Options;
 using SteakBot.Core.Objects;
 using SteakBot.Core.Objects.Enums;
 
@@ -16,7 +17,8 @@ namespace SteakBot.Core.Services
         public delegate void ReloadCommands();
         public event ReloadCommands OnReloadCommands;
 
-        private readonly string _memeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
+        //private readonly string _memeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
+        private readonly IMemeServiceOptions _options;
 
         private readonly string[] _imageFormats =
         {
@@ -31,8 +33,9 @@ namespace SteakBot.Core.Services
             ".webm"
         };
 
-        public MemeService()
+        public MemeService(IMemeServiceOptions options)
         {
+            _options = options;
             LoadCommands();
         }
 
@@ -138,13 +141,13 @@ namespace SteakBot.Core.Services
 
         private void LoadCommands()
         {
-            var text = File.ReadAllText(_memeCommandsFileName);
+            var text = File.ReadAllText(_options.MemeCommandsFileName);
             MemeCommands = JsonConvert.DeserializeObject<List<MemeCommand>>(text);
         }
 
         private void SaveCommands()
         {
-            using (var fileWriter = new StreamWriter(_memeCommandsFileName))
+            using (var fileWriter = new StreamWriter(_options.MemeCommandsFileName))
             using (var jsonTextWriter = new JsonTextWriter(fileWriter) { Formatting = Formatting.Indented, Indentation = 4 })
             {
                 var jsonSerializer = new JsonSerializer();

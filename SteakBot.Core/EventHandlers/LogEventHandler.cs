@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord;
-using SteakBot.Core.EventHandlers.Abstraction;
+using SteakBot.Core.Abstractions;
+using SteakBot.Core.Abstractions.Handlers;
 
 namespace SteakBot.Core.EventHandlers
 {
