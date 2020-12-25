@@ -6,6 +6,6 @@ namespace SteakBot.Core.Abstractions.EventHandlers
 {
     public interface IReactionEventHandler
     {
-        Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3);
+        Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> messageGetter, ISocketMessageChannel channel, SocketReaction reaction);
     }
 }

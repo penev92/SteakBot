@@ -12,17 +12,16 @@ namespace SteakBot.Core.EventHandlers
         private const int MinReactionMessageHours = 2;
         private const int MessagesAfterCurrentLimit = 10;
 
-        public async Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
+        public async Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> messageGetter, ISocketMessageChannel channel, SocketReaction reaction)
         {
-            var channel = arg3.Channel;
-            var message = await channel.GetMessageAsync(arg3.MessageId);
+            var message = await messageGetter.GetOrDownloadAsync();
             if (await ShouldSkipReaction(channel, message))
             {
                 return;
             }
 
             var messageJumpUrl = message.GetJumpUrl();
-            var notificationMessage = $"{arg3.User.Value.Mention} reacted with {arg3.Emote} to [a message]({messageJumpUrl}) by {message.Author.Username}"
+            var notificationMessage = $"{reaction.User.Value.Mention} reacted with {reaction.Emote} to [a message]({messageJumpUrl}) by {message.Author.Username}"
                 + $" from {message.CreatedAt.LocalDateTime:HH:mm:ss} of {message.CreatedAt.LocalDateTime:dd.MM.yyyy}.";
 
             var notificationEmbedBuilder = new EmbedBuilder
@@ -41,9 +40,11 @@ namespace SteakBot.Core.EventHandlers
                 return true;
             }
 
-            var messages = await channel.GetMessagesAsync(message, Direction.After, MessagesAfterCurrentLimit + 1).ToArrayAsync();
-            bool shouldSkip = messages.SelectMany(x => x).Count() < MessagesAfterCurrentLimit;
-            return shouldSkip;
+            var messageCount = await channel
+                .GetMessagesAsync(message, Direction.After, MessagesAfterCurrentLimit + 1)
+                .AggregateAsync(0, (i, messagePage) => i + messagePage.Count);
+
+            return messageCount < MessagesAfterCurrentLimit;
         }
     }
 }
