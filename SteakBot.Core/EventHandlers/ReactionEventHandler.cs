@@ -41,7 +41,7 @@ namespace SteakBot.Core.EventHandlers
                 return true;
             }
 
-            var messages = await channel.GetMessagesAsync(message, Direction.After, MessagesAfterCurrentLimit + 1).ToArray();
+            var messages = await channel.GetMessagesAsync(message, Direction.After, MessagesAfterCurrentLimit + 1).ToArrayAsync();
             bool shouldSkip = messages.SelectMany(x => x).Count() < MessagesAfterCurrentLimit;
             return shouldSkip;
         }
