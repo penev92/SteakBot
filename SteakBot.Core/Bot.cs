@@ -5,12 +5,13 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using SteakBot.Core.Abstractions;
 using SteakBot.Core.Abstractions.EventHandlers;
 using SteakBot.Core.TypeReaders;
 
 namespace SteakBot.Core
 {
-    public class Bot : IDisposable
+    public class Bot : IBot
     {
         private static readonly string DiscordBotToken = ConfigurationManager.AppSettings["BotToken"];
 

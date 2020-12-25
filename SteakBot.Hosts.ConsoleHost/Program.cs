@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using SteakBot.Core;
+using SteakBot.Core.Abstractions;
 using SteakBot.Core.DependencyInjection;
 
 namespace SteakBot.Hosts.ConsoleHost
@@ -10,8 +10,8 @@ namespace SteakBot.Hosts.ConsoleHost
         private static async Task Main()
         {
             await using var serviceProvider = new ServiceCollection()
-                .AddSingleton<Bot>()
                 .AddBasicDiscordServices()
+                .AddDefaultDiscordBot()
                 .AddDefaultEventHandlerServices()
                 .AddCustomTypeReaders()
                 .AddDefaultModules()
@@ -21,7 +21,7 @@ namespace SteakBot.Hosts.ConsoleHost
                 .BuildServiceProvider();
 
             await serviceProvider
-                .GetService<Bot>()
+                .GetService<IBot>()
                 .RunAsync();
         }
     }

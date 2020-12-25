@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Octokit;
 using SharpBucket.V2;
+using SteakBot.Core.Abstractions;
 using SteakBot.Core.EventHandlers;
 using SteakBot.Core.Abstractions.EventHandlers;
 using SteakBot.Core.Abstractions.Providers;
@@ -23,6 +24,12 @@ namespace SteakBot.Core.DependencyInjection
             return serviceCollection
                 .AddSingleton<DiscordSocketClient>()
                 .AddSingleton<CommandService>();
+        }
+
+        public static IServiceCollection AddDefaultDiscordBot(this IServiceCollection serviceCollection)
+        {
+            return serviceCollection
+                .AddSingleton<IBot, Bot>();
         }
 
         public static IServiceCollection AddDefaultEventHandlerServices(this IServiceCollection serviceCollection)
