@@ -17,10 +17,11 @@ namespace SteakBot.Core.Services
 
         public async Task JoinAudioChannel(IGuild guild, IVoiceChannel target)
         {
-            if (_connectedChannels.TryGetValue(guild.Id, out IAudioClient client))
+            if (_connectedChannels.TryGetValue(guild.Id, out _))
             {
                 return;
             }
+
             if (target.Guild.Id != guild.Id)
             {
                 return;
@@ -30,8 +31,6 @@ namespace SteakBot.Core.Services
 
             if (_connectedChannels.TryAdd(guild.Id, audioClient))
             {
-                // If you add a method to log happenings from this service,
-                // you can uncomment these commented lines to make use of that.
                 //await Log(LogSeverity.Info, $"Connected to voice on {guild.Name}.");
             }
         }
@@ -39,8 +38,9 @@ namespace SteakBot.Core.Services
         public async Task LeaveAudioChannel(IGuild guild)
         {
             _isPlaying = false;
+            _audioOutStream = null;
 
-            if (_connectedChannels.TryRemove(guild.Id, out IAudioClient client))
+            if (_connectedChannels.TryRemove(guild.Id, out var client))
             {
                 await client.StopAsync();
                 //await Log(LogSeverity.Info, $"Disconnected from voice on {guild.Name}.");
@@ -74,23 +74,22 @@ namespace SteakBot.Core.Services
                 return;
             }
 
-            if (_connectedChannels.TryGetValue(guild.Id, out IAudioClient audioClient))
+            if (_connectedChannels.TryGetValue(guild.Id, out var audioClient))
             {
-                _audioOutStream = _audioOutStream ?? audioClient.CreatePCMStream(AudioApplication.Voice);
-                using (var mp3 = new Mp3FileReader(filePath))
-                using (var pcmStream = WaveFormatConversionStream.CreatePcmStream(mp3))
+                _audioOutStream ??= audioClient.CreatePCMStream(AudioApplication.Voice);
+                await using var mp3 = new Mp3FileReader(filePath);
+                await using var pcmStream = WaveFormatConversionStream.CreatePcmStream(mp3);
+
+                try
                 {
-                    try
-                    {
-                        _isPlaying = true;
-                        await pcmStream.CopyToAsync(_audioOutStream);
-                    }
-                    finally
-                    {
-                        await _audioOutStream.FlushAsync();
-                        await pcmStream.FlushAsync();
-                        _isPlaying = false;
-                    }
+                    _isPlaying = true;
+                    await pcmStream.CopyToAsync(_audioOutStream);
+                }
+                finally
+                {
+                    await _audioOutStream.FlushAsync();
+                    await pcmStream.FlushAsync();
+                    _isPlaying = false;
                 }
             }
         }
