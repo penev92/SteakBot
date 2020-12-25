@@ -5,11 +5,12 @@ using Octokit;
 using SharpBucket.V2;
 using SteakBot.Core.EventHandlers;
 using SteakBot.Core.Abstractions.EventHandlers;
+using SteakBot.Core.Abstractions.Providers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
-using SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.BitBucketIssueNumberMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.GitHubIssueNumberMessageHandlers;
 using SteakBot.Core.Modules;
+using SteakBot.Core.Providers;
 using SteakBot.Core.Services;
 using SteakBot.Core.TypeReaders;
 
@@ -52,7 +53,8 @@ namespace SteakBot.Core.DependencyInjection
                 .AddSingleton<ModuleBase<SocketCommandContext>, RollModule>()
                 .AddSingleton<AudioService>()
                 .AddSingleton<MemeService>()
-                .AddSingleton<QuotingService>();
+                .AddSingleton<QuotingService>()
+                .AddSingleton<IAudioFilePathProvider, AudioFilePathProvider>();
         }
 
         public static IServiceCollection AddDefaultCustomMessageHandlers(this IServiceCollection serviceCollection)

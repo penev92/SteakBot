@@ -1,19 +1,25 @@
 ﻿using System.Collections.Concurrent;
-using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Audio;
 using NAudio.Wave;
+using SteakBot.Core.Abstractions.Providers;
 
 namespace SteakBot.Core.Services
 {
     public class AudioService
     {
+        private readonly IAudioFilePathProvider _audioFilePathProvider;
         private readonly ConcurrentDictionary<ulong, IAudioClient> _connectedChannels = new ConcurrentDictionary<ulong, IAudioClient>();
 
         private bool _isPlaying;
         private AudioOutStream _audioOutStream;
+
+        public AudioService(IAudioFilePathProvider audioFilePathProvider)
+        {
+            _audioFilePathProvider = audioFilePathProvider;
+        }
 
         public async Task JoinAudioChannel(IGuild guild, IVoiceChannel target)
         {
@@ -49,7 +55,7 @@ namespace SteakBot.Core.Services
 
         public async Task PlayAudio(IGuild guild, IMessageChannel sourceTextChannel, string audioFileIdentifier)
         {
-            var filePath = ConfigurationManager.AppSettings[audioFileIdentifier];
+            var filePath = _audioFilePathProvider.GetPath(audioFileIdentifier);
             if (string.IsNullOrWhiteSpace(filePath))
             {
                 await sourceTextChannel.SendMessageAsync("Unknown file identifier.");
