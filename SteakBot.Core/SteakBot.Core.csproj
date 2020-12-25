@@ -26,6 +26,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SteakBot.Core.Abstractions\SteakBot.Core.Abstractions.csproj" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y &quot;$(SolutionDir)lib\libsodium.dll&quot; &quot;$(TargetDir)libsodium.dll&quot;&#xD;&#xA;copy /Y &quot;$(SolutionDir)lib\opus.dll&quot; &quot;$(TargetDir)opus.dll&quot;" />
   </Target>

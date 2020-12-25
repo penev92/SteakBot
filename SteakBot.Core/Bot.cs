@@ -5,7 +5,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using SteakBot.Core.EventHandlers.Abstraction;
+using SteakBot.Core.Abstractions.EventHandlers;
 using SteakBot.Core.TypeReaders;
 
 namespace SteakBot.Core

@@ -1,6 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using SteakBot.Core.EventHandlers.Abstraction;
+using SteakBot.Core.Abstractions.EventHandlers;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

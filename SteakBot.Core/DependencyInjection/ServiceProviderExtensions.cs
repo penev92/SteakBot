@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Octokit;
 using SharpBucket.V2;
 using SteakBot.Core.EventHandlers;
-using SteakBot.Core.EventHandlers.Abstraction;
+using SteakBot.Core.Abstractions.EventHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.BitBucketIssueNumberMessageHandlers;
