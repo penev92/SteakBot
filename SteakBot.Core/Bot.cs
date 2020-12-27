@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -82,6 +83,11 @@ namespace SteakBot.Core
             var modules = _serviceProvider.GetServices<ModuleBase<SocketCommandContext>>();
             foreach (var module in modules)
             {
+                if (!_botConfiguration.EnabledModules.Contains(module.GetType().Name))
+                {
+                    continue;
+                }
+
                 _commands.AddModuleAsync(module.GetType(), _serviceProvider).Wait();
             }
         }
