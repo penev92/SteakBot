@@ -1,4 +1,5 @@
-﻿using SteakBot.Core.Abstractions.Configuration.Modules;
+﻿using SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers;
+using SteakBot.Core.Abstractions.Configuration.Modules;
 using SteakBot.Core.Abstractions.Configuration.Services;
 
 namespace SteakBot.Core.Abstractions.Configuration
@@ -12,5 +13,9 @@ namespace SteakBot.Core.Abstractions.Configuration
         IAudioServiceConfiguration AudioServiceConfiguration { get; }
 
         IMemeServiceConfiguration MemeServiceConfiguration { get; }
+
+        IBitBucketConfiguration BitBucketConfiguration { get; }
+
+        IGitHubConfiguration GitHubConfiguration { get; }
     }
 }

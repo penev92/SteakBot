@@ -6,6 +6,7 @@ using Discord.WebSocket;
 using SharpBucket.V2;
 using SharpBucket.V2.EndPoints;
 using SharpBucket.V2.Pocos;
+using SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.BitBucketIssueNumberMessageHandlers
 {
@@ -19,9 +20,8 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
 
         protected abstract string ConsumerSecretKey { get; }
 
-        private static readonly string IssueIconBaseUrl = ConfigurationManager.AppSettings["BitBucketIconsBaseUrl"];
-
-        private static readonly bool ShouldShowRepositoryIcon = bool.Parse(ConfigurationManager.AppSettings["ShowRepositoryIcon"]);
+        private readonly string _issueIconBaseUrl;
+        private readonly bool _shouldShowRepositoryIcon;
 
         private readonly IssuesResource _issuesResource;
         private readonly PullRequestsResource _pullRequestsResource;
@@ -43,7 +43,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             { "DECLINED", Color.Red }
         };
 
-        internal BaseBitBucketIssueNumberMessageHandler(SharpBucketV2 bitBucketClient)
+        internal BaseBitBucketIssueNumberMessageHandler(SharpBucketV2 bitBucketClient, IBitBucketConfiguration configuration)
         {
             var client = bitBucketClient;
             client.OAuth2ClientCredentials(ConsumerKey, ConsumerSecretKey);
@@ -52,6 +52,9 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             var repositoryResource = repositoriesEndPoint.RepositoryResource(RepositoryOwner, RepositoryName);
             _pullRequestsResource = repositoryResource.PullRequestsResource();
             _issuesResource = repositoryResource.IssuesResource();
+
+            _issueIconBaseUrl = configuration.BitBucketIconsBaseUrl;
+            _shouldShowRepositoryIcon = configuration.ShowRepositoryIcon;
         }
 
         public override void Invoke(SocketUserMessage message)
@@ -105,7 +108,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
                 Footer = new EmbedFooterBuilder
                 {
                     Text = $"Created at {issue.createdOn.ToString("s").Replace('T', ' ') + " UTC"}",
-                    IconUrl = ShouldShowRepositoryIcon ? issue.repository.links.avatar.href : null
+                    IconUrl = _shouldShowRepositoryIcon ? issue.repository.links.avatar.href : null
                 },
                 Timestamp = issue.updatedOn,
                 Color = _colorPerStatus[status.ToString()]
@@ -133,7 +136,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
                 Footer = new EmbedFooterBuilder
                 {
                     Text = $"Created at {pullRequest.created_on.ToString("s").Replace('T', ' ') + " UTC"}",
-                    IconUrl = ShouldShowRepositoryIcon ? pullRequest.destination.repository.links.avatar.href : null
+                    IconUrl = _shouldShowRepositoryIcon ? pullRequest.destination.repository.links.avatar.href : null
                 },
                 Timestamp = pullRequest.updated_on,
                 Color = _colorPerStatus[status]
@@ -142,7 +145,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             return embedBuilder.Build();
         }
 
-        private static string GetIssueIconUrl(bool isIssue, string status)
+        private string GetIssueIconUrl(bool isIssue, string status)
         {
             var stat = status.ToLower();
             if (stat == "declined")
@@ -160,7 +163,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
                 stat = "closed";
             }
 
-            return $"{IssueIconBaseUrl}/github-{(isIssue ? "issue" : "pr")}-{stat}.png";
+            return $"{_issueIconBaseUrl}/github-{(isIssue ? "issue" : "pr")}-{stat}.png";
         }
     }
 }

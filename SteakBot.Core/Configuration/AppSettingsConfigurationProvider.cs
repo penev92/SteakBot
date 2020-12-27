@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SteakBot.Core.Abstractions.Configuration;
+using SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers;
 using SteakBot.Core.Abstractions.Configuration.Modules;
 using SteakBot.Core.Abstractions.Configuration.Services;
+using SteakBot.Core.Configuration.CustomMessageHandlers;
 using SteakBot.Core.Configuration.Modules;
 using SteakBot.Core.Configuration.Services;
 
@@ -16,6 +18,8 @@ namespace SteakBot.Core.Configuration
         private readonly AudioServiceConfiguration _audioServiceConfiguration;
         private readonly MemeServiceConfiguration _memeServiceConfiguration;
         private readonly QuoteModuleConfiguration _quoteModuleConfiguration;
+        private readonly BitBucketConfiguration _bitBucketConfiguration;
+        private readonly GitHubConfiguration _gitHubConfiguration;
 
         public AppSettingsConfigurationProvider(IConfiguration configuration)
         {
@@ -26,6 +30,8 @@ namespace SteakBot.Core.Configuration
             _audioServiceConfiguration = new AudioServiceConfiguration();
             _memeServiceConfiguration = new MemeServiceConfiguration();
             _quoteModuleConfiguration = new QuoteModuleConfiguration();
+            _bitBucketConfiguration = new BitBucketConfiguration();
+            _gitHubConfiguration = new GitHubConfiguration();
         }
 
         public IBotConfiguration BotConfiguration
@@ -81,6 +87,34 @@ namespace SteakBot.Core.Configuration
                 }
 
                 return _memeServiceConfiguration;
+            }
+        }
+
+        public IBitBucketConfiguration BitBucketConfiguration
+        {
+            get
+            {
+                if (!_bitBucketConfiguration.IsPopulated)
+                {
+                    _bitBucketConfiguration.IsPopulated = true;
+                    _configuration.GetSection("CustomMessageHandlers:NumberParsingMessageHandlers:BitBucket").Bind(_bitBucketConfiguration);
+                }
+
+                return _bitBucketConfiguration;
+            }
+        }
+
+        public IGitHubConfiguration GitHubConfiguration
+        {
+            get
+            {
+                if (!_gitHubConfiguration.IsPopulated)
+                {
+                    _gitHubConfiguration.IsPopulated = true;
+                    _configuration.GetSection("CustomMessageHandlers:NumberParsingMessageHandlers:GitHub").Bind(_gitHubConfiguration);
+                }
+
+                return _gitHubConfiguration;
             }
         }
     }

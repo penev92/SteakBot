@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Octokit;
+using SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.GitHubIssueNumberMessageHandlers
 {
@@ -14,6 +15,6 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             { "bot", 0 }
         };
 
-        public SteakBotGitHubNumberParsingMessageHandler(IGitHubClient gitHubClient) : base(gitHubClient) { }
+        public SteakBotGitHubNumberParsingMessageHandler(IGitHubClient gitHubClient, IGitHubConfiguration configuration) : base(gitHubClient, configuration) { }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Octokit;
+using SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.GitHubIssueNumberMessageHandlers
 {
@@ -15,6 +16,6 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             { "ora", 0 }
         };
 
-        public OpenRaGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient) : base(gitHubClient) { }
+        public OpenRaGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient, IGitHubConfiguration configuration) : base(gitHubClient, configuration) { }
     }
 }

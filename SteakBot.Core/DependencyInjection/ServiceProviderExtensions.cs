@@ -112,6 +112,11 @@ namespace SteakBot.Core.DependencyInjection
         public static IServiceCollection AddGitHubIntegrationServices(this IServiceCollection serviceCollection)
         {
             return serviceCollection
+                .AddSingleton(serviceProvider =>
+                {
+                    var configurationProvider = serviceProvider.GetService<ICustomConfigurationProvider>();
+                    return configurationProvider.GitHubConfiguration;
+                })
                 .AddSingleton<IGitHubClient>(provider => new GitHubClient(new ProductHeaderValue("SteakBot")))
                 .AddSingleton<ICustomMessageHandler, SteakBotGitHubNumberParsingMessageHandler>()
                 .AddSingleton<ICustomMessageHandler, OpenRaGitHubIssueNumberMessageHandler>();
@@ -120,6 +125,11 @@ namespace SteakBot.Core.DependencyInjection
         public static IServiceCollection AddBitBucketIntegrationServices(this IServiceCollection serviceCollection)
         {
             return serviceCollection
+                .AddSingleton(serviceProvider =>
+                {
+                    var configurationProvider = serviceProvider.GetService<ICustomConfigurationProvider>();
+                    return configurationProvider.BitBucketConfiguration;
+                })
                 .AddSingleton<SharpBucketV2>();
         }
     }
