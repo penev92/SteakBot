@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Configuration;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using SteakBot.Core.Abstractions;
+using SteakBot.Core.Abstractions.Configuration;
 using SteakBot.Core.Abstractions.EventHandlers;
 using SteakBot.Core.TypeReaders;
 
@@ -13,8 +13,6 @@ namespace SteakBot.Core
 {
     public class Bot : IBot
     {
-        private static readonly string DiscordBotToken = ConfigurationManager.AppSettings["BotToken"];
-
         private readonly IServiceProvider _serviceProvider;
 
         private readonly DiscordSocketClient _client;
@@ -25,9 +23,12 @@ namespace SteakBot.Core
         private readonly IReactionEventHandler _reactionEventHandler;
         private readonly IVoiceStateEventHandler _voiceStateEventHandler;
 
-        public Bot(IServiceProvider serviceProvider)
+        private readonly IBotConfiguration _botConfiguration;
+
+        public Bot(IServiceProvider serviceProvider, IBotConfiguration botConfiguration)
         {
             _serviceProvider = serviceProvider;
+            _botConfiguration = botConfiguration;
 
             _client = _serviceProvider.GetService<DiscordSocketClient>();
             _commands = _serviceProvider.GetService<CommandService>();
@@ -42,7 +43,7 @@ namespace SteakBot.Core
 
         public async Task RunAsync()
         {
-            await _client.LoginAsync(TokenType.Bot, DiscordBotToken);
+            await _client.LoginAsync(TokenType.Bot, _botConfiguration.BotToken);
             await _client.StartAsync();
 
             Console.ReadLine();

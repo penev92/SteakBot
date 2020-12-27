@@ -1,12 +1,16 @@
-﻿using Discord.Commands;
+﻿using System.IO;
+using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Octokit;
 using SharpBucket.V2;
 using SteakBot.Core.Abstractions;
+using SteakBot.Core.Abstractions.Configuration;
 using SteakBot.Core.EventHandlers;
 using SteakBot.Core.Abstractions.EventHandlers;
 using SteakBot.Core.Abstractions.Providers;
+using SteakBot.Core.Configuration;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.GitHubIssueNumberMessageHandlers;
@@ -19,6 +23,20 @@ namespace SteakBot.Core.DependencyInjection
 {
     public static class ServiceProviderExtensions
     {
+        public static IServiceCollection AddAppSettingsConfiguration(this IServiceCollection serviceCollection)
+        {
+            return serviceCollection
+                .AddSingleton<IConfiguration>(provider =>
+                {
+                    var builder = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json");
+
+                    return builder.Build();
+                })
+                .AddSingleton<ICustomConfigurationProvider, AppSettingsConfigurationProvider>();
+        }
+
         public static IServiceCollection AddBasicDiscordServices(this IServiceCollection serviceCollection)
         {
             return serviceCollection
@@ -29,7 +47,12 @@ namespace SteakBot.Core.DependencyInjection
         public static IServiceCollection AddDefaultDiscordBot(this IServiceCollection serviceCollection)
         {
             return serviceCollection
-                .AddSingleton<IBot, Bot>();
+                .AddSingleton<IBot, Bot>()
+                .AddSingleton(serviceProvider =>
+                {
+                    var configurationProvider = serviceProvider.GetService<ICustomConfigurationProvider>();
+                    return configurationProvider.BotConfiguration;
+                });
         }
 
         public static IServiceCollection AddDefaultEventHandlerServices(this IServiceCollection serviceCollection)
@@ -61,7 +84,22 @@ namespace SteakBot.Core.DependencyInjection
                 .AddSingleton<AudioService>()
                 .AddSingleton<MemeService>()
                 .AddSingleton<QuotingService>()
-                .AddSingleton<IAudioFilePathProvider, AudioFilePathProvider>();
+                .AddSingleton<IAudioFilePathProvider, AudioFilePathProvider>()
+                .AddSingleton(serviceProvider =>
+                {
+                    var configurationProvider = serviceProvider.GetService<ICustomConfigurationProvider>();
+                    return configurationProvider.QuoteModuleConfiguration;
+                })
+                .AddSingleton(serviceProvider =>
+                {
+                    var configurationProvider = serviceProvider.GetService<ICustomConfigurationProvider>();
+                    return configurationProvider.AudioServiceConfiguration;
+                })
+                .AddSingleton(serviceProvider =>
+                {
+                    var configurationProvider = serviceProvider.GetService<ICustomConfigurationProvider>();
+                    return configurationProvider.MemeServiceConfiguration;
+                });
         }
 
         public static IServiceCollection AddDefaultCustomMessageHandlers(this IServiceCollection serviceCollection)

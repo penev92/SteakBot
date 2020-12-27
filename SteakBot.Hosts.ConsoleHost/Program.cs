@@ -10,6 +10,7 @@ namespace SteakBot.Hosts.ConsoleHost
         private static async Task Main()
         {
             await using var serviceProvider = new ServiceCollection()
+                .AddAppSettingsConfiguration()
                 .AddBasicDiscordServices()
                 .AddDefaultDiscordBot()
                 .AddDefaultEventHandlerServices()

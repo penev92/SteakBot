@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using SteakBot.Core.Abstractions.Configuration.Services;
 using SteakBot.Core.Objects;
 using SteakBot.Core.Objects.Enums;
 
@@ -16,7 +16,7 @@ namespace SteakBot.Core.Services
         public delegate void ReloadCommands();
         public event ReloadCommands OnReloadCommands;
 
-        private readonly string _memeCommandsFileName = ConfigurationManager.AppSettings["memeCommandsRelativeFilePath"];
+        private readonly string _memeCommandsFileName;
 
         private readonly string[] _imageFormats =
         {
@@ -31,8 +31,9 @@ namespace SteakBot.Core.Services
             ".webm"
         };
 
-        public MemeService()
+        public MemeService(IMemeServiceConfiguration configuration)
         {
+            _memeCommandsFileName = configuration.MemeCommandsFileRelativePath;
             LoadCommands();
         }
 
