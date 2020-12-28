@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -118,8 +119,16 @@ namespace SteakBot.Core.DependencyInjection
                     return configurationProvider.GitHubConfiguration;
                 })
                 .AddSingleton<IGitHubClient>(provider => new GitHubClient(new ProductHeaderValue("SteakBot")))
-                .AddSingleton<ICustomMessageHandler, SteakBotGitHubNumberParsingMessageHandler>()
-                .AddSingleton<ICustomMessageHandler, OpenRaGitHubIssueNumberMessageHandler>();
+                .AddSingleton<GitHubNumberMessageHandlerFactory>();
+
+                // TODO: Register these as BaseGitHubIssueNumberMessageHandler instances
+                // and add a CustomMessageHandlerProvider to gather all implementations of ICustomMessageHandler
+                // and be used by MessageEventHandler to round them up and do the casting, so none of the MessageEventHandler logic changes.
+                //.AddSingleton<IEnumerable<ICustomMessageHandler>>(serviceProvider =>
+                //{
+                //    var factory = serviceProvider.GetService<GitHubNumberMessageHandlerFactory>();
+                //    return factory.Create();
+                //});
         }
 
         public static IServiceCollection AddBitBucketIntegrationServices(this IServiceCollection serviceCollection)

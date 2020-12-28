@@ -1,4 +1,5 @@
-﻿using SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers;
+﻿using System.Collections.Generic;
+using SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers;
 
 namespace SteakBot.Core.Configuration.CustomMessageHandlers
 {
@@ -7,5 +8,7 @@ namespace SteakBot.Core.Configuration.CustomMessageHandlers
         public string GitHubIconsBaseUrl { get; set; }
 
         public bool ShowRepositoryIcon { get; set; }
+
+        public IReadOnlyDictionary<string, CodeRepositoryConfiguration> Repositories { get; set; }
     }
 }

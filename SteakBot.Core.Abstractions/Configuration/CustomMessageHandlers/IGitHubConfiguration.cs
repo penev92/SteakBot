@@ -1,9 +1,13 @@
-﻿namespace SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers
+﻿using System.Collections.Generic;
+
+namespace SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers
 {
     public interface IGitHubConfiguration
     {
-        public string GitHubIconsBaseUrl { get; }
+        string GitHubIconsBaseUrl { get; }
+        
+        bool ShowRepositoryIcon { get; }
 
-        public bool ShowRepositoryIcon { get; }
+        IReadOnlyDictionary<string, CodeRepositoryConfiguration> Repositories { get; }
     }
 }

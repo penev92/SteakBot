@@ -11,7 +11,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
     /// </summary>
     internal abstract class BaseNumberParsingMessageHandler : ICustomMessageHandler
     {
-        protected abstract Dictionary<string, int> MinimumHandledNumberPerKeyword { get; }
+        protected abstract IReadOnlyDictionary<string, int> MinimumHandledNumberPerKeyword { get; }
 
         protected virtual string[] RegexMatchPatternKeywords => MinimumHandledNumberPerKeyword.Keys.ToArray();
 
@@ -19,13 +19,13 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
 
         protected virtual bool RegexMatchCase { get; } = false;
 
+        protected string[] RegexMatchPatterns => RegexMatchPatternKeywords.Select(x => RegexMatchPattern.Replace("{keyword}", x)).ToArray();
+
         protected readonly RegexOptions RegexOptions;
-        protected readonly string[] RegexMatchPatterns;
 
         internal BaseNumberParsingMessageHandler()
         {
             RegexOptions = RegexMatchCase ? RegexOptions.Compiled : RegexOptions.Compiled | RegexOptions.IgnoreCase;
-            RegexMatchPatterns = RegexMatchPatternKeywords.Select(x => RegexMatchPattern.Replace("{keyword}", x)).ToArray();
         }
 
         public abstract bool CanHandle(SocketUserMessage message);

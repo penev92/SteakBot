@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Discord;
 using Discord.WebSocket;
@@ -8,11 +8,13 @@ using SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.GitHubIssueNumberMessageHandlers
 {
-    internal abstract class BaseGitHubIssueNumberMessageHandler : BaseSimpleNumberParsingMessageHandler
+    internal class BaseGitHubIssueNumberMessageHandler : BaseSimpleNumberParsingMessageHandler
     {
-        protected abstract string RepositoryOwner { get; }
+        protected string RepositoryOwner { get; }
 
-        protected abstract string RepositoryName { get; }
+        protected string RepositoryName { get; }
+
+        protected override IReadOnlyDictionary<string, int> MinimumHandledNumberPerKeyword { get; } = new ReadOnlyDictionary<string, int>(new Dictionary<string, int>());
 
         private readonly IGitHubClient _gitHubClient;
         private readonly string _issueIconBaseUrl;
@@ -25,11 +27,15 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             { "merged", Color.Purple }
         };
 
-        internal BaseGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient, IGitHubConfiguration configuration)
+        public BaseGitHubIssueNumberMessageHandler(IGitHubClient gitHubClient, CodeRepositoryConfiguration repositoryConfiguration)
         {
             _gitHubClient = gitHubClient;
-            _issueIconBaseUrl = configuration.GitHubIconsBaseUrl;
-            _shouldShowRepositoryIcon = configuration.ShowRepositoryIcon;
+
+            _issueIconBaseUrl = repositoryConfiguration.IconsBaseUrl;
+            _shouldShowRepositoryIcon = repositoryConfiguration.ShowRepositoryIcon;
+            RepositoryOwner = repositoryConfiguration.Owner;
+            RepositoryName = repositoryConfiguration.Name;
+            MinimumHandledNumberPerKeyword = new ReadOnlyDictionary<string, int>(repositoryConfiguration.MinimumHandledNumberPerKeyword);
         }
 
         public override void Invoke(SocketUserMessage message)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using SteakBot.Core.Abstractions.Configuration;
 using SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers;
 using SteakBot.Core.Abstractions.Configuration.Modules;
@@ -112,6 +113,17 @@ namespace SteakBot.Core.Configuration
                 {
                     _gitHubConfiguration.IsPopulated = true;
                     _configuration.GetSection("CustomMessageHandlers:NumberParsingMessageHandlers:GitHub").Bind(_gitHubConfiguration);
+
+                    foreach (var (_, value) in _gitHubConfiguration.Repositories)
+                    {
+                        value.IconsBaseUrl = _gitHubConfiguration.GitHubIconsBaseUrl;
+                        value.ShowRepositoryIcon = _gitHubConfiguration.ShowRepositoryIcon;
+
+                        if (value.MinimumHandledNumberPerKeyword == null)
+                        {
+                            value.MinimumHandledNumberPerKeyword = new Dictionary<string, int>();
+                        }
+                    }
                 }
 
                 return _gitHubConfiguration;
