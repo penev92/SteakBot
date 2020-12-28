@@ -14,6 +14,7 @@ using SteakBot.Core.Abstractions.Providers;
 using SteakBot.Core.Configuration;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.CommandMessageHandlers;
+using SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.BitBucketIssueNumberMessageHandlers;
 using SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.GitHubIssueNumberMessageHandlers;
 using SteakBot.Core.Modules;
 using SteakBot.Core.Providers;
@@ -139,7 +140,17 @@ namespace SteakBot.Core.DependencyInjection
                     var configurationProvider = serviceProvider.GetService<ICustomConfigurationProvider>();
                     return configurationProvider.BitBucketConfiguration;
                 })
-                .AddSingleton<SharpBucketV2>();
+                .AddSingleton<SharpBucketV2>()
+                .AddSingleton<BitBucketNumberMessageHandlerFactory>();
+                
+                // TODO: Register these as BaseGitHubIssueNumberMessageHandler instances
+                // and add a CustomMessageHandlerProvider to gather all implementations of ICustomMessageHandler
+                // and be used by MessageEventHandler to round them up and do the casting, so none of the MessageEventHandler logic changes.
+                //.AddSingleton<IEnumerable<ICustomMessageHandler>>(serviceProvider =>
+                //{
+                //    var factory = serviceProvider.GetService<BitBucketNumberMessageHandlerFactory>();
+                //    return factory.Create();
+                //});
         }
     }
 }

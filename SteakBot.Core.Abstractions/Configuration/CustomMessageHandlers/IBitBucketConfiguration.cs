@@ -1,9 +1,17 @@
-﻿namespace SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers
+﻿using System.Collections.Generic;
+
+namespace SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers
 {
     public interface IBitBucketConfiguration
     {
-        public string BitBucketIconsBaseUrl { get; }
+        string BitBucketIconsBaseUrl { get; }
 
-        public bool ShowRepositoryIcon { get; }
+        bool ShowRepositoryIcon { get; }
+
+        string ConsumerKey { get; }
+
+        string ConsumerSecretKey { get; }
+
+        IReadOnlyDictionary<string, CodeRepositoryConfiguration> Repositories { get; }
     }
 }

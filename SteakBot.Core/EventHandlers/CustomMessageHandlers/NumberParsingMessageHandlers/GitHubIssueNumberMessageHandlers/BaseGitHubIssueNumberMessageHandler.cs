@@ -11,7 +11,6 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
     internal class BaseGitHubIssueNumberMessageHandler : BaseSimpleNumberParsingMessageHandler
     {
         protected string RepositoryOwner { get; }
-
         protected string RepositoryName { get; }
 
         protected override IReadOnlyDictionary<string, int> MinimumHandledNumberPerKeyword { get; } = new ReadOnlyDictionary<string, int>(new Dictionary<string, int>());

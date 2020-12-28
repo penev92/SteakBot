@@ -99,6 +99,17 @@ namespace SteakBot.Core.Configuration
                 {
                     _bitBucketConfiguration.IsPopulated = true;
                     _configuration.GetSection("CustomMessageHandlers:NumberParsingMessageHandlers:BitBucket").Bind(_bitBucketConfiguration);
+
+                    foreach (var (_, value) in _bitBucketConfiguration.Repositories)
+                    {
+                        value.IconsBaseUrl = _bitBucketConfiguration.BitBucketIconsBaseUrl;
+                        value.ShowRepositoryIcon = _bitBucketConfiguration.ShowRepositoryIcon;
+
+                        if (value.MinimumHandledNumberPerKeyword == null)
+                        {
+                            value.MinimumHandledNumberPerKeyword = new Dictionary<string, int>();
+                        }
+                    }
                 }
 
                 return _bitBucketConfiguration;

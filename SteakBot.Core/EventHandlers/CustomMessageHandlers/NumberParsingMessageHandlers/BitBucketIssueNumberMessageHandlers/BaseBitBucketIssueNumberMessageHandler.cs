@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Discord;
 using Discord.WebSocket;
 using SharpBucket.V2;
@@ -10,15 +10,14 @@ using SteakBot.Core.Abstractions.Configuration.CustomMessageHandlers;
 
 namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessageHandlers.BitBucketIssueNumberMessageHandlers
 {
-    internal abstract class BaseBitBucketIssueNumberMessageHandler : BaseTypedNumberParsingMessageHandler
+    internal class BaseBitBucketIssueNumberMessageHandler : BaseTypedNumberParsingMessageHandler
     {
-        protected abstract string RepositoryOwner { get; }
+        private string RepositoryOwner { get; }
+        private string RepositoryName { get; }
+        private string ConsumerKey { get; }
+        private string ConsumerSecretKey { get; }
 
-        protected abstract string RepositoryName { get; }
-
-        protected abstract string ConsumerKey { get; }
-
-        protected abstract string ConsumerSecretKey { get; }
+        protected override IReadOnlyDictionary<string, int> MinimumHandledNumberPerKeyword { get; } = new ReadOnlyDictionary<string, int>(new Dictionary<string, int>());
 
         private readonly string _issueIconBaseUrl;
         private readonly bool _shouldShowRepositoryIcon;
@@ -43,8 +42,16 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             { "DECLINED", Color.Red }
         };
 
-        internal BaseBitBucketIssueNumberMessageHandler(SharpBucketV2 bitBucketClient, IBitBucketConfiguration configuration)
+        public BaseBitBucketIssueNumberMessageHandler(SharpBucketV2 bitBucketClient, IBitBucketConfiguration configuration, CodeRepositoryConfiguration repositoryConfiguration)
         {
+            _issueIconBaseUrl = repositoryConfiguration.IconsBaseUrl;
+            _shouldShowRepositoryIcon = repositoryConfiguration.ShowRepositoryIcon;
+            RepositoryOwner = repositoryConfiguration.Owner;
+            RepositoryName = repositoryConfiguration.Name;
+            ConsumerKey = configuration.ConsumerKey;
+            ConsumerSecretKey = configuration.ConsumerSecretKey;
+            MinimumHandledNumberPerKeyword = new ReadOnlyDictionary<string, int>(repositoryConfiguration.MinimumHandledNumberPerKeyword);
+
             var client = bitBucketClient;
             client.OAuth2ClientCredentials(ConsumerKey, ConsumerSecretKey);
             
@@ -52,9 +59,6 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             var repositoryResource = repositoriesEndPoint.RepositoryResource(RepositoryOwner, RepositoryName);
             _pullRequestsResource = repositoryResource.PullRequestsResource();
             _issuesResource = repositoryResource.IssuesResource();
-
-            _issueIconBaseUrl = configuration.BitBucketIconsBaseUrl;
-            _shouldShowRepositoryIcon = configuration.ShowRepositoryIcon;
         }
 
         public override void Invoke(SocketUserMessage message)
