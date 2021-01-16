@@ -1,6 +1,6 @@
 ﻿using Discord.WebSocket;
 
-namespace SteakBot.Core.EventHandlers.CustomMessageHandlers
+namespace SteakBot.Core.Abstractions.EventHandlers
 {
     public interface ICustomMessageHandler
     {
