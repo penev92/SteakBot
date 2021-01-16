@@ -21,6 +21,7 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
 
         private readonly string _issueIconBaseUrl;
         private readonly bool _shouldShowRepositoryIcon;
+        private readonly bool _canAuthenticate;
 
         private readonly IssuesResource _issuesResource;
         private readonly PullRequestsResource _pullRequestsResource;
@@ -52,17 +53,30 @@ namespace SteakBot.Core.EventHandlers.CustomMessageHandlers.NumberParsingMessage
             ConsumerSecretKey = configuration.ConsumerSecretKey;
             MinimumHandledNumberPerKeyword = new ReadOnlyDictionary<string, int>(repositoryConfiguration.MinimumHandledNumberPerKeyword);
 
-            var client = bitBucketClient;
-            client.OAuth2ClientCredentials(ConsumerKey, ConsumerSecretKey);
-            
-            var repositoriesEndPoint = client.RepositoriesEndPoint();
-            var repositoryResource = repositoriesEndPoint.RepositoryResource(RepositoryOwner, RepositoryName);
-            _pullRequestsResource = repositoryResource.PullRequestsResource();
-            _issuesResource = repositoryResource.IssuesResource();
+            try
+            {
+                var client = bitBucketClient;
+                client.OAuth2ClientCredentials(ConsumerKey, ConsumerSecretKey);
+                _canAuthenticate = true;
+
+                var repositoriesEndPoint = client.RepositoriesEndPoint();
+                var repositoryResource = repositoriesEndPoint.RepositoryResource(RepositoryOwner, RepositoryName);
+                _pullRequestsResource = repositoryResource.PullRequestsResource();
+                _issuesResource = repositoryResource.IssuesResource();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"BitBucket authentication failed for {RepositoryOwner}/{RepositoryName}!");
+            }
         }
 
         public override void Invoke(SocketUserMessage message)
         {
+            if (!_canAuthenticate)
+            {
+                return;
+            }
+
             foreach (var numberResult in GetMatchedNumbers(message.Content))
             {
                 Embed embed;
