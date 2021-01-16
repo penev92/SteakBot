@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
 using SteakBot.Core.Abstractions.EventHandlers;
+using SteakBot.Core.Abstractions.Providers;
 
 namespace SteakBot.Core.EventHandlers
 {
     internal class MessageEventHandler : IMessageEventHandler
     {
-        private readonly IEnumerable<ICustomMessageHandler> _customMessageHandlers;
+        private readonly ICustomMessageHandler[] _customMessageHandlers;
 
-        public MessageEventHandler(IServiceProvider serviceProvider)
+        public MessageEventHandler(ICustomMessageHandlerProvider customMessageHandlerProvider)
         {
-            _customMessageHandlers = serviceProvider.GetServices<ICustomMessageHandler>();
+            _customMessageHandlers = customMessageHandlerProvider.Get().ToArray();
         }
 
         public async Task HandleMessageReceivedAsync(SocketMessage messageParam)
