@@ -54,5 +54,11 @@ namespace SteakBot.Core.Modules
         {
             await _service.PlayAudio(Context.Guild, Context.Channel, "surpriseMf");
         }
+
+        [Command("clownMusic", RunMode = RunMode.Async)]
+        public async Task ClownMusic()
+        {
+            await _service.PlayAudio(Context.Guild, Context.Channel, "clownMusic");
+        }
     }
 }
