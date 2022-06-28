@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using SteakBot.Core.Abstractions;
+using Microsoft.Extensions.Hosting;
 using SteakBot.Core.DependencyInjection;
 
 namespace SteakBot.Hosts.ConsoleHost
@@ -9,21 +9,26 @@ namespace SteakBot.Hosts.ConsoleHost
     {
         private static async Task Main()
         {
-            await using var serviceProvider = new ServiceCollection()
-                .AddAppSettingsConfiguration()
-                .AddBasicDiscordServices()
-                .AddDefaultDiscordBot()
-                .AddDefaultEventHandlerServices()
-                .AddCustomTypeReaders()
-                .AddDefaultModules()
-                .AddDefaultCustomMessageHandlers()
-                .AddGitHubIntegrationServices()
-                .AddBitBucketIntegrationServices()
-                .BuildServiceProvider();
+            var hostBuilder = Host
+                .CreateDefaultBuilder()
+                .ConfigureServices(
+                    services =>
+                    {
+                        services
+                            .AddAppSettingsConfiguration()
+                            .AddBasicDiscordServices()
+                            .AddDefaultDiscordBot()
+                            .AddDefaultEventHandlerServices()
+                            .AddCustomTypeReaders()
+                            .AddDefaultModules()
+                            .AddDefaultCustomMessageHandlers()
+                            .AddGitHubIntegrationServices()
+                            .AddBitBucketIntegrationServices()
+                            .AddHostedService<BotHostedService>();
+                    });
 
-            await serviceProvider
-                .GetService<IBot>()
-                .RunAsync();
+            using var host = hostBuilder.Build();
+            await host.RunAsync();
         }
     }
 }
